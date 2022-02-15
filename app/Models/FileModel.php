@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class FileModel extends Model
+{
+    use HasFactory;
+    /*
+     * Use-case methods
+     */
+
+    public function uploadFiles(Request $request)
+    {
+        if ($request->hasFile('attachments')) {
+            foreach($request->attachments as $attachment){
+                $extension = $attachment->getClientOriginalExtension();
+                $size = $attachment->getSize();
+                $filename = config('app.name').'_' . uniqid() . '_' . time() . '_' . date('Ymd') . '.' . $extension;
+                $dir = 'assets/drive/';
+                $attachment->move(public_path($dir), $filename);
+                $file = new FileModel();
+                $file->filename = $filename;
+                $file->name = $request->file_name;
+                $file->folder_id = $request->folder;
+                $file->uploaded_by = Auth::user()->id;
+                $file->slug = substr(sha1(time()),21,40);
+                $file->size = $size;
+                $file->save();
+            }
+        }
+
+    }
+
+
+    public function getFilesByFolderId($id){
+        return FileModel::where('folder_id', $id)->get();
+    }
+
+    public function getFileById($id){
+        return FileModel::find($id);
+    }
+
+    public function getIndexFiles(){
+        return FileModel::where('folder_id',0)->get();
+    }
+
+    public function downloadFile($file_name) {
+        $file_path = public_path('assets/drive/'.$file_name);
+        if(file_exists($file_path)){
+            return response()->download($file_path);
+        }else{
+            return 0; //file not found.
+        }
+    }
+
+    public function deleteFile($file){
+        if(\File::exists(public_path('assets/drive/'.$file))){
+            \File::delete(public_path('assets/drive/'.$file));
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+}

@@ -1,0 +1,117 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+/*Route::prefix('/')->group(function(){
+    Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('homepage');
+});*/
+Route::get('/', function(){
+    return redirect()->route('register');
+});
+
+Route::get('/authenticate', [App\Http\Controllers\Auth\LoginController::class, 'showAdminLoginScreen'])->name('authenticate');
+Route::post('/authenticate', [App\Http\Controllers\Auth\LoginController::class, 'loginAdmin']);
+
+Auth::routes();
+Route::post('/e-registration', [App\Http\Controllers\Auth\RegisterController::class, 'eRegistration'])->name('e-registration');
+Route::get('/e-registration/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyERegistration'])->name('verify-e-registration');
+Route::post('/register/subscriber', [App\Http\Controllers\Auth\RegisterController::class, 'registerSubscriber'])->name('register-subscriber');
+Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+/*
+ * Human Resource Routes
+ */
+Route::prefix('/human-resource')->group(function (){
+    Route::get('/', [App\Http\Controllers\HumanResourceController::class, 'index'])->name('all-employees');
+    Route::get('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'showNewEmployeeForm'])->name('add-new-employee');
+    Route::post('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'storeNewEmployee']);
+    Route::get('/employee/profile/{slug}', [App\Http\Controllers\HumanResourceController::class, 'viewEmployeeProfile'])->name('view-employee-profile');
+
+    #Recruitment routes
+    Route::get('/post-job', [App\Http\Controllers\RecruitmentController::class, 'showPostJobForm'])->name('post-job');
+    Route::post('/post-job', [App\Http\Controllers\RecruitmentController::class, 'postJob']);
+    Route::get('/all-jobs', [App\Http\Controllers\RecruitmentController::class, 'index'])->name('all-jobs');
+    Route::get('/view-job/{slug}', [App\Http\Controllers\RecruitmentController::class, 'viewJob'])->name('view-job');
+    Route::get('/edit-job/{slug}', [App\Http\Controllers\RecruitmentController::class, 'showEditJobForm'])->name('edit-job');
+    Route::post('/update-job', [App\Http\Controllers\RecruitmentController::class, 'updateJob'])->name('update-job');
+
+    #Settings
+    Route::get('/settings', [App\Http\Controllers\HumanResourceController::class, 'showHumanResourceSettings'])->name('human-resource-settings');
+    Route::post('/department', [App\Http\Controllers\HumanResourceController::class, 'storeDepartment'])->name('add-new-department');
+    Route::post('/update-department', [App\Http\Controllers\HumanResourceController::class, 'updateDepartment'])->name('update-department');
+    Route::post('/add-new-job-role', [App\Http\Controllers\HumanResourceController::class, 'storeJobRole'])->name('add-new-job-role');
+    Route::post('/update-job-role', [App\Http\Controllers\HumanResourceController::class, 'updateJobRole'])->name('update-job-role');
+    Route::post('/assign-section-head', [App\Http\Controllers\HumanResourceController::class, 'assignSectionHead'])->name('assign-section-head');
+});
+
+Route::prefix('/news-feed')->group(function(){
+    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('news-feed');
+});
+
+Route::prefix('/account')->group(function(){
+    Route::post('/change-password',[App\Http\Controllers\UserController::class, 'changePassword'])->name('change-password');
+    Route::post('/add-emergency-contact',[App\Http\Controllers\UserController::class, 'addNewEmergencyContact'])->name('add-emergency-contact');
+});
+
+Route::prefix('/publications')->group(function(){
+    Route::get('/manage-publications', [App\Http\Controllers\PublicationController::class, 'managePublications'])->name('manage-publications');
+    Route::get('/manage-publication-categories', [App\Http\Controllers\PublicationController::class, 'managePublicationCategories'])->name('manage-publication-categories');
+    Route::post('/manage-publication-categories', [App\Http\Controllers\PublicationController::class, 'storePublicationCategory']);
+    Route::post('/update-publication-category', [App\Http\Controllers\PublicationController::class, 'updatePublicationCategory'])->name('update-publication-category');
+});
+
+Route::prefix('/file-management')->group(function(){
+    Route::get('/', [App\Http\Controllers\FileManagementController::class, 'manageFiles'])->name('manage-files');
+    Route::post('/manage-files', [App\Http\Controllers\FileManagementController::class, 'storeFiles'] )->name('upload-files');
+    Route::post('/create-folder', [App\Http\Controllers\FileManagementController::class, 'createFolder'] )->name('create-folder');
+    Route::get('/folder/{slug}', [App\Http\Controllers\FileManagementController::class, 'openFolder'] )->name('open-folder');
+    Route::get('/download/{slug}', [App\Http\Controllers\FileManagementController::class, 'downloadAttachment'] )->name('download-attachment');
+    Route::post('/delete-file', [App\Http\Controllers\FileManagementController::class, 'deleteAttachment'])->name('delete-file');
+    Route::post('/delete-folder', [App\Http\Controllers\FileManagementController::class, 'deleteFolder'])->name('delete-folder');
+});
+
+Route::prefix('/bulk-sms')->group(function(){
+    Route::get('/phone-group',[App\Http\Controllers\SMSController::class, 'showPhoneGroupForm'])->name('phone-group');
+    Route::post('/phone-group',[App\Http\Controllers\SMSController::class, 'setNewPhoneGroup']);
+    Route::get('/top-up',[App\Http\Controllers\SMSController::class, 'showTopUpForm'])->name('top-up');
+    Route::post('/top-up',[App\Http\Controllers\SMSController::class, 'processTopUpRequest']);
+    Route::get('/compose-message',[App\Http\Controllers\SMSController::class, 'showComposeMessageForm'])->name('compose-message');
+    Route::get('/preview-message',[App\Http\Controllers\SMSController::class, 'previewMessage'])->name('preview-message');
+    Route::post('/send-text-message',[App\Http\Controllers\SMSController::class, 'sendTextMessage'])->name('send-text-message');
+    Route::get('/bulk-messages',[App\Http\Controllers\SMSController::class, 'getBulkMessages'])->name('bulk-messages');
+    Route::get('/bulk-messages/{slug}',[App\Http\Controllers\SMSController::class, 'viewBulkMessage'])->name('view-bulk-message');
+});
+
+Route::prefix('/company')->group(function (){
+    Route::get('/dashboard', [App\Http\Controllers\CompanyController::class, 'dashboard'])->name('dashboard');
+    Route::get('/licence-certificates', [App\Http\Controllers\CompanyController::class, 'licenceCertificates'])->name('licence-certificates');
+    Route::get('/company-profile', [App\Http\Controllers\CompanyController::class, 'getCompanyProfile'])->name('company-profile');
+    Route::post('/update-company-profile', [App\Http\Controllers\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
+    Route::get('/new-licence-application', [App\Http\Controllers\CompanyController::class, 'showNewLicenceApplicationForm'])->name('new-licence-application');
+    Route::get('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
+    Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
+    Route::get('/add-new-device-equipment', [App\Http\Controllers\CompanyController::class, 'showNewEquipmentForm'])->name('add-new-device-equipment');
+});
+
+
+#Paystack callback
+Route::get('/process/payment', [App\Http\Controllers\PaymentController::class, 'processOnlinePayment']);
+
+
+
+Route::post('/load-local-governments', [App\Http\Controllers\ShareResourceController::class, 'loadLocalGovernments']);
+Route::post('/load-departments', [App\Http\Controllers\ShareResourceController::class, 'loadDepartments']);
+Route::post('/load-job-roles', [App\Http\Controllers\ShareResourceController::class, 'loadJobRoles']);

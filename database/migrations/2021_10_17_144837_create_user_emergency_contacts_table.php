@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateUserEmergencyContactsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('user_emergency_contacts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->comment('owner');
+            $table->string('full_name');
+            $table->string('mobile_no')->nullable();
+            $table->string('email')->nullable();
+            $table->string('relationship')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('user_emergency_contacts');
+    }
+}
