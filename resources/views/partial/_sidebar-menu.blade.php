@@ -13,6 +13,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('all-employees')}}">Applications</a></li>
                     <li><a href="{{route('add-new-employee')}}">Companies</a></li>
+                    <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

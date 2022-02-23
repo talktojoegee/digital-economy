@@ -31,6 +31,7 @@ class Department extends Model
         $department = Department::find($request->department);
         $department->department_name = $request->department_name ?? "";
         $department->save();
+        return $department;
     }
 
     public function getAllDepartments(){

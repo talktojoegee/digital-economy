@@ -93,6 +93,7 @@ Route::prefix('/bulk-sms')->group(function(){
     Route::post('/send-text-message',[App\Http\Controllers\SMSController::class, 'sendTextMessage'])->name('send-text-message');
     Route::get('/bulk-messages',[App\Http\Controllers\SMSController::class, 'getBulkMessages'])->name('bulk-messages');
     Route::get('/bulk-messages/{slug}',[App\Http\Controllers\SMSController::class, 'viewBulkMessage'])->name('view-bulk-message');
+    Route::post('/bulk-messages/settings/compose',[App\Http\Controllers\SMSController::class, 'appDefaultSmsSettings'])->name('app-sms-settings');
 });
 
 Route::prefix('/company')->group(function (){
@@ -104,6 +105,11 @@ Route::prefix('/company')->group(function (){
     Route::get('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
     Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
     Route::get('/add-new-device-equipment', [App\Http\Controllers\CompanyController::class, 'showNewEquipmentForm'])->name('add-new-device-equipment');
+});
+
+Route::prefix('/workflow')->group(function(){
+    Route::get('/settings', [App\Http\Controllers\WorkflowController::class, 'showWorkflowSettings'])->name('workflow-settings');
+    Route::post('/settings', [App\Http\Controllers\WorkflowController::class, 'appDefaultSettings']);
 });
 
 

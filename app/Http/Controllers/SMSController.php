@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSmsSetting;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use App\Models\BulkMessage;
 use App\Models\BulkSmsAccount;
@@ -24,7 +26,27 @@ class SMSController extends Controller
         $this->phonegroup = new PhoneGroup();
         $this->bulksmsaccount = new BulkSmsAccount();
         $this->bulkmessage = new BulkMessage();
+        $this->appsmssettings = new AppSmsSetting();
+        $this->auditlog = new AuditLog();
 
+    }
+
+    public function appDefaultSmsSettings(Request $request){
+        $this->validate($request,[
+           'new_licence_sms'=>'required',
+           'licence_renewal_sms'=>'required',
+           'licence_renewal_sms_ack'=>'required'
+        ],[
+            'new_licence_sms.required'=>'Compose an SMS for new licence acknowledgement',
+            'licence_renewal_sms_ack.required'=>'Compose an SMS for licence renewal reminder',
+            'licence_renewal_sms.required'=>'Compose an SMS for licence renewal acknowledgement',
+        ]);
+        $this->appsmssettings->addAppSmsDefaultSetting($request);
+        $message = Auth::user()->first_name." added new SMS message for new licence, renewal reminder";
+        $subject = "Default SMS settings";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success",  "Your settings were saved successfully.");
+        return back();
     }
 
     public function showPhoneGroupForm()
@@ -54,6 +76,9 @@ class SMSController extends Controller
         $filter = array_unique($filtered_numbers);
         $phone_numbers = implode(",", $filter);
         $this->phonegroup->setNewPhoneGroup($request, $phone_numbers);
+        $message = Auth::user()->first_name." created a new phone group (".$request->group_name.")";
+        $subject = "New Phone Group";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success", "Your phone group was successfully published.");
         return back();
     }
@@ -197,6 +222,9 @@ class SMSController extends Controller
             if ($response->getStatusCode() == 200) {
                 $this->bulksmsaccount->debitAccount(substr(sha1(time()), 27, 40), $request->cost, $units);
                 $this->bulkmessage->setNewMessage($request->message, $request->phone_numbers);
+                $message = Auth::user()->first_name." sent bulk SMS";
+                $subject = "Bulk SMS service";
+                $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
                 session()->flash("success", "Your text message was sent successfully.");
                 return redirect()->route('compose-message');
             } else {

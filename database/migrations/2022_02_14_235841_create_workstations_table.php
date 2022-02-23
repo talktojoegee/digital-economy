@@ -20,6 +20,8 @@ class CreateWorkstationsTable extends Migration
             $table->string('address')->nullable();
             $table->string('mobile_no')->nullable();
             $table->string('capacity')->nullable();
+            $table->string('long')->nullable();
+            $table->string('lat')->nullable();
             $table->timestamps();
         });
     }

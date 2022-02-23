@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                         <div class="form-group">
-                                            <a class="text-white" href="{{route('password.request')}}">Already Have An Account? Login here</a>
+                                            <a class="text-white" href="{{route('login')}}">Already Have An Account? Login here</a>
                                         </div>
                                     </div>
                                     <div class="text-center">

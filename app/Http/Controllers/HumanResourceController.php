@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\GradeLevel;
@@ -13,6 +14,7 @@ use App\Models\Supervisor;
 use App\Models\SupervisorLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HumanResourceController extends Controller
 {
@@ -29,6 +31,7 @@ class HumanResourceController extends Controller
         $this->jobrole = new JobRole();
         $this->state = new State();
         $this->localgovernment = new LocalGovernment();
+        $this->auditlog = new AuditLog();
 
     }
 
@@ -86,6 +89,9 @@ class HumanResourceController extends Controller
             'grade_level.required'=>'Select grade level'
         ]);
         $this->user->setNewEmployee($request);
+        $message = Auth::user()->first_name." added a new employee (".$request->first_name." ".$request->surname.") to the system.";
+        $subject = "New employee enrollment";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success", "<strong>Congratulations!</strong> You've successfully added a new employee to the system. A <code>random password</code> was sent to
   <u class='text-muted'>$request->email</u> along with other details. Thank you <i class='ti-heart ml-2 text-warning'></i>");
         return back();
@@ -127,6 +133,9 @@ class HumanResourceController extends Controller
             'department_name.unique'=>"The department name you entered already exist"
         ]);
         $this->department->setNewDepartment($request);
+        $message = Auth::user()->first_name." added a new section to the system";
+        $subject = "New section/unit";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success", "<strong>Success!</strong> Department name registered.");
         return back();
     }
@@ -137,7 +146,10 @@ class HumanResourceController extends Controller
         ],[
             'department_name.required'=>'Enter department name'
         ]);
-        $this->department->updateDepartment($request);
+        $update = $this->department->updateDepartment($request);
+        $message = Auth::user()->first_name." updated section/unit from (".$request->department_name.") to (".$update->department_name.")";
+        $subject = "Update on section/unit";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success", "<strong>Success!</strong> Your changes were saved.");
         return back();
     }
