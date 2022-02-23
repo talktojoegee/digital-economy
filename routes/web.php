@@ -105,6 +105,9 @@ Route::prefix('/company')->group(function (){
     Route::get('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
     Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
     Route::get('/add-new-device-equipment', [App\Http\Controllers\CompanyController::class, 'showNewEquipmentForm'])->name('add-new-device-equipment');
+    Route::get('/directors', [App\Http\Controllers\CompanyController::class, 'showDirectors'])->name('show-directors');
+    Route::post('/directors', [App\Http\Controllers\CompanyController::class, 'addDirector']);
+    Route::post('/edit-director-record', [App\Http\Controllers\CompanyController::class, 'updateDirector'])->name('edit-director-record');
 });
 
 Route::prefix('/workflow')->group(function(){

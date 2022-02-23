@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\CompanyDirector;
+use App\Models\Country;
 use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
@@ -20,6 +23,9 @@ class CompanyController extends Controller
         $this->lga = new LocalGovernment();
         $this->letter = new LicenceApplication();
         $this->licencecategory = new LicenceCategory();
+        $this->director = new CompanyDirector();
+        $this->country = new Country();
+        $this->auditlog = new AuditLog();
     }
 
 
@@ -100,5 +106,59 @@ class CompanyController extends Controller
 
     public function showNewEquipmentForm(){
         return view('operators.new-equipment');
+    }
+
+    public function showDirectors(){
+        return view('operators.directors',
+            [
+                'directors'=>$this->director->getCompanyDirectors(Auth::user()->id),
+                'countries'=>$this->country->getCountries()
+            ]);
+    }
+
+    public function addDirector(Request $request){
+        $this->validate($request,[
+            'full_name'=>'required',
+            'email'=>'required|email',
+            'mobile_no'=>'required',
+            'address'=>'required',
+            'nationality'=>'required'
+        ],[
+            'full_name.required'=>"Enter director's full name",
+            'email.required'=>"Enter email address",
+            'email.email'=>"Enter a valid email address",
+            'mobile_no.required'=>"Enter director's mobile number",
+            'address.required'=>"Enter address",
+            'nationality.required'=>'Select country from the list provided'
+        ]);
+        $director = $this->director->addCompanyDirector($request);
+        $message = Auth::user()->first_name." added a new director(".$director->full_name.")";
+        $subject = "New Director ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return back();
+    }
+    public function updateDirector(Request $request){
+        $this->validate($request,[
+            'full_name'=>'required',
+            'email'=>'required|email',
+            'mobile_no'=>'required',
+            'address'=>'required',
+            'nationality'=>'required',
+            'director'=>'required'
+        ],[
+            'full_name.required'=>"Enter director's full name",
+            'email.required'=>"Enter email address",
+            'email.email'=>"Enter a valid email address",
+            'mobile_no.required'=>"Enter director's mobile number",
+            'address.required'=>"Enter address",
+            'nationality.required'=>'Select country from the list provided'
+        ]);
+        $director = $this->director->updateCompanyDirector($request);
+        $message = Auth::user()->first_name." updated director(".$director->full_name.") record";
+        $subject = "Director record edited ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return back();
     }
 }

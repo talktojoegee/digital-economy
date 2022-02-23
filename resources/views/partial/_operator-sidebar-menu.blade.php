@@ -13,7 +13,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('new-licence-application')}}">New Application</a></li>
                     <li><a href="{{route('licence-certificates')}}">All Applications</a></li>
-                    <li><a href="{{route('licence-certificates')}}">Licence Certificates</a></li>
+                    <li><a href="{{route('licence-certificates')}}">Licence Radio Stations</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -22,9 +22,12 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('company-profile')}}">Profile</a></li>
+                    <li><a href="{{route('show-directors')}}">Directors</a></li>
+                    <li><a href="{{route('add-new-device-equipment')}}">Contact Persons</a></li>
+                    <li><a href="{{route('add-new-device-equipment')}}">Documents</a></li>
                     <li><a href="{{route('add-new-device-equipment')}}">New Equipment</a></li>
                     <li><a href="{{route('phone-group')}}">All Equipments</a></li>
-                    <li><a href="{{route('manage-publication-categories')}}">Work Stations</a></li>
+                    <li><a href="{{route('manage-publication-categories')}}">Radio Work Stations</a></li>
                 </ul>
             </li>
             <li><a href="{{route('news-feed')}}" class="ai-icon" aria-expanded="false">
