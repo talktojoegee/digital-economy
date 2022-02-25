@@ -55,6 +55,7 @@
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Mobile No.</th>
+                                <th>Status</th>
                                 <th>Nationality</th>
                                 <th>Action</th>
                             </tr>
@@ -67,6 +68,7 @@
                                         <td>{{$director->full_name ?? '' }}</td>
                                         <td>{{$director->email ?? ''}}</td>
                                         <td>{{$director->mobile_no ?? ''}}</td>
+                                        <td>{!! $director->status == 1 ? "<span class='text-success'>Active</span>" : "<span class='text-danger'>Inactive</span>"!!}</td>
                                         <td>{{$director->getCountry->nicename ?? ''}}</td>
                                         <td>
                                             <div class="d-flex">
@@ -112,8 +114,21 @@
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
+                                                                                <label for="">Is this person currently a director? <sup class="text-danger">*</sup></label>
+                                                                                <select name="director_status" id="director_status" class="form-control js-example-theme-single">
+                                                                                    <option selected disabled>-- Select status --</option>
+                                                                                    <option value="1">Yes</option>
+                                                                                    <option value="0">No</option>
+                                                                                </select>
+                                                                                @error('director_status')
+                                                                                <i class="text-danger">{{$message}}</i>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
                                                                                 <label for="">Nationality <sup class="text-danger">*</sup></label>
-                                                                                <select name="nationality" id="nationality" class="form-control js-example-theme-single">
+                                                                                <select name="nationality" id="nationality_{{$director->id}}" class="form-control js-example-theme-single">
                                                                                     <option selected disabled>-- Select nationality --</option>
                                                                                     @foreach($countries as $country)
                                                                                         <option value="{{$country->id}}" {{$country->id == $director->nationality ? 'selected' : '' }}>{{$country->nicename ?? '' }}</option>
@@ -190,6 +205,19 @@
                                     <label for="">Mobile No. <sup class="text-danger">*</sup></label>
                                     <input type="text" name="mobile_no" value="{{old('mobile_no')}}" placeholder="Mobile No." class="form-control">
                                     @error('mobile_no')
+                                        <i class="text-danger">{{$message}}</i>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">Is this person currently a director? <sup class="text-danger">*</sup></label>
+                                    <select name="director_status" id="director_status" class="form-control js-example-theme-single">
+                                        <option selected disabled>-- Select status --</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    @error('director_status')
                                         <i class="text-danger">{{$message}}</i>
                                     @enderror
                                 </div>

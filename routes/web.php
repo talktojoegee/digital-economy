@@ -102,12 +102,22 @@ Route::prefix('/company')->group(function (){
     Route::get('/company-profile', [App\Http\Controllers\CompanyController::class, 'getCompanyProfile'])->name('company-profile');
     Route::post('/update-company-profile', [App\Http\Controllers\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
     Route::get('/new-licence-application', [App\Http\Controllers\CompanyController::class, 'showNewLicenceApplicationForm'])->name('new-licence-application');
-    Route::get('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
+    Route::post('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
     Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
     Route::get('/add-new-device-equipment', [App\Http\Controllers\CompanyController::class, 'showNewEquipmentForm'])->name('add-new-device-equipment');
+
     Route::get('/directors', [App\Http\Controllers\CompanyController::class, 'showDirectors'])->name('show-directors');
     Route::post('/directors', [App\Http\Controllers\CompanyController::class, 'addDirector']);
     Route::post('/edit-director-record', [App\Http\Controllers\CompanyController::class, 'updateDirector'])->name('edit-director-record');
+
+    Route::get('/contact-persons', [App\Http\Controllers\CompanyController::class, 'showContactPersons'])->name('show-contact-persons');
+    Route::post('/contact-persons', [App\Http\Controllers\CompanyController::class, 'addContactPersons']);
+    Route::post('/edit-person-record', [App\Http\Controllers\CompanyController::class, 'updateContactPersons'])->name('edit-person-record');
+
+    Route::get('/radio-work-station', [App\Http\Controllers\CompanyController::class, 'showRadioWorkStation'])->name('radio-work-station');
+    Route::post('/radio-work-station', [App\Http\Controllers\CompanyController::class, 'addRadioWorkStation']);
+    Route::post('/edit-radio-work-station', [App\Http\Controllers\CompanyController::class, 'updateRadioWorkStation'])->name('edit-radio-work-station');
+    Route::get('/edit/radio-work-station/{slug}', [App\Http\Controllers\CompanyController::class, 'viewRadioWorkStation'])->name('view-radio-work-station');
 });
 
 Route::prefix('/workflow')->group(function(){

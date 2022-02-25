@@ -37,53 +37,117 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="{{route('preview-letter')}}" method="get">
+                            <form action="{{route('preview-letter')}}" method="post">
                                     @csrf
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Equipment</label>
-                                            <select name="equipment" id="equipment" class="form-control js-example-theme-single">
-                                                <option selected disabled>-- Select equipment --</option>
-                                            </select>
-                                            @error('equipment')
-                                                <i class="text-danger mt-2">{{$message}}</i>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Workstation</label>
-                                            <select name="workstation" id="workstation" class="form-control js-example-theme-single">
-                                                <option selected disabled>-- Select workstation --</option>
-                                            </select>
-                                            @error('workstation')
-                                                <i class="text-danger mt-2">{{$message}}</i>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Licence Category</label>
-                                            <select name="licence_category" id="licence_category" class="form-control js-example-theme-single">
-                                                <option selected disabled>-- Select Licence Category --</option>
-                                                @foreach($licence_categories as $cat)
-                                                    <option value="{{$cat->id}}">{{$cat->category_name ?? '' }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('licence_category')
-                                                <i class="text-danger mt-2">{{$message}}</i>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="">Compose Letter</label>
+                                            <label for="">Compose Ministerial Memo</label>
                                             <textarea name="compose_letter" id="compose_letter" placeholder="Type letter here..." style="resize: none;" class="form-control content">{{old('compose_letter')}}</textarea>
                                             @error('compose_letter')
                                                 <i class="text-danger mt-2">{{$message}}</i>
                                             @enderror
+                                        </div>
+                                        <!--
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Equipment</label>
+                                                    <select name="equipment" id="equipment" class="form-control js-example-theme-single">
+                                                        <option selected disabled>-- Select equipment --</option>
+                                                    </select>
+                                                    @error('equipment')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Workstation</label>
+                                                    <select name="workstation" id="workstation" class="form-control js-example-theme-single">
+                                                        <option selected disabled>-- Select workstation --</option>
+                                                        @foreach($work_stations as $station)
+                                                            <option value="{{$station->id}}">{{$station->work_station_name ?? '' }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('workstation')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Licence Category</label>
+                                                    <select name="licence_category" id="licence_category" class="form-control js-example-theme-single">
+                                                        <option selected disabled>-- Select Licence Category --</option>
+                                                        @foreach($licence_categories as $cat)
+                                                            <option value="{{$cat->id}}">{{$cat->category_name ?? '' }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('licence_category')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table card-table table-vcenter text-nowrap mb-0 invoice-detail-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Equipment</th>
+                                                        <th>Work Station</th>
+                                                        <th>Licence Category</th>
+                                                        <th>Quantity</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="products">
+                                                    <tr class="item">
+                                                        <td >
+                                                            <select name="equipment[]"  class="form-control js-example-theme-single">
+                                                                <option selected disabled>-- Select equipment --</option>
+                                                            </select>
+                                                            @error('equipment')
+                                                            <i class="text-danger mt-2">{{$message}}</i>
+                                                            @enderror
+                                                        </td>
+                                                        <td>
+                                                            <select name="workstation[]" class="form-control js-example-theme-single">
+                                                                <option selected disabled>-- Select workstation --</option>
+                                                                @foreach($work_stations as $station)
+                                                                    <option value="{{$station->id}}">{{$station->work_station_name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('workstation')
+                                                            <i class="text-danger mt-2">{{$message}}</i>
+                                                            @enderror
+                                                        </td>
+                                                        <td>
+                                                            <select name="licence_category[]" id="licence_category" class="form-control js-example-theme-single">
+                                                                <option selected disabled>-- Select Licence Category --</option>
+                                                                @foreach($licence_categories as $cat)
+                                                                    <option value="{{$cat->id}}">{{$cat->category_name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('licence_category')
+                                                            <i class="text-danger mt-2">{{$message}}</i>
+                                                            @enderror
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="quantity[]" placeholder="Quantity" class="form-control total_amount">
+                                                        </td>
+                                                        <td>
+                                                            <i class="ti-trash text-danger remove-line" style="cursor: pointer;"></i>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                                <button class="btn btn-sm btn-primary add-line" type="button"> <i class="ti-plus mr-2"></i> Add Another Equipment</button>
+                                            </div>
                                         </div>
                                     </div>
 

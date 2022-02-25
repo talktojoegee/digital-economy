@@ -11,7 +11,7 @@
                     <span class="nav-text">Licence</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{route('new-licence-application')}}">New Application</a></li>
+                    <li><a href="{{route('new-licence-application')}}">New Ministerial Memo</a></li>
                     <li><a href="{{route('licence-certificates')}}">All Applications</a></li>
                     <li><a href="{{route('licence-certificates')}}">Licence Radio Stations</a></li>
                 </ul>
@@ -23,11 +23,11 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('company-profile')}}">Profile</a></li>
                     <li><a href="{{route('show-directors')}}">Directors</a></li>
-                    <li><a href="{{route('add-new-device-equipment')}}">Contact Persons</a></li>
+                    <li><a href="{{route('show-contact-persons')}}">Contact Persons</a></li>
                     <li><a href="{{route('add-new-device-equipment')}}">Documents</a></li>
                     <li><a href="{{route('add-new-device-equipment')}}">New Equipment</a></li>
                     <li><a href="{{route('phone-group')}}">All Equipments</a></li>
-                    <li><a href="{{route('manage-publication-categories')}}">Radio Work Stations</a></li>
+                    <li><a href="{{route('radio-work-station')}}">Radio Work Stations</a></li>
                 </ul>
             </li>
             <li><a href="{{route('news-feed')}}" class="ai-icon" aria-expanded="false">

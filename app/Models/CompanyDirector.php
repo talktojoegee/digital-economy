@@ -34,6 +34,7 @@ class CompanyDirector extends Model
         //$director->birth_month = date("m", $date);
         //$director->birth_year = date("Y", $date);
         $director->nationality = $request->nationality ?? '';
+        $director->status = $request->director_status ?? 0;
         //$director->marital_status = $request->marital_status ?? '';
         $director->save();
         return $director;
@@ -47,6 +48,7 @@ class CompanyDirector extends Model
         $director->address = $request->address ?? '';
         $director->email = $request->email ?? '';
         $director->mobile_no = $request->mobile_no ?? '';
+        $director->status = $request->director_status ?? 0;
         //$director->birth_date = $request->birth_date ?? '';
         //$director->birth_month = date("m", $date);
         //$director->birth_year = date("Y", $date);

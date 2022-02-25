@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\CompanyContactPerson;
 use App\Models\CompanyDirector;
 use App\Models\Country;
 use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
 use App\Models\State;
+use App\Models\Workstation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +28,8 @@ class CompanyController extends Controller
         $this->director = new CompanyDirector();
         $this->country = new Country();
         $this->auditlog = new AuditLog();
+        $this->contactperson = new CompanyContactPerson();
+        $this->workstation = new Workstation();
     }
 
 
@@ -82,7 +86,8 @@ class CompanyController extends Controller
 
     public function showNewLicenceApplicationForm(){
         return view('operators.new-application', [
-            'licence_categories'=>$this->licencecategory->getLicenceCategories()
+            'licence_categories'=>$this->licencecategory->getLicenceCategories(),
+            'work_stations'=>$this->workstation->getCompanyWorkStations(Auth::user()->id)
         ]);
     }
 
@@ -122,14 +127,16 @@ class CompanyController extends Controller
             'email'=>'required|email',
             'mobile_no'=>'required',
             'address'=>'required',
-            'nationality'=>'required'
+            'nationality'=>'required',
+            'director_status'=>'required'
         ],[
             'full_name.required'=>"Enter director's full name",
             'email.required'=>"Enter email address",
             'email.email'=>"Enter a valid email address",
             'mobile_no.required'=>"Enter director's mobile number",
             'address.required'=>"Enter address",
-            'nationality.required'=>'Select country from the list provided'
+            'nationality.required'=>'Select country from the list provided',
+            'director_status.required'=>'Select status'
         ]);
         $director = $this->director->addCompanyDirector($request);
         $message = Auth::user()->first_name." added a new director(".$director->full_name.")";
@@ -145,14 +152,16 @@ class CompanyController extends Controller
             'mobile_no'=>'required',
             'address'=>'required',
             'nationality'=>'required',
-            'director'=>'required'
+            'director'=>'required',
+            'director_status'=>'required'
         ],[
             'full_name.required'=>"Enter director's full name",
             'email.required'=>"Enter email address",
             'email.email'=>"Enter a valid email address",
             'mobile_no.required'=>"Enter director's mobile number",
             'address.required'=>"Enter address",
-            'nationality.required'=>'Select country from the list provided'
+            'nationality.required'=>'Select country from the list provided',
+            'director_status.required'=>'Select status'
         ]);
         $director = $this->director->updateCompanyDirector($request);
         $message = Auth::user()->first_name." updated director(".$director->full_name.") record";
@@ -160,5 +169,135 @@ class CompanyController extends Controller
         $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success", "Your action was carried out successfully.");
         return back();
+    }
+
+    public function showContactPersons(){
+        return view('operators.contact-persons',
+            [
+                'persons'=>$this->contactperson->getCompanyContactPersons(Auth::user()->id),
+            ]);
+    }
+
+    public function addContactPersons(Request $request){
+        $this->validate($request,[
+            'full_name'=>'required',
+            'email'=>'required|email',
+            'mobile_no'=>'required',
+            'address'=>'required',
+            'person_status'=>'required'
+        ],[
+            'full_name.required'=>"Enter full name",
+            'email.required'=>"Enter email address",
+            'email.email'=>"Enter a valid email address",
+            'mobile_no.required'=>"Enter mobile number",
+            'address.required'=>"Enter address",
+            'person_status.required'=>'Select status'
+        ]);
+        $person = $this->contactperson->addCompanyContactPerson($request);
+        $message = Auth::user()->first_name." added a new contact person(".$person->full_name.")";
+        $subject = "New Contact Person ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return back();
+    }
+    public function updateContactPersons(Request $request){
+        $this->validate($request,[
+            'full_name'=>'required',
+            'email'=>'required|email',
+            'mobile_no'=>'required',
+            'address'=>'required',
+            'person'=>'required',
+            'person_status'=>'required'
+        ],[
+            'full_name.required'=>"Enter full name",
+            'email.required'=>"Enter email address",
+            'email.email'=>"Enter a valid email address",
+            'mobile_no.required'=>"Enter mobile number",
+            'address.required'=>"Enter address",
+            'person_status.required'=>'Select status'
+        ]);
+        $person = $this->contactperson->updateCompanyContactPerson($request);
+        $message = Auth::user()->first_name." updated contact person(".$person->full_name.") record";
+        $subject = "Contact person record edited ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return back();
+    }
+
+    public function showRadioWorkStation(){
+        return view('operators.work-stations',[
+            'work_stations'=>$this->workstation->getCompanyWorkStations(Auth::user()->id),
+            'states'=>$this->state->getAllStates()
+        ]);
+    }
+
+    public function addRadioWorkStation(Request $request){
+        $this->validate($request,[
+            'work_station_name'=>'required',
+            'state'=>'required',
+            'address'=>'required',
+            'mobile_no'=>'required',
+            //'capacity'=>'required',
+            'long'=>'required',
+            'lat'=>'required',
+            'status'=>'required'
+        ],[
+            'work_station_name.required'=>'What do you call this work station?',
+            'state.required'=>'Select the state in which the radio work station is located',
+            'address.required'=>'Enter the address',
+            'mobile_no.required'=>'Enter radio work station contact number',
+            'capacity.required'=>"What's the capacity of this radio work station?",
+            'long.required'=>'Enter radio work station longitude',
+            'lat.required'=>'Enter radio work station latitude',
+            'status.required'=>'Is this radio work station still active?'
+        ]);
+        $station = $this->workstation->addWorkStation($request);
+        $message = Auth::user()->first_name." added a new radio work station(".$station->work_station_name.") record";
+        $subject = "New radio work station ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return back();
+    }
+
+    public function updateRadioWorkStation(Request $request){
+        $this->validate($request,[
+            'work_station_name'=>'required',
+            'state'=>'required',
+            'address'=>'required',
+            'mobile_no'=>'required',
+            'station'=>'required',
+            'long'=>'required',
+            'lat'=>'required',
+            'status'=>'required'
+        ],[
+            'work_station_name.required'=>'What do you call this work station?',
+            'state.required'=>'Select the state in which the radio work station is located',
+            'address.required'=>'Enter the address',
+            'mobile_no.required'=>'Enter radio work station contact number',
+            'capacity.required'=>"What's the capacity of this radio work station?",
+            'long.required'=>'Enter radio work station longitude',
+            'lat.required'=>'Enter radio work station latitude',
+            'status.required'=>'Is this radio work station still active?'
+        ]);
+        $station = $this->workstation->updateWorkStation($request);
+        $message = Auth::user()->first_name." updated radio work station(".$station->work_station_name.") record";
+        $subject = "Updated radio work station ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your action was carried out successfully.");
+        return redirect()->route('radio-work-station');
+    }
+
+    public function viewRadioWorkStation($slug){
+        $station = $this->workstation->getCompanyWorkStationBySlug($slug);
+        if(!empty($station)){
+            return view('operators.work-station-details',
+                [
+                    'station'=>$station,
+                    'states'=>$this->state->getAllStates()
+                ]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
     }
 }
