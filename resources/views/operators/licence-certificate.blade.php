@@ -19,7 +19,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">All Certificates</h4>
+                    <h4 class="card-title">All Radio Licence Stations</h4>
                     <div class="btn-group">
                         <a href="{{route('new-licence-application')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-plus mr-2"></i> New Licence Application</a>
                     </div>
@@ -43,16 +43,45 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Licence No.</th>
-                                <th>Date Issued</th>
-                                <th>Expires On</th>
-                                <th>Status</th>
+                                <th>Date</th>
                                 <th>Category</th>
+                                <th>Workstation</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
+                            @foreach(Auth::user()->getCompanyApplications as $app)
+                                <tr>
+                                    <td>{{$serial++}}</td>
+                                    <td>{{date('d M, Y', strtotime($app->created_at))}}</td>
+                                    <td>{{$app->getLicenceCategory->category_name ?? '' }}</td>
+                                    <td>{{$app->getWorkStation->work_station_name ?? '' }}</td>
+                                    <td>
+                                        @switch($app->status)
+                                            @case(0)
+                                            <label for="" class="text-secondary">Received</label>
+                                            @break
+                                            @case(1)
+                                            <label for="" class="text-primary">Acknowledged</label>
+                                            @break
+                                            @case(2)
+                                            <label for="" class="text-warning">Processing</label>
+                                            @break
+                                            @case(3)
+                                            <label for="" class="text-danger">Declined</label>
+                                            @break
+                                            @case(4)
+                                            <label for="" class="text-success">Approved/Closed</label>
+                                            @break
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        <a href="{{route('view-memo', $app->slug)}}" class=""><i class="ti-eye mr-2 text-primary"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
 
                             </tbody>
                         </table>

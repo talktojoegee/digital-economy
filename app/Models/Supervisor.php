@@ -61,4 +61,8 @@ class Supervisor extends Model
         }
     }
 
+    public function getActiveSupervisorByDepartmentId($department_id){
+        return Supervisor::where('department_id', $department_id)->where('status',1)->first();
+    }
+
 }

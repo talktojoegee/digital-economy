@@ -44,6 +44,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getAdminNotifications(){
+        return $this->hasMany(AdminNotification::class, 'user_id');
+    }
+
+
+
     public function getDepartment(){
         return $this->belongsTo(Department::class, 'department_id');
     }
@@ -74,11 +80,10 @@ class User extends Authenticatable
 
 
 
-
-
     /*
      * Use-case methods
-     */
+    */
+
     public function getAllEmployees(){
         return User::orderBy('first_name', 'ASC')->get();
     }

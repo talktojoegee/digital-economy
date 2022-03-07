@@ -1,12 +1,12 @@
 @extends('layouts.operator-layout')
 @section('title')
-    Preview Your Letter
+    Ministerial Memo
 @endsection
 @section('extra-styles')
 
 @endsection
 @section('active-page')
-    Preview Your Letter
+    Ministerial Memo
 @endsection
 
 @section('main-content')
@@ -14,7 +14,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Preview</h4>
+                    <h4 class="card-title">Ministerial Memo</h4>
 
                 </div>
                 <div class="card-body">
@@ -57,19 +57,50 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            {!! $handler->compose_letter ?? '' !!}
+                                            {!! $app->content ?? '' !!}
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-center">
-                                            <form action="{{route('submit-letter')}}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="compose_letter" value="{{$handler->compose_letter}}">
-                                                <a href="{{url()->previous()}}" class="btn btn-light btn-sm">Cancel</a>
-                                                <button class="btn btn-sm btn-warning text-white">Print</button>
-                                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
-                                            </form>
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            <h4>Trail</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-responsive-sm">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Office</th>
+                                                        <th>Status</th>
+                                                        <th>Comment</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @php $index = 1; @endphp
+                                                    @foreach($app->getWorkflowProcess as $process)
+                                                    <tr>
+                                                        <th>{{$index}}</th>
+                                                        <td>{{$process->getOfficer->first_name ?? ''}} {{$process->getOfficer->last_name ?? ''}}</td>
+                                                        <td>{{$process->getOfficer->getDepartment->department_name ?? '' }}</td>
+                                                        <td>
+                                                            @switch($process->status)
+                                                                @case(0)
+                                                                <span class="text-warning">Pending</span>
+                                                                @break
+                                                                @case(1)
+                                                                <span class="text-success">Approved</span>
+                                                                @break
+                                                                @case(2)
+                                                                <span class="text-danger">Declined</span>
+                                                                @break
+                                                            @endswitch
+                                                        </td>
+                                                        <td class="color-primary">$21.56</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
