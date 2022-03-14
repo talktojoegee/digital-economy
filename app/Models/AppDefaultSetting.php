@@ -36,4 +36,6 @@ class AppDefaultSetting extends Model
             $app->save();
         }
     }
+
+
 }

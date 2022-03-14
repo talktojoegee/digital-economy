@@ -9,6 +9,7 @@ use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\GradeLevel;
 use App\Models\JobRole;
+use App\Models\LicenceApplication;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
 use App\Models\State;
@@ -36,6 +37,7 @@ class WorkflowController extends Controller
         $this->appdefaultsettings = new AppDefaultSetting();
         $this->appsmsdefaultsettings = new AppSmsSetting();
         $this->auditlog = new AuditLog();
+        $this->licenceapplication = new LicenceApplication();
     }
 
     public function showWorkflowSettings(){
@@ -70,5 +72,19 @@ class WorkflowController extends Controller
         $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
         session()->flash("success",  "Your settings were saved successfully.");
         return back();
+    }
+
+    public function workflow(){
+        return view('workflow.index');
+    }
+
+    public function readMemo($slug){
+        $memo = $this->licenceapplication->getLicenceApplicationByCompanySlug($slug);
+        if(!empty($memo)){
+            return view('workflow.view',['memo'=>$memo]);
+        }else{
+            session()->flash("error", "Record not found.");
+            return redirect()->route('workflow');
+        }
     }
 }

@@ -13,6 +13,24 @@ class LicenceApplication extends Model
 
 
 
+    public function getWorkStation(){
+        return $this->belongsTo(Workstation::class, 'company_id');
+    }
+
+    public function getLicenceCategory(){
+        return $this->belongsTo(LicenceCategory::class, 'licence_category');
+    }
+
+    public function getWorkflowProcess(){
+        return $this->hasMany(WorkflowProcess::class, 'post_id');
+    }
+
+
+    public function getLicenceApplicationBySlug($slug){
+        return LicenceApplication::where('slug', $slug)->first();
+    }
+
+
     public function addLicenceApplication(Request $request){
 
         $app = new LicenceApplication();
@@ -33,7 +51,7 @@ class LicenceApplication extends Model
     }
 
     public function getLicenceApplicationByCompanySlug($slug){
-        return LicenceApplication::where('slug', $slug)->orderBy('DESC')->first();
+        return LicenceApplication::where('slug', $slug)->first();
     }
 
    /* public function updateLicenceApplicationStatus($companyId){
