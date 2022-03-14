@@ -21,7 +21,7 @@
                 <div class="card-header">
                     <h4 class="card-title">{{$station->work_station_name ?? '' }} Location</h4>
                     <div class="btn-group">
-                        <button data-toggle="modal" data-target="#directorModal" class="btn btn-sm btn-primary float-right"> <i class="ti-flag mr-2"></i> Add New Radio Work Station</button>
+                        <a href="{{route('radio-work-station')}}"  class="btn btn-sm btn-primary float-right"> <i class="ti-flag mr-2"></i> All Radio Stations</a>
                     </div>
                 </div>
                 <div class="card-body">

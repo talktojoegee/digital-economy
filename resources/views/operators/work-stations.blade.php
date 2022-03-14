@@ -44,9 +44,20 @@
                                     </button>
                                 </div>
                             @endif
+                                @if($errors->any())
+                                <div class="alert alert-warning alert-dismissible fade show">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{$error}}</li>
+                                    @endforeach
+                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                                    </button>
+                                </div>
+                            @endif
 
                         </div>
                     </div>
+                    <p>All your radio stations listed here will be available for licence application or anywhere needed within the application. This does not mean it is licenced yet.</p>
                     <div class="table-responsive">
                         <table id="example3" class="display table-responsive-lg">
                             <thead>
@@ -86,13 +97,19 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"> <i class="ti-flag mr-3"></i> Add New Radio Work Station</h5>
+                    <h5 class="modal-title"> <i class="ti-flag mr-3"></i> Add New Radio Station</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
                 <form action="{{route('radio-work-station')}}" method="post" autocomplete="off">
                     @csrf
+
                     <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong class="text-danger">Note:</strong> The radio stations you'll here are not considered licensed till the application process is done.</p>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -126,6 +143,44 @@
                                     <label for="">Latitude. <sup class="text-danger">*</sup></label>
                                     <input type="text" name="lat" value="{{old('lat')}}" placeholder="Work Station Latitude" class="form-control">
                                     @error('lat')
+                                    <i class="text-danger">{{$message}}</i>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Class of Station</label>
+                                    <select name="station_class" id="station_class" class="form-control">
+                                        <option selected disabled>Select Class of Station</option>
+                                    </select>
+                                    @error('station_class')
+                                    <i class="text-danger">{{$message}}</i>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Schedule of Operation</label>
+                                    <input type="text" name="schedule_of_operation" class="form-control" placeholder="Schedule of Operation">
+                                    @error('schedule_of_operation')
+                                    <i class="text-danger">{{$message}}</i>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Frequency Usage</label>
+                                    <input type="text" name="frequency_usage" class="form-control" placeholder="Fequency Usage">
+                                    @error('frequency_usage')
+                                    <i class="text-danger">{{$message}}</i>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Transmitting Location</label>
+                                    <input type="text" name="transmitting_location" class="form-control" placeholder="Transmitting Location">
+                                    @error('transmitting_location')
                                     <i class="text-danger">{{$message}}</i>
                                     @enderror
                                 </div>

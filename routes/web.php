@@ -98,9 +98,10 @@ Route::prefix('/bulk-sms')->group(function(){
 
 Route::prefix('/company')->group(function (){
     Route::get('/dashboard', [App\Http\Controllers\CompanyController::class, 'dashboard'])->name('dashboard');
-    Route::get('/licence-certificates', [App\Http\Controllers\CompanyController::class, 'licenceCertificates'])->name('licence-certificates');
     Route::get('/company-profile', [App\Http\Controllers\CompanyController::class, 'getCompanyProfile'])->name('company-profile');
     Route::post('/update-company-profile', [App\Http\Controllers\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
+
+    Route::get('/licence-certificates', [App\Http\Controllers\CompanyController::class, 'licenceCertificates'])->name('licence-certificates');
     Route::get('/new-licence-application', [App\Http\Controllers\CompanyController::class, 'showNewLicenceApplicationForm'])->name('new-licence-application');
     Route::post('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
     Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
@@ -120,6 +121,12 @@ Route::prefix('/company')->group(function (){
     Route::get('/edit/radio-work-station/{slug}', [App\Http\Controllers\CompanyController::class, 'viewRadioWorkStation'])->name('view-radio-work-station');
 });
 
+Route::prefix('/radio')->group(function(){
+    Route::get('/all-radio-license-applications', [App\Http\Controllers\RadioLicenseController::class, 'showAllMyRadioLicenseApplications'])->name('all-radio-license-applications');
+    Route::get('/new-radio-license-application', [App\Http\Controllers\RadioLicenseController::class, 'showRadioLicenseApplicationForm'])->name('new-radio-license-application');
+    Route::post('/new-radio-license-application', [App\Http\Controllers\RadioLicenseController::class, 'addRadioLicenseApplication']);
+    Route::get('/{slug}', [App\Http\Controllers\RadioLicenseController::class, 'showRadioLicenseApplication'])->name('view-radio-license-application');
+});
 Route::prefix('/workflow')->group(function(){
     Route::get('/settings', [App\Http\Controllers\WorkflowController::class, 'showWorkflowSettings'])->name('workflow-settings');
     Route::post('/settings', [App\Http\Controllers\WorkflowController::class, 'appDefaultSettings']);
