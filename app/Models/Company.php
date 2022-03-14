@@ -14,7 +14,12 @@ class Company extends Authenticatable
 {
     use HasFactory;
 
-
+    public function getUserNotifications(){
+        return $this->hasMany(UserNotification::class, 'user_id');
+    }
+    public function getUnreadUserNotifications(){
+        return $this->hasMany(UserNotification::class, 'user_id')->where('is_read', 0)->count();
+    }
     public function getCompanyApplications(){
         return $this->hasMany(LicenceApplication::class, 'company_id')->orderBy('id', 'DESC');
     }

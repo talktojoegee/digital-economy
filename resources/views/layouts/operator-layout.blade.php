@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    @include('partial._header-top')
+    @include('partial._operator-header-top')
     @include('partial._operator-sidebar-menu')
     <div class="content-body">
         <div class="container-fluid">
