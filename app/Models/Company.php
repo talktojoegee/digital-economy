@@ -15,6 +15,10 @@ class Company extends Authenticatable
     use HasFactory;
 
 
+    public function getCompanyApplications(){
+        return $this->hasMany(LicenceApplication::class, 'company_id')->orderBy('id', 'DESC');
+    }
+
     public function getLicenceCertificates(){
         return $this->hasMany(LicenceCertificate::class, 'company_id');
     }

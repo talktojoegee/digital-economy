@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminNotification;
+use App\Models\AppDefaultSetting;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\CompanyContactPerson;
@@ -11,6 +13,10 @@ use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
 use App\Models\State;
+use App\Models\Supervisor;
+use App\Models\User;
+use App\Models\UserNotification;
+use App\Models\WorkflowProcess;
 use App\Models\Workstation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +36,12 @@ class CompanyController extends Controller
         $this->auditlog = new AuditLog();
         $this->contactperson = new CompanyContactPerson();
         $this->workstation = new Workstation();
+        $this->appdefaultsetting = new AppDefaultSetting();
+        $this->supervisor = new Supervisor();
+        $this->workflowprocess = new WorkflowProcess();
+        $this->adminnotification = new AdminNotification();
+        $this->usernotification = new UserNotification();
+        $this->licenceapplication = new LicenceApplication();
     }
 
 
@@ -85,13 +97,35 @@ class CompanyController extends Controller
     }
 
     public function showNewLicenceApplicationForm(){
-        return view('operators.new-application', [
-            'licence_categories'=>$this->licencecategory->getLicenceCategories(),
-            'work_stations'=>$this->workstation->getCompanyWorkStations(Auth::user()->id)
-        ]);
+        $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+        if(!empty($defaultSettings)){
+            if(!empty($defaultSettings->new_app_section_handler)){
+                return view('operators.new-application', [
+                    'licence_categories'=>$this->licencecategory->getLicenceCategories(),
+                    'work_stations'=>$this->workstation->getCompanyWorkStations(Auth::user()->id),
+                    'status'=>1
+                ]);
+            }else{
+                session()->flash("error", "Whoops! We can't log your request at this time. Try again later.");
+              return view('operators.new-application', [
+                    'licence_categories'=>$this->licencecategory->getLicenceCategories(),
+                    'work_stations'=>$this->workstation->getCompanyWorkStations(Auth::user()->id),
+                  'status'=>0
+                ]);
+            }
+        }else{
+            session()->flash("error", "Whoops! We can't log your request at this time. Try again later.");
+            return redirect()->route('new-licence-application');
+        }
+
     }
 
     public function previewLetter(Request $request){
+        $this->validate($request,[
+           'compose_letter'=>'required'
+        ],[
+            'compose_letter.required'=>'Type your memo in the space provided.'
+        ]);
         return view('operators.preview-letter',
             ['handler'=>$request]);
     }
@@ -102,11 +136,48 @@ class CompanyController extends Controller
             //'workstation'=>'required',
             //'licence_category'=>'required'
         ]);
-        $this->letter->addLicenceApplication($request);
-        session()->flash("success", "A licence is assigned within one month (four weeks) from the date of submission of the request under normal circumstances.");
-        return back();
+        $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+        if(!empty($defaultSettings)){
+            if(!empty($defaultSettings->new_app_section_handler)){
+                $department = $defaultSettings->new_app_section_handler;
+                $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($department);
+                if(!empty($supervisor)){
+                    $app = $this->letter->addLicenceApplication($request);
+                    #Register new workflow process
+                    #$company, $request, $officer, $is_seen, $status, $type
+                    $work = $this->workflowprocess->addWorkflowProcess(Auth::user()->id, $app->id, $supervisor->user_id, 0, 0, 1);
+                    #$subject, $body, $route_name, $route_param, $route_type, $user_id
+                    #Admin notification
+                    $subject = "New Ministerial memo.";
+                    $body = Auth::user()->company_name." just submitted a new ministerial memo.";
+                    $this->adminnotification->addAdminNotification($subject, $body, "read-memo", $app->slug, 1, $supervisor->user_id);
 
+                    #User notification
+                    $subject = "New Ministerial memo.";
+                    $body = "Here's an acknowledgement of your ministerial memo submission.";
+                    $this->usernotification->addUserNotification($subject, $body, "view-memo", $app->slug, 1, Auth::user()->id);
+                    /*session()->flash("success", "A licence is assigned within one month (four weeks) from the date of submission of the request under normal circumstances.");
+                    return back();*/
+                }
 
+            }
+        }else{
+            session()->flash("error", "Whoops! We can't log your request at this time. Try again.");
+            return redirect()->route('new-licence-application');
+        }
+       session()->flash("success", "A licence is assigned within one month (four weeks) from the date of submission of the request under normal circumstances.");
+        return redirect()->route('new-licence-application');
+
+    }
+
+    public function viewMemo($slug){
+        $app = $this->licenceapplication->getLicenceApplicationByCompanySlug($slug);
+        if(!empty($app)){
+            return view('operators.view-memo',['app'=>$app]);
+        }else{
+            session()->flash("error", "Record not found.");
+            return back();
+        }
     }
 
     public function showNewEquipmentForm(){

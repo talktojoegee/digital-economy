@@ -102,9 +102,10 @@ Route::prefix('/company')->group(function (){
     Route::get('/company-profile', [App\Http\Controllers\CompanyController::class, 'getCompanyProfile'])->name('company-profile');
     Route::post('/update-company-profile', [App\Http\Controllers\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
     Route::get('/new-licence-application', [App\Http\Controllers\CompanyController::class, 'showNewLicenceApplicationForm'])->name('new-licence-application');
-    Route::post('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
+    Route::get('/preview-letter', [App\Http\Controllers\CompanyController::class, 'previewLetter'])->name('preview-letter');
     Route::post('/submit-letter', [App\Http\Controllers\CompanyController::class, 'submitLetter'])->name('submit-letter');
     Route::get('/add-new-device-equipment', [App\Http\Controllers\CompanyController::class, 'showNewEquipmentForm'])->name('add-new-device-equipment');
+    Route::get('/memo/{slug}', [App\Http\Controllers\CompanyController::class, 'viewMemo'])->name('view-memo');
 
     Route::get('/directors', [App\Http\Controllers\CompanyController::class, 'showDirectors'])->name('show-directors');
     Route::post('/directors', [App\Http\Controllers\CompanyController::class, 'addDirector']);
@@ -123,6 +124,8 @@ Route::prefix('/company')->group(function (){
 Route::prefix('/workflow')->group(function(){
     Route::get('/settings', [App\Http\Controllers\WorkflowController::class, 'showWorkflowSettings'])->name('workflow-settings');
     Route::post('/settings', [App\Http\Controllers\WorkflowController::class, 'appDefaultSettings']);
+    Route::get('/read-memo/{slug}', [App\Http\Controllers\WorkflowController::class, 'readMemo'])->name('read-memo');
+    Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
 });
 
 

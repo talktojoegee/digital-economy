@@ -13,7 +13,7 @@
 @section('main-content')
     <div class="row">
         <div class="col-md-12 mb-3">
-            <a href="{{route('licence-certificates')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-tag mr-2"></i> All Licence Certificates</a>
+            <a href="{{route('licence-certificates')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-flag mr-2"></i> All Licence Radio Stations</a>
         </div>
     </div>
     <div class="row">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="{{route('preview-letter')}}" method="post">
+                            <form action="{{route('preview-letter')}}" method="get">
                                     @csrf
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -152,10 +152,16 @@
                                     </div>
 
                                     <hr>
+                                @if($status == 0)
+                                    <p class="text-warning"><strong class="text-danger">Note:</strong> Whoops! We can't log your request at the moment. This is an internal process on our part. We
+                                        apologise for the inconvenience this must have caused you.</p>
+                                @endif
                                     <div class="col-md-12 d-flex justify-content-center">
                                         <div class="btn-group">
                                             <a href="{{url()->previous()}}" class="btn-light btn-sm btn">Cancel</a>
+                                            @if($status == 1)
                                             <button class="btn btn-primary btn-sm">Preview</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </form>
