@@ -131,8 +131,9 @@ Route::prefix('/radio')->group(function(){
 Route::prefix('/workflow')->group(function(){
     Route::get('/settings', [App\Http\Controllers\WorkflowController::class, 'showWorkflowSettings'])->name('workflow-settings');
     Route::post('/settings', [App\Http\Controllers\WorkflowController::class, 'appDefaultSettings']);
-    Route::get('/read-memo/{slug}', [App\Http\Controllers\WorkflowController::class, 'readMemo'])->name('read-memo');
+    Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
+    Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
 });
 
 

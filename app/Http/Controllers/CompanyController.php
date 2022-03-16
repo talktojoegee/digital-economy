@@ -150,12 +150,12 @@ class CompanyController extends Controller
                     #Admin notification
                     $subject = "New Ministerial memo.";
                     $body = Auth::user()->company_name." just submitted a new ministerial memo.";
-                    $this->adminnotification->addAdminNotification($subject, $body, "read-memo", $app->slug, 1, $supervisor->user_id);
+                    $this->adminnotification->addAdminNotification($subject, $body, "read-radio-license-application", $app->slug, 1, $supervisor->user_id);
 
                     #User notification
                     $subject = "New Ministerial memo.";
                     $body = "Here's an acknowledgement of your ministerial memo submission.";
-                    $this->usernotification->addUserNotification($subject, $body, "view-memo", $app->slug, 1, Auth::user()->id);
+                    $this->usernotification->addUserNotification($subject, $body, "view-radio-license-application", $app->slug, 1, Auth::user()->id);
                     /*session()->flash("success", "A licence is assigned within one month (four weeks) from the date of submission of the request under normal circumstances.");
                     return back();*/
                 }

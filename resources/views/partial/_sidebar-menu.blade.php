@@ -8,10 +8,10 @@
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="flaticon-381-notepad"></i>
-                    <span class="nav-text">Licence</span>
+                    <span class="nav-text">Radio License</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{route('all-employees')}}">Applications</a></li>
+                    <li><a href="{{route('workflow')}}">Radio Lic. Apps.</a></li>
                     <li><a href="{{route('add-new-employee')}}">Companies</a></li>
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
