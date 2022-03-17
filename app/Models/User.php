@@ -45,7 +45,7 @@ class User extends Authenticatable
     ];
 
     public function getAdminNotifications(){
-        return $this->hasMany(AdminNotification::class, 'user_id');
+        return $this->hasMany(AdminNotification::class, 'user_id')->orderBy('id', 'DESC');
     }
     public function getUnreadAdminNotifications(){
         return $this->hasMany(AdminNotification::class, 'user_id')->where('is_read', 0)->count();

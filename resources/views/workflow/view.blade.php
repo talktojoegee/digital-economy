@@ -22,7 +22,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="btn-group">
-                                <a href="" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
+                                <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
                                 <a href="" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
                                 <a href="" class="btn btn-success mr-1 btn-sm">Assign Frequency</a>
                                 <a href="" class="btn btn-light mr-1 btn-sm">Ministerial Memo</a>
@@ -101,7 +101,7 @@
                                                                                 <label for="" class="badge badge-light float-right">Received</label>
                                                                                 @break
                                                                                 @case(1)
-                                                                                <label for="" class="badge badge-secondary float-right">Acknowledged</label>
+                                                                                <label for="" class="badge text-white badge-secondary float-right">Acknowledged</label>
                                                                                 @break
                                                                                 @case(2)
                                                                                 <label for="" class="badge badge-primary float-right">Processing...</label>
@@ -227,7 +227,7 @@
                                             </div>
                                         </div>
                                         @endif
-                                        <div class="row" id="change-password">
+                                        <div class="row" id="timeline">
                                             <div class="col-xl-12 col-lg-6">
                                                 <div class="card  flex-lg-column flex-md-row ">
                                                     <div class="card-body  border-left">
@@ -241,7 +241,7 @@
                                                                             <span>{{date('d M, Y h:ia', strtotime($request->created_at))}}</span>
                                                                             <h6 class="mb-0">
                                                                                 {{$request->getOfficer->first_name ?? ''}} {{$request->getOfficer->last_name ?? ''}}
-                                                                                ({{$request->getOfficer->getDepartment->department_name ?? ''}})
+                                                                                ({{$request->getSection->department_name ?? ''}})
                                                                                 @switch($request->status)
                                                                                     @case(0)
                                                                                     <small class="text-primary">Received</small>
@@ -433,6 +433,107 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="text-uppercase">Workflow Log</h4>
+                    <div class="table-responsive">
+                        <table class="table header-border table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Section</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php $serial = 1; @endphp
+                            @foreach($workflow_processes as $flow)
+                            <tr>
+                                <td>{{$serial++}}
+                                </td>
+                                <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                <td><span class="text-muted">{{$flow->getSection->department_name ?? ''}}</span>
+                                </td>
+                                <td>
+                                    @switch($flow->status)
+                                        @case(0)
+                                        <small class="text-primary">Received</small>
+                                        @break
+                                        @case(1)
+                                        <small class="text-success">Approved</small>
+                                        @break
+                                        @case(2)
+                                        <small class="text-danger">Declined</small>
+                                        @break
+                                    @endswitch
+                                </td>
+                                <td>
+                                    {{date('d M, Y h:ia', strtotime($flow->created_at))}}
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0)" data-target="#flow_{{$flow->id}}" class="btn btn-info btn-sm" data-toggle="modal"><i class="ti-eye mr-2"></i> View</a>
+                                    <div class="modal fade" id="flow_{{$flow->id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-uppercase">Details</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table table-stripped">
+                                                        <tr>
+                                                            <td><strong>User</strong></td>
+                                                            <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Section</strong></td>
+                                                            <td>{{$flow->getSection->department_name ?? ''}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Date</strong></td>
+                                                            <td>{{date('d M, Y h:ia', strtotime($flow->created_at))}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Status</strong></td>
+                                                            <td>
+                                                                @switch($flow->status)
+                                                                    @case(0)
+                                                                    <small class="text-primary">Received</small>
+                                                                    @break
+                                                                    @case(1)
+                                                                    <small class="text-success">Approved</small>
+                                                                    @break
+                                                                    @case(2)
+                                                                    <small class="text-danger">Declined</small>
+                                                                    @break
+                                                                @endswitch
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Comment</strong></td>
+                                                            <td>{{$flow->comment ?? ''}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger light btn-sm" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

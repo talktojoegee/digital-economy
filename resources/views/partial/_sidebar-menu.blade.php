@@ -16,6 +16,11 @@
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
             </li>
+            <li><a href="{{route('messages')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-email"></i>
+                    <span class="nav-text">Messages</span>
+                </a>
+            </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="flaticon-381-user-9"></i>
                     <span class="nav-text">Administration</span>

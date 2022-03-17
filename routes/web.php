@@ -134,6 +134,10 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
     Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
+    Route::get('/message/customer/{customer}', [App\Http\Controllers\WorkflowController::class, 'showMessageCustomerForm'])->name('message-customer');
+    Route::post('/message/customer/send', [App\Http\Controllers\WorkflowController::class, 'messageCustomer'])->name('send-customer-message');
+    Route::get('/message/customer/read/{slug}', [App\Http\Controllers\WorkflowController::class, 'readMessage'])->name('read-message');
+    Route::get('/messages', [App\Http\Controllers\WorkflowController::class, 'messages'])->name('messages');
 });
 
 

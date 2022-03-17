@@ -33,15 +33,22 @@ class WorkflowProcess extends Model
         return $process;
     }
 
-    public function updateWorkflowProcess(Request $request, $processId){
-        $process = WorkflowProcess::find($processId);
+    public function updateWorkflowProcess(Request $request){
+        $process = WorkflowProcess::find( $request->processId);
         $process->status = $request->status;
+        $process->is_seen = 1;
+        $process->comment = $request->comment;
+        $process->updated_at = now();
         $process->save();
         return $process;
     }
 
     public function getWorkflowProcesses($licenseAppId, $processorId){
         return WorkflowProcess::where('post_id', $licenseAppId)->where('officer_id', $processorId)->get();
+    }
+
+    public function getAllWorkflowProcessesByApplicationId($licenseAppId){
+        return WorkflowProcess::where('post_id', $licenseAppId)->get();
     }
 
     public function getWorkflowProcessByCompanyId($company_id){

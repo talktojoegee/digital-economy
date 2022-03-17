@@ -70,7 +70,7 @@
                                             <label for="" class="badge badge-light">Received</label>
                                             @break
                                             @case(1)
-                                            <label for="" class="badge badge-secondary">Acknowledged</label>
+                                            <label for="" class="badge text-white badge-secondary">Acknowledged</label>
                                             @break
                                             @case(2)
                                             <label for="" class="badge badge-primary">Processing...</label>
