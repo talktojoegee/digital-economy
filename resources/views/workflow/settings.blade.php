@@ -88,13 +88,13 @@
                                                             <select name="new_app_section" id="new_app_section" class="form-control js-example-theme-single">
                                                                 <option disabled selected>-- Select section/unit --</option>
                                                                 @foreach($departments as $department)
-                                                                    <option value="{{$department->id}}" {{$department->id == $app_licence_setting->new_app_section_handler ? "selected" : '' }}>{{$department->department_name ?? '' }}</option>
+                                                                    <option value="{{$department->id}}" {{ !empty($app_licence_setting->new_app_section_handler) ? ($department->id == $app_licence_setting->new_app_section_handler ? "selected" : '')  : 'selected'}}>{{$department->department_name ?? '' }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('new_app_section')
                                                                 <i class="text-danger mt-2">{{$message}}</i>
                                                             @enderror
-                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ $app_licence_setting->getDepartmentById($app_licence_setting->new_app_section_handler)->department_name ?? '' }}</span></p>
+                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ !empty($app_licence_setting) ? $app_licence_setting->getDepartmentById($app_licence_setting->new_app_section_handler)->department_name : '' }}</span></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -105,13 +105,13 @@
                                                             <select name="licence_renewal" id="licence_renewal" class="form-control js-example-theme-single">
                                                                 <option disabled selected>-- Select section/unit --</option>
                                                                 @foreach($departments as $department)
-                                                                    <option value="{{$department->id}}" {{$department->id == $app_licence_setting->licence_renewal_handler ? "selected" : '' }}>{{$department->department_name ?? '' }}</option>
+                                                                    <option value="{{$department->id}}" {{ !empty($app_licence_setting->licence_renewal_handler) ? ($department->id == $app_licence_setting->licence_renewal_handler ? "selected" : '')  : 'selected'}} >{{$department->department_name ?? '' }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('licence_renewal')
                                                                 <i class="text-danger mt-2">{{$message}}</i>
                                                             @enderror
-                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ $app_licence_setting->getDepartmentById($app_licence_setting->licence_renewal_handler)->department_name ?? '' }}</span></p>
+                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ !empty($app_licence_setting) ?  $app_licence_setting->getDepartmentById($app_licence_setting->licence_renewal_handler)->department_name : '' }}</span></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -122,13 +122,13 @@
                                                             <select name="engage_customer" id="engage_customer" class="form-control js-example-theme-single">
                                                                 <option disabled selected>-- Select section/unit --</option>
                                                                 @foreach($departments as $department)
-                                                                    <option value="{{$department->id}}" {{$department->id == $app_licence_setting->engage_customer ? "selected" : '' }}>{{$department->department_name ?? '' }}</option>
+                                                                    <option value="{{$department->id}}" {{ !empty($app_licence_setting->engage_customer) ? ($department->id == $app_licence_setting->engage_customer ? "selected" : '')  : 'selected'}}  >{{$department->department_name ?? '' }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('engage_customer')
                                                                 <i class="text-danger mt-2">{{$message}}</i>
                                                             @enderror
-                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ $app_licence_setting->getDepartmentById($app_licence_setting->engage_customer)->department_name ?? '' }}</span></p>
+                                                           <p class="mt-1"> <span class="label label-info">Current Selection: </span> <span>{{ !empty($app_licence_setting) ?  $app_licence_setting->getDepartmentById($app_licence_setting->engage_customer)->department_name : '' }}</span></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -400,7 +400,7 @@
                                                 <div class="form-group">
                                                     <label for="">SMS for <strong>New Licence Application</strong></label>
                                                     <textarea name="new_licence_sms" id="new_licence_sms" maxlength="160" placeholder="Compose SMS message for new licence application (Acknowledgement)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('new_licence_sms', $app_sms_setting->new_licence_sms)}}</textarea>
+                                                              class="form-control">{{old('new_licence_sms', $app_sms_setting->new_licence_sms ?? '')}}</textarea>
                                                     @error('new_licence_sms')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
@@ -412,7 +412,7 @@
                                                 <div class="form-group">
                                                     <label for="">SMS for Licence Renewal <strong>(Reminder)</strong></label>
                                                     <textarea name="licence_renewal_sms" id="licence_renewal_sms" maxlength="160" placeholder="Compose SMS message for licence renewal (Reminder)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('licence_renewal_sms', $app_sms_setting->licence_renewal_reminder_sms)}}</textarea>
+                                                              class="form-control">{{old('licence_renewal_sms', $app_sms_setting->licence_renewal_reminder_sms ?? '')}}</textarea>
                                                     @error('licence_renewal_sms')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
@@ -424,7 +424,7 @@
                                                 <div class="form-group">
                                                     <label for="">SMS for Licence Renewal <strong>(Acknowledgment)</strong></label>
                                                     <textarea name="licence_renewal_sms_ack" id="licence_renewal_sms_ack" maxlength="160" placeholder="Compose SMS message for licence renewal (Acknowledgement)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('licence_renewal_sms_ack', $app_sms_setting->licence_renewal_sms)}}</textarea>
+                                                              class="form-control">{{old('licence_renewal_sms_ack', $app_sms_setting->licence_renewal_sms ?? '')}}</textarea>
                                                     @error('licence_renewal_sms_ack')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror

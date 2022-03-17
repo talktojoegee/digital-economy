@@ -8,12 +8,12 @@
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="ti-id-badge"></i>
-                    <span class="nav-text">Licence</span>
+                    <span class="nav-text">Radio Licence</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('new-licence-application')}}">New Ministerial Memo</a></li>
-                    <li><a href="{{route('licence-certificates')}}">All Applications</a></li>
-                    <li><a href="{{route('licence-certificates')}}">Licence Radio Stations</a></li>
+                    <li><a href="{{route('new-radio-license-application')}}">New Application</a></li>
+                    <li><a href="{{route('all-radio-license-applications')}}">All Radio Licence App.</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
