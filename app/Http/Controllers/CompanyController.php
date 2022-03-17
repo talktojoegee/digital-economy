@@ -378,4 +378,8 @@ class CompanyController extends Controller
             return back();
         }
     }
+
+    public function viewMessage($slug){
+
+    }
 }
