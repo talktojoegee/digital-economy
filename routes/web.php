@@ -120,6 +120,8 @@ Route::prefix('/company')->group(function (){
     Route::post('/radio-work-station', [App\Http\Controllers\CompanyController::class, 'addRadioWorkStation']);
     Route::post('/edit-radio-work-station', [App\Http\Controllers\CompanyController::class, 'updateRadioWorkStation'])->name('edit-radio-work-station');
     Route::get('/edit/radio-work-station/{slug}', [App\Http\Controllers\CompanyController::class, 'viewRadioWorkStation'])->name('view-radio-work-station');
+
+    Route::get('/view-message/{slug}', [App\Http\Controllers\CompanyController::class, 'viewMessage'])->name('view-message');
 });
 
 Route::prefix('/radio')->group(function(){
