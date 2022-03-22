@@ -17,7 +17,9 @@ class CreateInvoiceItemsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('company_id');
-            $table->text('description')->nullable()->comment('service description');
+            $table->unsignedBigInteger('rlad_id')->comment('radio license application detail ID');
+            //$table->text('description')->nullable()->comment('service description');
+            $table->integer('quantity');
             $table->double('sub_total');
             $table->timestamps();
         });

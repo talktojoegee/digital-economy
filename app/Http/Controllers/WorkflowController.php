@@ -14,7 +14,7 @@ use App\Models\JobRole;
 use App\Models\LicenceApplication;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
-use App\Models\MessageCustomer;
+//use App\Models\MessageCustomer;
 use App\Models\RadioLicenseApplication;
 use App\Models\RadioLicenseApplicationDetail;
 use App\Models\State;
@@ -51,7 +51,7 @@ class WorkflowController extends Controller
         $this->workflowprocess = new WorkflowProcess();
         $this->adminnotification = new AdminNotification();
         $this->usernotification = new UserNotification();
-        $this->messagecustomer = new MessageCustomer();
+        //$this->messagecustomer = new MessageCustomer();
     }
 
     public function showWorkflowSettings(){
@@ -199,53 +199,15 @@ class WorkflowController extends Controller
         }
     }
 
-    public function showMessageCustomerForm($customer){
-        $customer = $this->company->getCompanyBySlug($customer);
-        if(!empty($customer)){
-            return view('workflow.message-customer', ['customer'=>$customer]);
-        }else{
-            session()->flash("error", "Whoops! No record found.");
-            return back();
-        }
-
-    }
-
-    public function messageCustomer(Request $request){
-        $this->validate($request,[
-            'subject'=>'required',
-            'customer'=>'required',
-            'compose_message'=>'required'
-        ],[
-            'subject.required'=>'Enter a subject for this conversation',
-            'compose_message.required'=>'Type a message in the box provided.'
-        ]);
-        $message = $this->messagecustomer->messageCustomer($request);
-        //Log
-        #Admin notification
-        $subject = "Message Customer";
-        $body = Auth::user()->first_name." sent a message to customer.";
-        $this->adminnotification->addAdminNotification($subject, $body, "read-message", $message->slug, 1, Auth::user()->id);
-
-        #User notification
-        $subject = "New message from ".config('app.name');
-        $body = "You recently received a message from ".config('app.name');
-        $this->usernotification->addUserNotification($subject, $body, "view-message", $message->slug, 1, $request->customer);
-        session()->flash("success", "Your message was sent.");
-        return back();
-    }
-
-    public function messages(){
-        return view('workflow.messages', ['messages'=>$this->messagecustomer->getAllMessages()]);
-    }
-
-    public function readMessage($slug){
-        $message = $this->messagecustomer->getAllMessagesBySlug($slug);
-        if(!empty($message)){
-            return view('workflow.message-view', ['message'=>$message]);
+    public function showAssignFrequencyForm($slug){
+        $company = $this->company->getCompanyBySlug($slug);
+        if(!empty($company)){
+            return view("workflow.assign-frequency",['customer'=>$company]);
         }else{
             session()->flash("error", "No record found.");
-            return back();
+            return redirect()->route("manage-transactions");
         }
-
     }
+
+
 }

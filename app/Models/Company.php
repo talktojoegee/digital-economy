@@ -15,7 +15,7 @@ class Company extends Authenticatable
     use HasFactory;
 
     public function getUserNotifications(){
-        return $this->hasMany(UserNotification::class, 'user_id');
+        return $this->hasMany(UserNotification::class, 'user_id')->orderBy('id', 'DESC');
     }
     public function getUnreadUserNotifications(){
         return $this->hasMany(UserNotification::class, 'user_id')->where('is_read', 0)->count();

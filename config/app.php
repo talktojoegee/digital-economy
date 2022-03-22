@@ -15,7 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'App Name'),
     'address' => env("COMPANY_ADDRESS", "Ministry"),
-    'phone' => env('COMPANY_PHONE', '+441908690081'),
+    'phone' => env('COMPANY_PHONE', '+234'),
     'email' => env('COMPANY_EMAIL', 'info@hello.ng'),
     'paystack_public_key'=>env('PAYSTACK_PUBLIC_KEY',''),
     'paystack_secret_key'=>env('PAYSTACK_SECRET_KEY',''),

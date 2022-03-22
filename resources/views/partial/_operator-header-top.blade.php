@@ -20,10 +20,10 @@
                             {!!  Auth::user()->getUserNotifications->count() > 0 ? "<span class='badge light text-white bg-primary rounded-circle'>".Auth::user()->getUserNotifications->count()."</span>" : '' !!}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            @foreach(Auth::user()->getUserNotifications as $notify)
+
                             <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3 height380">
                                 <ul class="timeline">
-
+                                    @foreach(Auth::user()->getUserNotifications as $notify)
                                         <li>
                                             <div class="timeline-panel">
                                                 <div class="media-body">
@@ -34,9 +34,10 @@
                                                 </div>
                                             </div>
                                         </li>
+                                    @endforeach
                                 </ul>
                             </div>
-                            @endforeach
+
                             <a class="all-notification" href="#">See all notifications <i class="ti-arrow-right"></i></a>
                         </div>
                     </li>
