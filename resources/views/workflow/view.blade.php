@@ -23,8 +23,8 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
-                                <a href="" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
-                                <a href="" class="btn btn-success mr-1 btn-sm">Assign Frequency</a>
+                                <a href="{{route('invoice-customer', ['slug'=>$application->getCompany->slug, 'appSlug'=>$application->slug])}}" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
+                                <a href="{{route('assign-frequency', $application->getCompany->slug)}}" class="btn btn-success mr-1 btn-sm">Assign Frequency</a>
                                 <a href="" class="btn btn-light mr-1 btn-sm">Ministerial Memo</a>
                             </div>
                         </div>

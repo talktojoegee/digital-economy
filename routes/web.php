@@ -122,6 +122,8 @@ Route::prefix('/company')->group(function (){
     Route::get('/edit/radio-work-station/{slug}', [App\Http\Controllers\CompanyController::class, 'viewRadioWorkStation'])->name('view-radio-work-station');
 
     Route::get('/view-message/{slug}', [App\Http\Controllers\CompanyController::class, 'viewMessage'])->name('view-message');
+    Route::get('/view-invoice/{slug}', [App\Http\Controllers\CompanyController::class, 'viewInvoice'])->name('view-invoice');
+    Route::get('/transactions', [App\Http\Controllers\CompanyController::class, 'transactions'])->name('transactions');
 });
 
 Route::prefix('/radio')->group(function(){
@@ -136,10 +138,20 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
     Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
-    Route::get('/message/customer/{customer}', [App\Http\Controllers\WorkflowController::class, 'showMessageCustomerForm'])->name('message-customer');
-    Route::post('/message/customer/send', [App\Http\Controllers\WorkflowController::class, 'messageCustomer'])->name('send-customer-message');
-    Route::get('/message/customer/read/{slug}', [App\Http\Controllers\WorkflowController::class, 'readMessage'])->name('read-message');
-    Route::get('/messages', [App\Http\Controllers\WorkflowController::class, 'messages'])->name('messages');
+    Route::get('/assign-frequency/{slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+});
+
+Route::prefix('customer-support')->group(function(){
+    Route::get('/message/customer/{customer}', [App\Http\Controllers\CustomerController::class, 'showMessageCustomerForm'])->name('message-customer');
+    Route::post('/message/customer/send', [App\Http\Controllers\CustomerController::class, 'messageCustomer'])->name('send-customer-message');
+    Route::get('/message/customer/read/{slug}', [App\Http\Controllers\CustomerController::class, 'readMessage'])->name('read-message');
+    Route::get('/messages', [App\Http\Controllers\CustomerController::class, 'messages'])->name('messages');
+
+    Route::get('/invoice-customer/{slug}/{appSlug}', [App\Http\Controllers\CustomerController::class, 'invoiceCustomer'])->name('invoice-customer');
+    Route::post('/invoice-customer', [App\Http\Controllers\CustomerController::class, 'storeNewInvoice'])->name('store-invoice');
+    Route::get('/manage-transactions', [App\Http\Controllers\CustomerController::class, 'manageTransactions'])->name('manage-transactions');
+    Route::get('/read-invoice/{slug}', [App\Http\Controllers\CustomerController::class, 'readInvoice'])->name('read-invoice');
+    Route::post('/update-invoice-status', [App\Http\Controllers\CustomerController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
 });
 
 

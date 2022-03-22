@@ -14,6 +14,8 @@ class RadioLicenseApplicationDetail extends Model
     public function getWorkstation(){
         return $this->belongsTo(Workstation::class, 'workstation_id');
     }
+
+
     public function getLicenseCategory(){
         return $this->belongsTo(LicenceCategory::class, 'lc_id');
     }
@@ -30,4 +32,8 @@ class RadioLicenseApplicationDetail extends Model
         }
 
     }
+    public function getDetailsByRadioLicenseAppId($id){
+        return RadioLicenseApplicationDetail::where('radio_la_id', $id)->get();
+    }
+
 }

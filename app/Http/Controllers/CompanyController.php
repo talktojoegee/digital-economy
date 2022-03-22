@@ -9,9 +9,12 @@ use App\Models\Company;
 use App\Models\CompanyContactPerson;
 use App\Models\CompanyDirector;
 use App\Models\Country;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
+use App\Models\RadioLicenseApplication;
 use App\Models\State;
 use App\Models\Supervisor;
 use App\Models\User;
@@ -42,6 +45,9 @@ class CompanyController extends Controller
         $this->adminnotification = new AdminNotification();
         $this->usernotification = new UserNotification();
         $this->licenceapplication = new LicenceApplication();
+        $this->invoice = new Invoice();
+        $this->invoiceitem = new InvoiceItem();
+        $this->radiolicenseapplication = new RadioLicenseApplication();
     }
 
 
@@ -381,5 +387,26 @@ class CompanyController extends Controller
 
     public function viewMessage($slug){
 
+    }
+
+    public function transactions(){
+        return view('operators.transactions',[
+            'invoices'=>$this->invoice->getInvoiceByCompanyId(Auth::user()->id)
+        ]);
+    }
+
+    public function viewInvoice($slug){
+        $invoice = $this->invoice->getInvoiceBySlug($slug);
+        if(!empty($invoice)){
+            $application = $this->radiolicenseapplication->getRadioLicenseApplicationById($invoice->radio_lic_app_id);
+            return view('operators.transaction-view',
+                ['invoice'=>$invoice,
+                    'application'=>$application,
+
+                ]);
+        }else{
+            session()->flash("error", "No record found.");
+            return redirect()->route("transactions");
+        }
     }
 }

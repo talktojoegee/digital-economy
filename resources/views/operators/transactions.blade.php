@@ -1,6 +1,6 @@
-@extends('layouts.master-layout')
+@extends('layouts.operator-layout')
 @section('title')
-    Radio License Applications
+    Manage Transactions
 @endsection
 @section('extra-styles')
     <link href="/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -11,7 +11,7 @@
     </style>
 @endsection
 @section('active-page')
-    Radio License Applications
+    Transactions
 @endsection
 
 @section('main-content')
@@ -19,7 +19,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Radio License Applications</h4>
+                    <h4 class="card-title">Your transactions.</h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                     </div>
@@ -43,7 +43,7 @@
                                     </button>
                                 </div>
                             @endif
-
+                                <p><strong class="text-danger">NOTE:</strong> Your transactions are subject to verification.</p>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -52,39 +52,38 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>Purpose</th>
+                                <th>Company</th>
+                                <th>Amount(₦)</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach($applications as $app)
+                            @foreach($invoices as $invoice)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
-                                    <td>{{strlen(strip_tags($app->purpose)) > 60 ? substr(strip_tags($app->purpose),0,57).'...' : strip_tags($app->purpose)}}</td>
+                                    <td>{{date('d M, Y', strtotime($invoice->date_issued))}}</td>
+                                    <td>{{$invoice->getCompany->company_name ?? '' }}</td>
+                                    <td class="">{{number_format($invoice->total,2)}}</td>
                                     <td>
-                                        @switch($app->status)
+                                        @switch($invoice->status)
                                             @case(0)
-                                            <label for="" class="badge badge-light text-muted">Received</label>
+                                            <label for="" class="label label-warning text-white">Unpaid</label>
                                             @break
                                             @case(1)
-                                            <label for="" class="badge text-white badge-secondary text-muted">Acknowledged</label>
+                                            <label for="" class="label label-primary text-white">Paid</label>
                                             @break
                                             @case(2)
-                                            <label for="" class="badge badge-primary text-muted">Processing...</label>
+                                            <label for="" class="label label-success text-white">Verified</label>
                                             @break
                                             @case(3)
-                                            <label for="" class="badge badge-danger text-muted">Discarded</label>
-                                            @break
-                                            @case(4)
-                                            <label for="" class="badge badge-success text-muted">Closed</label>
+                                            <label for="" class="label label-danger text-white">Discarded</label>
                                             @break
                                         @endswitch
                                     </td>
                                     <td>
-                                        <a href="{{route('read-radio-license-application', $app->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        <a href="{{route('view-invoice', $invoice->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -11,7 +11,7 @@
                     <span class="nav-text">Radio License</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{route('workflow')}}">Radio Lic. Apps.</a></li>
+                    <li><a href="{{route('workflow')}}">Applications</a></li>
                     <li><a href="{{route('add-new-employee')}}">Companies</a></li>
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
@@ -20,6 +20,15 @@
                     <i class="ti-email"></i>
                     <span class="nav-text">Messages</span>
                 </a>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-database"></i>
+                    <span class="nav-text">Transactions</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{route('manage-transactions')}}">All Transactions</a></li>
+                    <li><a href="{{route('manage-transactions')}}">Report</a></li>
+                </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="flaticon-381-user-9"></i>
