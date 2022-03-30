@@ -83,7 +83,8 @@
                                         @endswitch
                                     </td>
                                     <td>
-                                        <a href="{{route('view-invoice', $invoice->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        <a href="{{route('view-invoice', $invoice->slug)}}" title="View Transaction" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        <a href="{{route('view-invoice', $invoice->slug)}}" title="Make Payment" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-wallet"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -28,6 +28,12 @@ class Invoice extends Model
         return Invoice::orderBy('id', 'DESC')->get();
     }
 
+    public function generateReport($from, $to){
+        //$month = date('m');
+        //$year = date('Y');
+        return Invoice::whereBetween('created_at', [$from, $to])->get();
+    }
+
     public function getIssuedBy(){
         return $this->belongsTo(User::class, 'issued_by');
     }

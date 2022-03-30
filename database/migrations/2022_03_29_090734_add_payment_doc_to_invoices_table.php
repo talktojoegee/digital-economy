@@ -14,7 +14,7 @@ class AddPaymentDocToInvoicesTable extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            //
+            $table->string('attachment')->nullable()->comment('evidence of payment doc');
         });
     }
 

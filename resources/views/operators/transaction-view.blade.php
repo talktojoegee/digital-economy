@@ -174,13 +174,11 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="{{route('store-invoice')}}" method="post">
-                                <div class="row">
-                                    <div class="col-md-12 d-flex justify-content-center">
-                                        <button class="btn btn-sm btn-primary" type="submit">Pay Now</button>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-12 d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-primary" href="{{route('make-payment', $invoice->slug)}}">Pay Now</a>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
 

@@ -21,11 +21,13 @@ use App\Models\User;
 use App\Models\UserNotification;
 use App\Models\WorkflowProcess;
 use App\Models\Workstation;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
+    public $merchantId, $apiHash, $baseUrl;
     public function __construct()
     {
         $this->middleware('auth:web');
@@ -408,5 +410,69 @@ class CompanyController extends Controller
             session()->flash("error", "No record found.");
             return redirect()->route("transactions");
         }
+    }
+
+    public function showMakePaymentForm($slug){
+        $transaction = $this->invoice->getInvoiceBySlug($slug);
+        if(empty($transaction)){
+            session()->flash("error", "No record found.");
+            return redirect()->route("transactions");
+        }
+        return view('operators.make-payment', ['transaction'=>$transaction]);
+    }
+
+    public function verifyRRRPayment(Request  $request){
+        $this->validate($request,[
+            'rrr'=>'required'
+        ],[
+            'rrr.required'=>'Enter Remita Retrieval Reference (RRR) for this transaction.'
+        ]);
+        $rrr = $request->rrr;
+        $hash = hash("SHA512", $rrr.env('REMITA_API_HASH').env('REMITA_MERCHANT_ID'));
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept'=>'application/json',
+            'Authorization' => 'remitaConsumerKey='.env('REMITA_MERCHANT_ID').',remitaConsumerToken='.$hash.'',
+        ];
+
+
+        //$url = "http://www.remitademo.net/remita/ecomm/".env('REMITA_MERCHANT_ID')."/status.reg";
+        $url = 'https://www.remitademo.net/remita/ecomm/'.env('REMITA_MERCHANT_ID').'/'.$rrr.'/'.$hash.'/status.reg';
+        //$client = new Client(['verify' => false, 'headers'=>$headers]);
+        //$response = $client->get($url);
+
+
+
+        /*$ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // SSL important
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        $repo = json_decode($output);*/ //$this->response['response']
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => $headers,
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response = json_decode($response);
+        //$token = $response->responseBody->accessToken;
+        //return $token;
+
+        return dd($response) ;
     }
 }

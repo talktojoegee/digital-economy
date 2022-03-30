@@ -11,6 +11,7 @@ use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\GradeLevel;
 use App\Models\JobRole;
+use App\Models\Invoice;
 use App\Models\LicenceApplication;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
@@ -28,8 +29,10 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkflowController extends Controller
 {
+
     public function __construct()
     {
+
         $this->middleware('auth:admin');
         $this->department = new Department();
         $this->user = new User();
@@ -51,6 +54,7 @@ class WorkflowController extends Controller
         $this->workflowprocess = new WorkflowProcess();
         $this->adminnotification = new AdminNotification();
         $this->usernotification = new UserNotification();
+        $this->invoice = new Invoice();
         //$this->messagecustomer = new MessageCustomer();
     }
 
@@ -199,14 +203,64 @@ class WorkflowController extends Controller
         }
     }
 
-    public function showAssignFrequencyForm($slug){
+    public function showAssignFrequencyForm($slug, $app_slug){
         $company = $this->company->getCompanyBySlug($slug);
         if(!empty($company)){
-            return view("workflow.assign-frequency",['customer'=>$company]);
+            $application = $this->radiolicenseapplication->getRadioLicenseApplicationBySlug($app_slug);
+            if(empty($application)){
+                session()->flash("error", "No record found.");
+                return redirect()->route("manage-transactions");
+            }
+            $detail = $this->radiolicenseapplicationdetails->getSingleDetailByRadioLicenseAppId($application->id);
+            $handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 1);
+            $base = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 2);
+            $repeaters = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 3);
+            $vehicular = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 4);
+            return view("workflow.assign-frequency",[
+                'customer'=>$company,
+                'application'=>$application,
+                'handheld'=>$handheld,
+                'base'=>$base,
+                'repeaters'=>$repeaters,
+                'vehicular'=>$vehicular,
+                'detail'=>$detail
+            ]);
         }else{
             session()->flash("error", "No record found.");
             return redirect()->route("manage-transactions");
         }
+    }
+
+
+    public function assignRadioFrequency(Request $request){
+        $this->validate($request,[
+            'assign_frequency'=>'required|array',
+            'assign_frequency.*'=>'required'
+        ],[
+            'assign_frequency.required'=>'Enter frequency value in the field provided'
+        ]);
+    }
+
+    public function showTransactionReportForm(){
+
+        return view('invoice.transaction-report',[
+            'thisMonth'=>$this->invoice->thisMonthsInvoice(),
+            'search'=>0
+        ]);
+    }
+
+    public function generateTransactionReport(Request $request){
+        $this->validate($request,[
+            'start'=>'required',
+            'end'=>'required'
+        ],[
+            'start.required'=>'Select start date',
+            'end.required'=>'Select end date'
+        ]);
+        return view('invoice.transaction-report',[
+            'search'=>1,
+            'invoices'=>$this->invoice->generateReport($request->start, $request->end),
+        ]);
     }
 
 

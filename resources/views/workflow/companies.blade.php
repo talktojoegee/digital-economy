@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('title')
-    Messages
+    Radio License Applications
 @endsection
 @section('extra-styles')
     <link href="/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -11,7 +11,7 @@
     </style>
 @endsection
 @section('active-page')
-    Messages
+    Radio License Applications
 @endsection
 
 @section('main-content')
@@ -19,10 +19,9 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Manage Messages</h4>
+                    <h4 class="card-title">Radio License Applications</h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
-                        <a href="{{route('compose-message')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-email mr-2"></i> Compose Message</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -53,21 +52,39 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>Customer</th>
-                                <th>Subject</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach($messages as $message)
+                            @foreach($applications as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{date('d M, Y h:ia', strtotime($message->created_at))}}</td>
-                                    <td>{{$message->getCustomer->company_name ?? ''}}</td>
-                                    <td>{{strlen($message->subject) > 25 ? substr($message->subject,0,22).'...' : $message->subject }}</td>
+                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
+                                    <td>{{strlen(strip_tags($app->purpose)) > 60 ? substr(strip_tags($app->purpose),0,57).'...' : strip_tags($app->purpose)}}</td>
                                     <td>
-                                        <a href="{{route('read-message', $message->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        @switch($app->status)
+                                            @case(0)
+                                            <label for="" class="badge badge-light text-muted">Received</label>
+                                            @break
+                                            @case(1)
+                                            <label for="" class="badge text-white badge-secondary text-muted">Acknowledged</label>
+                                            @break
+                                            @case(2)
+                                            <label for="" class="badge badge-primary text-muted">Processing...</label>
+                                            @break
+                                            @case(3)
+                                            <label for="" class="badge badge-danger text-muted">Discarded</label>
+                                            @break
+                                            @case(4)
+                                            <label for="" class="badge badge-success text-muted">Closed</label>
+                                            @break
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        <a href="{{route('read-radio-license-application', $app->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

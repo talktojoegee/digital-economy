@@ -12,9 +12,13 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('workflow')}}">Applications</a></li>
-                    <li><a href="{{route('add-new-employee')}}">Companies</a></li>
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
+            </li>
+            <li><a href="{{route('companies')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-briefcase"></i>
+                    <span class="nav-text">Companies</span>
+                </a>
             </li>
             <li><a href="{{route('messages')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-email"></i>
@@ -27,7 +31,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('manage-transactions')}}">All Transactions</a></li>
-                    <li><a href="{{route('manage-transactions')}}">Report</a></li>
+                    <li><a href="{{route('transaction-report')}}">Report</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

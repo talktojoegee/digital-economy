@@ -50,7 +50,8 @@ class CustomerController extends Controller
             'compose_message'=>'required'
         ],[
             'subject.required'=>'Enter a subject for this conversation',
-            'compose_message.required'=>'Type a message in the box provided.'
+            'compose_message.required'=>'Type a message in the box provided.',
+            'customer.required'=>'Select a customer'
         ]);
         $message = $this->messagecustomer->messageCustomer($request);
         //Log
@@ -151,5 +152,23 @@ class CustomerController extends Controller
         $this->invoice->updateInvoiceStatus($request);
         session()->flash("success", "Transaction recorded.");
         return redirect()->route("manage-transactions");
+    }
+
+    public function showComposeMessageForm(){
+        return view('workflow.compose-message',['customers'=>$this->company->getAllCompanies()]);
+    }
+
+    public function showCompanies(){
+        return view('customer.index',['companies'=>$this->company->getAllCompanies()]);
+    }
+
+    public function readCompanyProfile($slug){
+        $company = $this->company->getCompanyBySlug($slug);
+        if(!empty($company)){
+            return view('customer.view',['company'=>$company]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
     }
 }

@@ -19,7 +19,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Compose Message</h4>
+                    <h4 class="card-title">Assign Radio Frequency</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -46,27 +46,73 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="{{route('send-customer-message')}}" method="post">
+                            <form action="{{route('process-frequency-assignment')}}" method="post">
                                 @csrf
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="">Customer <sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{$customer->company_name ?? ''}}" readonly class="form-control" placeholder="To:">
-                                        <input type="hidden" name="customer" value="{{$customer->id}}">
-                                        <input type="hidden" name="message_type" value="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Frequency <sup class="text-danger">*</sup></label>
-                                        <input type="text"  class="form-control" name="frequency" placeholder="Frequency">
-                                        @error('frequency')
-                                        <i class="text-danger mt-2">{{$message}}</i>
-                                        @enderror
-                                    </div>
+                                @if($handheld > 0)
 
+                                        <h5>Handheld Devices({{$handheld}})</h5>
+                                    @for($i = 0; $i < $handheld; $i++)
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Handheld Device (#{{$i+1}})</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                    @error('assign_frequency')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                    @endfor
+                                @endif
+                                @if($base > 0)
+
+                                        <h5>Base({{$base}})</h5>
+                                    @for($b = 0; $b < $base; $b++)
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Base Station (#{{$b+1}})</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                    @error('assign_frequency')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                    @endfor
+                                @endif
+                                @if($repeaters > 0)
+
+                                    <h5>Repeaters({{$repeaters}})</h5>
+                                    @for($r = 0; $r < $repeaters; $r++)
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Repeaters Station (#{{$r+1}})</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                @error('assign_frequency')
+                                                <i class="text-danger mt-2">{{$message}}</i>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endfor
+                                @endif
+                                @if($vehicular > 0)
+
+                                    <h5>Vehicular({{$vehicular}})</h5>
+                                    @for($v = 0; $r < $vehicular; $v++)
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Vehicular Station (#{{$v+1}})</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                @error('assign_frequency')
+                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endfor
+                                @endif
                                 </div>
-
                                 <hr>
                                 <div class="col-md-12 d-flex justify-content-center">
+                                    <input type="hidden" name="application" value="{{$application->id}}">
                                     <div class="btn-group">
                                         <a href="{{url()->previous()}}" class="btn-light btn-sm btn">Cancel</a>
                                         <button class="btn btn-primary btn-sm">Submit</button>

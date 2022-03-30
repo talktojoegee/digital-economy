@@ -24,6 +24,14 @@ class Company extends Authenticatable
         return $this->hasMany(LicenceApplication::class, 'company_id')->orderBy('id', 'DESC');
     }
 
+    public function getDirectors(){
+        return $this->hasMany(CompanyDirector::class, 'company_id');
+    }
+
+    public function getCompanyContactPersons(){
+        return $this->hasMany(CompanyContactPerson::class, 'company_id');
+    }
+
     public function getLicenceCertificates(){
         return $this->hasMany(LicenceCertificate::class, 'company_id');
     }
@@ -88,5 +96,9 @@ class Company extends Authenticatable
     }
     public function getCompanyByEmail($email){
         return Company::where('email', $email)->first();
+    }
+
+    public function getAllCompanies(){
+        return Company::orderBy('company_name', 'ASC')->get();
     }
 }

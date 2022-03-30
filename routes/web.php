@@ -124,6 +124,8 @@ Route::prefix('/company')->group(function (){
     Route::get('/view-message/{slug}', [App\Http\Controllers\CompanyController::class, 'viewMessage'])->name('view-message');
     Route::get('/view-invoice/{slug}', [App\Http\Controllers\CompanyController::class, 'viewInvoice'])->name('view-invoice');
     Route::get('/transactions', [App\Http\Controllers\CompanyController::class, 'transactions'])->name('transactions');
+    Route::get('/make-payment/{slug}', [App\Http\Controllers\CompanyController::class, 'showMakePaymentForm'])->name('make-payment');
+    Route::post('/verify-rrr-payment', [App\Http\Controllers\CompanyController::class, 'verifyRRRPayment'])->name('verify-rrr-payment');
 });
 
 Route::prefix('/radio')->group(function(){
@@ -138,7 +140,11 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
     Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
-    Route::get('/assign-frequency/{slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+    Route::get('/assign-frequency/{slug}/{app_slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+    Route::post('/process-frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'assignRadioFrequency'])->name('process-frequency-assignment');
+
+    Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');
+    Route::get('/generate-report', [App\Http\Controllers\WorkflowController::class, 'generateTransactionReport'])->name('generate-report');
 });
 
 Route::prefix('customer-support')->group(function(){
@@ -152,6 +158,10 @@ Route::prefix('customer-support')->group(function(){
     Route::get('/manage-transactions', [App\Http\Controllers\CustomerController::class, 'manageTransactions'])->name('manage-transactions');
     Route::get('/read-invoice/{slug}', [App\Http\Controllers\CustomerController::class, 'readInvoice'])->name('read-invoice');
     Route::post('/update-invoice-status', [App\Http\Controllers\CustomerController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
+    Route::get('/compose-message', [App\Http\Controllers\CustomerController::class, 'showComposeMessageForm'])->name('compose-message');
+
+    Route::get('/companies', [App\Http\Controllers\CustomerController::class, 'showCompanies'])->name('companies');
+    Route::get('/companies/{slug}', [App\Http\Controllers\CustomerController::class, 'readCompanyProfile'])->name('read-company-profile');
 });
 
 

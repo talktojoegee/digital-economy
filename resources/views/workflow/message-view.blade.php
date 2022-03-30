@@ -53,22 +53,46 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <div class="basic-list-group">
-                                <ul class="list-group">
-                                    <li class="list-group-item"><strong>Sent By:</strong></li>
-                                    <li class="list-group-item list-group-item-primary">{{$message->getSentBy->first_name ?? '' }} {{$message->getSentBy->last_name ?? '' }}</li>
-                                    <li class="list-group-item list-group-item-secondary">This is a secondary list group item</li>
-                                    <li class="list-group-item list-group-item-success">This is a success list group item</li>
-                                    <li class="list-group-item list-group-item-danger">This is a danger list group item
-                                    </li>
-                                    <li class="list-group-item list-group-item-warning">This is a warning list group item</li>
-                                    <li class="list-group-item list-group-item-info">This is a info list group item
-                                    </li>
-                                    <li class="list-group-item list-group-item-light">This is a light list group item
-                                    </li>
-                                    <li class="list-group-item list-group-item-dark">This is a dark list group item
-                                    </li>
-                                </ul>
+                            <div class="profile-personal-info">
+                                <div class="row mb-4 mb-sm-2">
+                                    <div class="col-sm-3">
+                                        <h6 class="f-w-500">Sent By:
+                                        </h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <span>{{$message->getSentBy->first_name ?? '' }} {{$message->getSentBy->last_name ?? '' }}</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 mb-sm-2">
+                                    <div class="col-sm-3">
+                                        <h6 class="f-w-500">Email
+                                            <span class="pull-right d-none d-sm-block">:</span>
+                                        </h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <span>{{$message->getSentBy->email ?? '' }} </span>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 mb-sm-2">
+                                    <div class="col-sm-3">
+                                        <h5 class="f-w-500">Date
+                                            <span class="pull-right d-none d-sm-block">:</span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-9">
+                                        <span>{{ date('d M, Y h:ia', strtotime($message->created_at))}}</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 mb-sm-2">
+                                    <div class="col-sm-3">
+                                        <h5 class="f-w-500">Ref. No.
+                                            <span class="pull-right d-none d-sm-block">:</span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-9">
+                                        <span>{{strtoupper($message->ref_code ?? '')}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
