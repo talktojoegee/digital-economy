@@ -95,4 +95,14 @@ class Invoice extends Model
         $invoice->comment = $request->comment ?? '';
         $invoice->save();
     }
+
+    public function updatePayment(Request $request){
+        $invoice = Invoice::find($request->invoice);
+        $invoice->paid_amount = ($request->amount - $invoice->total);
+        $invoice->ref_no = $request->paymentReference;
+        $invoice->r_order_id = $request->transactionId;
+        $invoice->r_payment_date = now();
+        $invoice->r_amount = ($request->amount - $invoice->total);
+        $invoice->save();
+    }
 }

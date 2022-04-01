@@ -125,6 +125,7 @@ Route::prefix('/company')->group(function (){
     Route::get('/view-invoice/{slug}', [App\Http\Controllers\CompanyController::class, 'viewInvoice'])->name('view-invoice');
     Route::get('/transactions', [App\Http\Controllers\CompanyController::class, 'transactions'])->name('transactions');
     Route::get('/make-payment/{slug}', [App\Http\Controllers\CompanyController::class, 'showMakePaymentForm'])->name('make-payment');
+    Route::post('/transaction-payment-handler', [App\Http\Controllers\CompanyController::class, 'transactionPaymentHandler'])->name('transaction-payment-handler');
     Route::post('/verify-rrr-payment', [App\Http\Controllers\CompanyController::class, 'verifyRRRPayment'])->name('verify-rrr-payment');
 });
 

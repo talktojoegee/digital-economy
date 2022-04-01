@@ -3,7 +3,6 @@
     Message Customer
 @endsection
 @section('extra-styles')
-    <link href="/vendor/summernote/summernote.css" rel="stylesheet" type="text/css"/>
     <link href="/vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('active-page')

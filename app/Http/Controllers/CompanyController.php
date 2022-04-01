@@ -475,4 +475,38 @@ class CompanyController extends Controller
 
         return dd($response) ;
     }
+
+    public function transactionPaymentHandler(Request $request){
+        $this->validate($request,[
+            'amount'=>'required',
+            'paymentReference'=>'required',
+            'transactionId'=>'required',
+            'invoice'=>'required'
+        ]);
+        $invoice = $this->invoice->getInvoiceById($request->invoice);
+        if(!empty($invoice)){
+            //$service_fee = $request->amount - $invoice->total;
+            $this->invoice->updatePayment($request);
+
+            //check whether invoice is for new license or renewal
+            if($invoice->invoice_type == 1){
+                //notify frequency assignment/license unit/section that of this payment to verify
+                //then wait for the officer/unit/section to assign frequency for each device
+                //permit him/her to select when the license should start reading
+                //log this operation for audit
+                //notify both parties(customer and officer) of this operation via approved means (SMS,Email)
+            }
+            //Invoice type other than 1 is considered to be for renewal
+            //get all assigned frequencies to this customer with status expired(2)
+            //check how much time it has expired/remains then add or subtract the number of days from 365(1year)
+            //update status to active
+            //send notification to concerned parties
+
+            if($invoice->invoice_type == 2){
+
+            }
+            return response()->json(['message'=>'Success']);
+        }
+
+    }
 }
