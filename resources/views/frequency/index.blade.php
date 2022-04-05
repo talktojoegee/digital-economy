@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('title')
-    Manage Transactions
+    Frequency Assignment(Pending)
 @endsection
 @section('extra-styles')
     <link href="/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -11,51 +11,15 @@
     </style>
 @endsection
 @section('active-page')
-    Manage Transactions
+    Frequency Assignment <small class="text-warning">(Pending)</small>
 @endsection
 
 @section('main-content')
     <div class="row">
-        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-            <div class="widget-stat card bg-danger">
-                <div class="card-body  p-4">
-                    <div class="media">
-                        <span class="mr-3">
-                            <i class="flaticon-381-multiply-1"></i>
-                        </span>
-                        <div class="media-body text-white text-right">
-                            <p class="mb-1">Discarded</p>
-                            <h4 class="text-white">
-                                ₦{{number_format($thisMonth->where('status', 3)->sum('total') ?? 0,2)}}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-            <div class="widget-stat card bg-success">
-                <div class="card-body p-4">
-                    <div class="media">
-                        <span class="mr-3">
-                            <i class="flaticon-381-success"></i>
-                        </span>
-                        <div class="media-body text-white text-right">
-                            <p class="mb-1">Paid</p>
-                            <h4 class="text-white">
-                                ₦{{number_format($thisMonth->where('status', 2)->sum('total') ?? 0,2)}}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">List of transactions</h4>
+                    <h4 class="card-title">Frequency Assignment <small class="text-warning">(Pending)</small></h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                     </div>
@@ -89,37 +53,36 @@
                                 <th>#</th>
                                 <th>Date</th>
                                 <th>Company</th>
-                                <th>Amount(₦)</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach($invoices as $invoice)
+                            @foreach($queue as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{date('d M, Y', strtotime($invoice->date_issued))}}</td>
-                                    <td>{{$invoice->getCompany->company_name ?? '' }}</td>
-                                    <td class="">{{number_format($invoice->total,2)}}</td>
+                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
+                                    <td>{{$app->getCompany->company_name ?? '' }}</td>
                                     <td>
-                                        @switch($invoice->status)
+                                        @switch($app->status)
                                             @case(0)
-                                            <label for="" class="label label-warning text-white">Unpaid</label>
+                                            <label for="" class="badge badge-warning text-white">Pending</label>
                                             @break
                                             @case(1)
-                                            <label for="" class="label label-primary text-white">Paid</label>
+                                            <label for="" class="badge text-white badge-success text-white">Assigned</label>
                                             @break
                                             @case(2)
-                                            <label for="" class="label label-success text-white">Verified</label>
-                                            @break
-                                            @case(3)
-                                            <label for="" class="label label-danger text-white">Discarded</label>
+                                            <label for="" class="badge badge-danger text-muted">Discarded</label>
                                             @break
                                         @endswitch
                                     </td>
                                     <td>
-                                        <a href="{{route('read-invoice', $invoice->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        @if($app->status == 0)
+                                        <a href="{{route('assign-frequency', ['slug'=>$app->getCompany->slug, 'invoice_slug'=>$app->invoice_slug])}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        @else
+                                            <a href="javascript:void(0);" class="btn btn-light shadow btn-xs" disabled>No Action</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

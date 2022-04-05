@@ -141,8 +141,11 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
     Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
-    Route::get('/assign-frequency/{slug}/{app_slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+    Route::get('/assign-frequency/{slug}/{invoice_slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
     Route::post('/process-frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'assignRadioFrequency'])->name('process-frequency-assignment');
+    Route::get('/frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'loadQueuedFrequencyAssignments'])->name('queued-frequency-assignment');
+    Route::get('/assigned-frequencies', [App\Http\Controllers\WorkflowController::class, 'assignedFrequencies'])->name('assigned-frequencies');
+    Route::get('/frequencies/{id}', [App\Http\Controllers\WorkflowController::class, 'readFrequency'])->name('read-frequencies');
 
     Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');
     Route::get('/generate-report', [App\Http\Controllers\WorkflowController::class, 'generateTransactionReport'])->name('generate-report');

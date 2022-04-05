@@ -16,7 +16,9 @@
                 <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                 @if($invoice->status == 0)
                 <a href="javascript:void(0);" data-toggle="modal" data-target="#discardTransaction" class="btn btn-sm btn-danger float-right mr-1"> <i class="ti-close mr-2"></i> Discard Transaction</a>
-                <a href="javascript:void(0);" data-toggle="modal" data-target="#verifyPayment" class="btn btn-sm btn-primary float-right mr-1"> <i class="ti-check mr-2"></i> Verify Payment</a>
+                @endif
+                @if($invoice->status == 1)
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#verifyPayment" class="btn btn-sm btn-primary float-right mr-1"> <i class="ti-check mr-2"></i> Verify Payment</a>
                 @endif
 
             </div>

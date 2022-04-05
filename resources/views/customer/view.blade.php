@@ -211,6 +211,7 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Device</th>
                                                 <th>Frequency</th>
                                                 <th>Start</th>
                                                 <th>End</th>
@@ -219,8 +220,47 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @php $serial = 1; @endphp
-
+                                            @php $f = 1; @endphp
+                                            @foreach($company->getAssignedFrequencies as $freq)
+                                                <tr>
+                                                    <td>{{$f++}}</td>
+                                                    <td>
+                                                        @switch($freq->type_of_device)
+                                                            @case(1)
+                                                            Handheld
+                                                            @break
+                                                            @case(2)
+                                                            Base
+                                                            @break
+                                                            @case(3)
+                                                            Repeaters
+                                                            @break
+                                                            @case(1)
+                                                            Vehicular
+                                                            @break
+                                                        @endswitch
+                                                    </td>
+                                                    <td>{{$freq->assigned_frequency ?? '' }}</td>
+                                                    <td class="text-success">{{date('d M, Y', strtotime($freq->valid_from))}}</td>
+                                                    <td class="text-danger">{{date('d M, Y', strtotime($freq->valid_to))}}</td>
+                                                    <td>
+                                                        @switch($freq->status)
+                                                            @case(0)
+                                                            <label for="" class="badge badge-warning text-white">Inactive</label>
+                                                            @break
+                                                            @case(1)
+                                                            <label for="" class="badge text-white badge-success text-white">Active</label>
+                                                            @break
+                                                            @case(2)
+                                                            <label for="" class="badge badge-danger text-muted">Expired</label>
+                                                            @break
+                                                        @endswitch
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{route('read-frequencies', $freq->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>

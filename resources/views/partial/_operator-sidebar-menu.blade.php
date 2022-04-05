@@ -11,7 +11,7 @@
                     <span class="nav-text">Radio License</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{route('new-licence-application')}}">New Ministerial Memo</a></li>
+                    <li><a href="{{route('new-licence-application')}}">Radio License</a></li>
                     <li><a href="{{route('new-radio-license-application')}}">New Application</a></li>
                     <li><a href="{{route('all-radio-license-applications')}}">Application</a></li>
                 </ul>
@@ -33,6 +33,11 @@
             <li><a href="{{route('transactions')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-pulse"></i>
                     <span class="nav-text">Transactions</span>
+                </a>
+            </li>
+            <li><a href="{{route('transactions')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-help"></i>
+                    <span class="nav-text">FAQs</span>
                 </a>
             </li>
         </ul>

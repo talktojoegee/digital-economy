@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminNotification;
+use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Invoice;
@@ -29,6 +30,7 @@ class CustomerController extends Controller
         $this->invoice = new Invoice();
         $this->invoiceitem = new InvoiceItem();
         $this->auditlog = new AuditLog();
+        $this->assignfrequencyqueue = new AssignFrequencyQueue();
     }
 
 
@@ -150,6 +152,14 @@ class CustomerController extends Controller
             'comment.required'=>"Leave comment",
         ]);
         $this->invoice->updateInvoiceStatus($request);
+        if($request->status == 2){//verified
+            $invoice = $this->invoice->getInvoiceById($request->invoiceId);
+            if($invoice->invoice_type == 1){ //new license app
+                //let's queue for frequency assignment
+                $this->assignfrequencyqueue->queueFrequency($invoice->company_id, $invoice->slug, 1);
+            }
+        }
+
         session()->flash("success", "Transaction recorded.");
         return redirect()->route("manage-transactions");
     }

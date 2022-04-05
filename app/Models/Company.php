@@ -24,6 +24,10 @@ class Company extends Authenticatable
         return $this->hasMany(LicenceApplication::class, 'company_id')->orderBy('id', 'DESC');
     }
 
+    public function getAssignedFrequencies(){
+        return $this->hasMany(FrequencyAssignment::class, 'company_id');
+    }
+
     public function getDirectors(){
         return $this->hasMany(CompanyDirector::class, 'company_id');
     }

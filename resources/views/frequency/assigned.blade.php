@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('title')
-    Manage Transactions
+    Frequency Assignment(Assigned)
 @endsection
 @section('extra-styles')
     <link href="/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -11,39 +11,56 @@
     </style>
 @endsection
 @section('active-page')
-    Manage Transactions
+    Frequency Assignment <small class="text-success">(Assigned)</small>
 @endsection
 
 @section('main-content')
     <div class="row">
-        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-            <div class="widget-stat card bg-danger">
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-warning">
                 <div class="card-body  p-4">
                     <div class="media">
                         <span class="mr-3">
-                            <i class="flaticon-381-multiply-1"></i>
+                            <i class="flaticon-381-stopwatch"></i>
                         </span>
                         <div class="media-body text-white text-right">
-                            <p class="mb-1">Discarded</p>
+                            <p class="mb-1">Inactive</p>
                             <h4 class="text-white">
-                                ₦{{number_format($thisMonth->where('status', 3)->sum('total') ?? 0,2)}}
+                                {{number_format($frequencies->where('status',0)->count())}}
                             </h4>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-danger">
+                <div class="card-body  p-4">
+                    <div class="media">
+                        <span class="mr-3">
+                            <i class="flaticon-381-close"></i>
+                        </span>
+                        <div class="media-body text-white text-right">
+                            <p class="mb-1">Expired</p>
+                            <h4 class="text-white">
+                                {{number_format($frequencies->where('status',2)->count())}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
             <div class="widget-stat card bg-success">
                 <div class="card-body p-4">
                     <div class="media">
                         <span class="mr-3">
-                            <i class="flaticon-381-success"></i>
+                            <i class="flaticon-381-hourglass"></i>
                         </span>
                         <div class="media-body text-white text-right">
-                            <p class="mb-1">Paid</p>
+                            <p class="mb-1">Active</p>
                             <h4 class="text-white">
-                                ₦{{number_format($thisMonth->where('status', 2)->sum('total') ?? 0,2)}}
+                                {{number_format($frequencies->where('status',1)->count())}}
                             </h4>
                         </div>
                     </div>
@@ -55,7 +72,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">List of transactions</h4>
+                    <h4 class="card-title">Frequency Assignment <small class="text-success">(Assigned)</small></h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                     </div>
@@ -89,37 +106,51 @@
                                 <th>#</th>
                                 <th>Date</th>
                                 <th>Company</th>
-                                <th>Amount(₦)</th>
+                                <th>Device</th>
+                                <th>Frequency</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach($invoices as $invoice)
+                            @foreach($frequencies as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{date('d M, Y', strtotime($invoice->date_issued))}}</td>
-                                    <td>{{$invoice->getCompany->company_name ?? '' }}</td>
-                                    <td class="">{{number_format($invoice->total,2)}}</td>
+                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
+                                    <td>{{$app->getCompany->company_name ?? '' }}</td>
                                     <td>
-                                        @switch($invoice->status)
-                                            @case(0)
-                                            <label for="" class="label label-warning text-white">Unpaid</label>
-                                            @break
+                                        @switch($app->type_of_device)
                                             @case(1)
-                                            <label for="" class="label label-primary text-white">Paid</label>
+                                            Handheld
                                             @break
                                             @case(2)
-                                            <label for="" class="label label-success text-white">Verified</label>
+                                            Base
                                             @break
                                             @case(3)
-                                            <label for="" class="label label-danger text-white">Discarded</label>
+                                            Repeaters
+                                            @break
+                                            @case(1)
+                                            Vehicular
+                                            @break
+                                        @endswitch
+                                    </td>
+                                    <td>{{$app->assigned_frequency ?? '' }}</td>
+                                    <td>
+                                        @switch($app->status)
+                                            @case(0)
+                                            <label for="" class="badge badge-warning text-white">Inactive</label>
+                                            @break
+                                            @case(1)
+                                            <label for="" class="badge text-white badge-success text-white">Active</label>
+                                            @break
+                                            @case(2)
+                                            <label for="" class="badge badge-danger text-white">Expired</label>
                                             @break
                                         @endswitch
                                     </td>
                                     <td>
-                                        <a href="{{route('read-invoice', $invoice->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        <a href="{{route('read-frequencies', $app->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

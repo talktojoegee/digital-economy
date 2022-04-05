@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\AdminNotification;
 use App\Models\AppDefaultSetting;
 use App\Models\AppSmsSetting;
+use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmploymentStatus;
+use App\Models\FrequencyAssignment;
 use App\Models\GradeLevel;
 use App\Models\JobRole;
 use App\Models\Invoice;
@@ -55,7 +57,8 @@ class WorkflowController extends Controller
         $this->adminnotification = new AdminNotification();
         $this->usernotification = new UserNotification();
         $this->invoice = new Invoice();
-        //$this->messagecustomer = new MessageCustomer();
+        $this->assignfrequencyqueue = new AssignFrequencyQueue();
+        $this->frequencyassignment = new FrequencyAssignment();
     }
 
     public function showWorkflowSettings(){
@@ -203,22 +206,29 @@ class WorkflowController extends Controller
         }
     }
 
-    public function showAssignFrequencyForm($slug, $app_slug){
+    public function loadQueuedFrequencyAssignments(){
+        return view('frequency.index',[
+            'queue'=>$this->assignfrequencyqueue->getAllQueuedFrequencyAssignments()
+        ]);
+    }
+
+    public function showAssignFrequencyForm($slug, $invoice_slug){
         $company = $this->company->getCompanyBySlug($slug);
         if(!empty($company)){
-            $application = $this->radiolicenseapplication->getRadioLicenseApplicationBySlug($app_slug);
-            if(empty($application)){
+            $invoice = $this->invoice->getInvoiceBySlug($invoice_slug);
+            if(empty($invoice)){
                 session()->flash("error", "No record found.");
                 return redirect()->route("manage-transactions");
             }
-            $detail = $this->radiolicenseapplicationdetails->getSingleDetailByRadioLicenseAppId($application->id);
-            $handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 1);
-            $base = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 2);
-            $repeaters = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 3);
-            $vehicular = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($application->id, 4);
-            return view("workflow.assign-frequency",[
+            $detail = $this->radiolicenseapplicationdetails->getSingleDetailByRadioLicenseAppId($invoice->radio_lic_app_id);
+            $handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 1);
+            $base = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 2);
+            $repeaters = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 3);
+            $vehicular = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 4);
+            return view("frequency.assign-frequency",[
                 'customer'=>$company,
-                'application'=>$application,
+                'applicationId'=>$invoice->radio_lic_app_id,
+                'invoice_slug'=>$invoice->slug,
                 'handheld'=>$handheld,
                 'base'=>$base,
                 'repeaters'=>$repeaters,
@@ -233,12 +243,36 @@ class WorkflowController extends Controller
 
 
     public function assignRadioFrequency(Request $request){
+        //return dd($request->all());
         $this->validate($request,[
+            'start_date'=>'required|date',
             'assign_frequency'=>'required|array',
-            'assign_frequency.*'=>'required'
+            'assign_frequency.*'=>'required',
+            'application'=>'required'
+
         ],[
-            'assign_frequency.required'=>'Enter frequency value in the field provided'
+            'assign_frequency.required'=>'Enter frequency value in the field provided',
+            'start_date.required'=>'Choose a date for license validity',
+            'start_date.date'=>'Enter a valid date format'
         ]);
+        $application = $this->radiolicenseapplication->getRadioLicenseApplicationById($request->application);
+        $companyId = $application->company_id;
+        $batch_code = substr(sha1(time()),27,40);
+        if(count($request->assign_frequency) > 0){
+            for($i = 0; $i < count($request->assign_frequency); $i++){
+                $frequency = $this->frequencyassignment->addFrequency($companyId, $request->application,
+                    $request->type_of_device[$i], $request->assign_frequency[$i], $request->start_date, $batch_code);
+            }
+            //Update queued freq. assign. status
+            $queue = $this->assignfrequencyqueue->updateQueuedFrequencyAssignmentBySlug($request->slug, 1);
+
+            session()->flash("success", "You've successfully assigned frequencies.");
+            return redirect()->route('queued-frequency-assignment');
+        }else{
+            session()->flash("error", "Whoops! Something went wrong. Try again.");
+            return back();
+        }
+
     }
 
     public function showTransactionReportForm(){
@@ -261,6 +295,23 @@ class WorkflowController extends Controller
             'search'=>1,
             'invoices'=>$this->invoice->generateReport($request->start, $request->end),
         ]);
+    }
+
+    public function assignedFrequencies(){
+        return view('frequency.assigned',
+            [
+                'frequencies'=>$this->frequencyassignment->getAllCompanyFrequencies()
+            ]);
+    }
+
+    public function readFrequency($id){
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            return view('frequency.view',['frequency'=>$frequency]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
     }
 
 

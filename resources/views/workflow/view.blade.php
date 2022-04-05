@@ -23,8 +23,9 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
+                                @if($application->status == 0)
                                 <a href="{{route('invoice-customer', ['slug'=>$application->getCompany->slug, 'appSlug'=>$application->slug])}}" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
-                                <a href="{{route('assign-frequency', ['slug'=>$application->getCompany->slug, 'app_slug'=>$application->slug])}}" class="btn btn-success mr-1 btn-sm">Assign Frequency</a>
+                                @endif
                             </div>
                         </div>
                     </div>

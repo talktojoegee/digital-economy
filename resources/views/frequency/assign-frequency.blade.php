@@ -49,6 +49,18 @@
                             <form action="{{route('process-frequency-assignment')}}" method="post">
                                 @csrf
                                 <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label">License Start Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" name="start_date" class="form-control" placeholder="Start Date" value="{{old('start_date')}}">
+                                            <input type="hidden" name="application" value="{{$applicationId}}">
+                                            @error('start_date')
+                                            <i class="text-danger mt-2">{{$message}}</i>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                 @if($handheld > 0)
 
                                         <h5>Handheld Devices({{$handheld}})</h5>
@@ -57,6 +69,7 @@
                                                 <label class="col-sm-4 col-form-label">Handheld Device (#{{$i+1}})</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                    <input type="hidden" name="type_of_device[]" value="1">
                                                     @error('assign_frequency')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
@@ -72,6 +85,7 @@
                                                 <label class="col-sm-4 col-form-label">Base Station (#{{$b+1}})</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                    <input type="hidden" name="type_of_device[]" value="2">
                                                     @error('assign_frequency')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
@@ -87,6 +101,7 @@
                                             <label class="col-sm-4 col-form-label">Repeaters Station (#{{$r+1}})</label>
                                             <div class="col-sm-8">
                                                 <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                <input type="hidden" name="type_of_device[]" value="3">
                                                 @error('assign_frequency')
                                                 <i class="text-danger mt-2">{{$message}}</i>
                                                 @enderror
@@ -102,6 +117,7 @@
                                             <label class="col-sm-4 col-form-label">Vehicular Station (#{{$v+1}})</label>
                                             <div class="col-sm-8">
                                                 <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                <input type="hidden" name="type_of_device[]" value="4">
                                                 @error('assign_frequency')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                 @enderror
@@ -112,8 +128,8 @@
                                 </div>
                                 <hr>
                                 <div class="col-md-12 d-flex justify-content-center">
-                                    <input type="hidden" name="application" value="{{$application->id}}">
                                     <div class="btn-group">
+                                        <input type="hidden" value="{{$invoice_slug}}" name="slug">
                                         <a href="{{url()->previous()}}" class="btn-light btn-sm btn">Cancel</a>
                                         <button class="btn btn-primary btn-sm">Submit</button>
                                     </div>

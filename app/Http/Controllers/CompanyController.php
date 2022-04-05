@@ -50,6 +50,7 @@ class CompanyController extends Controller
         $this->invoice = new Invoice();
         $this->invoiceitem = new InvoiceItem();
         $this->radiolicenseapplication = new RadioLicenseApplication();
+        $this->user = new User();
     }
 
 
@@ -427,53 +428,7 @@ class CompanyController extends Controller
         ],[
             'rrr.required'=>'Enter Remita Retrieval Reference (RRR) for this transaction.'
         ]);
-        $rrr = $request->rrr;
-        $hash = hash("SHA512", $rrr.env('REMITA_API_HASH').env('REMITA_MERCHANT_ID'));
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Accept'=>'application/json',
-            'Authorization' => 'remitaConsumerKey='.env('REMITA_MERCHANT_ID').',remitaConsumerToken='.$hash.'',
-        ];
 
-
-        //$url = "http://www.remitademo.net/remita/ecomm/".env('REMITA_MERCHANT_ID')."/status.reg";
-        $url = 'https://www.remitademo.net/remita/ecomm/'.env('REMITA_MERCHANT_ID').'/'.$rrr.'/'.$hash.'/status.reg';
-        //$client = new Client(['verify' => false, 'headers'=>$headers]);
-        //$response = $client->get($url);
-
-
-
-        /*$ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        // SSL important
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
-        $repo = json_decode($output);*/ //$this->response['response']
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => $headers,
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($response);
-        //$token = $response->responseBody->accessToken;
-        //return $token;
-
-        return dd($response) ;
     }
 
     public function transactionPaymentHandler(Request $request){
@@ -485,26 +440,60 @@ class CompanyController extends Controller
         ]);
         $invoice = $this->invoice->getInvoiceById($request->invoice);
         if(!empty($invoice)){
-            //$service_fee = $request->amount - $invoice->total;
             $this->invoice->updatePayment($request);
-
             //check whether invoice is for new license or renewal
             if($invoice->invoice_type == 1){
                 //notify frequency assignment/license unit/section that of this payment to verify
-                //then wait for the officer/unit/section to assign frequency for each device
-                //permit him/her to select when the license should start reading
-                //log this operation for audit
-                //notify both parties(customer and officer) of this operation via approved means (SMS,Email)
+                $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+                if(!empty($defaultSettings)) {
+                    if (!empty($defaultSettings->new_app_section_handler)) {
+                        $department = $defaultSettings->new_app_section_handler;
+                        $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($department);
+                        if (!empty($supervisor)) {
+                            $user = $this->user->getEmployeeById($supervisor->user_id);
+                            #Admin notification
+                            $subject = "Payment on new license application";
+                            $body = "Hello ".$user->first_name.", a customer just paid for new radio license";
+                            $this->adminnotification->addAdminNotification($subject, $body, "read-invoice", $invoice->slug, 1, $supervisor->user_id);
+
+                        }
+                    }
+                }
+
             }
+            if($invoice->invoice_type == 2 || $invoice->invoice_type == 3){
+                $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+                if(!empty($defaultSettings)) {
+                    if (!empty($defaultSettings->licence_renewal_handler)) {
+                        $department = $defaultSettings->licence_renewal_handler;
+                        $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($department);
+                        if (!empty($supervisor)) {
+                            $user = $this->user->getEmployeeById($supervisor->user_id);
+                            #Admin notification
+                            $subject = "Payment on license application";
+                            $body = "Hello ".$user->first_name.", a customer just paid for new radio license";
+                            $this->adminnotification->addAdminNotification($subject, $body, "read-invoice", $invoice->slug, 1, $supervisor->user_id);
+
+                        }
+                    }
+                }
+            }
+            //then wait for the officer/unit/section to assign frequency for each device
+            //permit him/her to select when the license should start reading
+            //log this operation for audit
+            //notify both parties(customer and officer) of this operation via approved means (SMS,Email)
+
+            #User notification
+            $subject = "Payment done!";
+            $body = "Your transaction was carried out successfully. We'll get back to you ASAP.";
+            $this->usernotification->addUserNotification($subject, $body, "view-invoice", $invoice->slug, 1, $invoice->company_id);
+
             //Invoice type other than 1 is considered to be for renewal
             //get all assigned frequencies to this customer with status expired(2)
             //check how much time it has expired/remains then add or subtract the number of days from 365(1year)
             //update status to active
             //send notification to concerned parties
 
-            if($invoice->invoice_type == 2){
-
-            }
             return response()->json(['message'=>'Success']);
         }
 

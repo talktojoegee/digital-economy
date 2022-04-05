@@ -15,6 +15,15 @@
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
             </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                    <i class="ti-signal"></i>
+                    <span class="nav-text">Frequency Ass.</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{route('queued-frequency-assignment')}}">Pending</a></li>
+                    <li><a href="{{route('assigned-frequencies')}}">Assigned</a></li>
+                </ul>
+            </li>
             <li><a href="{{route('companies')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-briefcase"></i>
                     <span class="nav-text">Companies</span>
@@ -51,7 +60,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('top-up')}}">Top-up</a></li>
                     <li><a href="{{route('phone-group')}}">Phone Groups</a></li>
-                    <li><a href="{{route('manage-publication-categories')}}">Compose Message</a></li>
+                    <li><a href="{{route('manage-publication-categories')}}">Compose</a></li>
                     <li><a href="{{route('manage-publication-categories')}}">Messages</a></li>
                 </ul>
             </li>
