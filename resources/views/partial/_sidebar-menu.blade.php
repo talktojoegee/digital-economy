@@ -2,8 +2,8 @@
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
             <li><a href="{{route('news-feed')}}" class="ai-icon" aria-expanded="false">
-                    <i class="ti-book"></i>
-                    <span class="nav-text">Newsfeed</span>
+                    <i class="ti-desktop"></i>
+                    <span class="nav-text">Dashboard</span>
                 </a>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -26,7 +26,7 @@
             </li>
             <li><a href="{{route('companies')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-briefcase"></i>
-                    <span class="nav-text">Companies</span>
+                    <span class="nav-text">Customers</span>
                 </a>
             </li>
             <li><a href="{{route('messages')}}" class="ai-icon" aria-expanded="false">
@@ -50,7 +50,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('all-employees')}}">All Employees</a></li>
                     <li><a href="{{route('add-new-employee')}}">Add New Employee</a></li>
-                    <li><a href="{{route('human-resource-settings')}}">Settings</a></li>
+                    <li><a href="{{route('add-new-employee')}}">Audit Trail</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -67,6 +67,11 @@
             <li><a href="{{route('manage-files')}}" class="ai-icon" aria-expanded="false">
                     <i class="flaticon-381-file"></i>
                     <span class="nav-text">File Storage</span>
+                </a>
+            </li>
+            <li><a href="#" class="ai-icon" aria-expanded="false">
+                    <i class="ti-help"></i>
+                    <span class="nav-text">FAQs</span>
                 </a>
             </li>
         </ul>

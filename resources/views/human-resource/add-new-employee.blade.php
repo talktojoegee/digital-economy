@@ -66,9 +66,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Birth Date</label>
-                                    <input type="date" name="birth_date" value="{{old('birth_date')}}" placeholder="Birth Date"   class="form-control">
-                                    @error('birth_date') <i class="text-danger">{{$message}}</i> @enderror
+                                    <label for="">Department</label>
+                                    <select name="department" id="department" class="form-control js-example-theme-single">
+                                        <option selected disabled>--Select department--</option>
+                                        @foreach($departments as $depart)
+                                            <option value="{{$depart->id}}">{{$depart->department_name ?? '' }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('department') <i class="text-danger">{{$message}}</i> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -121,66 +126,6 @@
                                 </div>
                             </div>
                         </div>
-                        <h4>Employment Information</h4>
-                        <div class="form-section row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Department</label>
-                                    <select name="department" id="department" class="form-control js-example-theme-single">
-                                        <option selected disabled>--Select department--</option>
-                                        @foreach($departments as $depart)
-                                            <option value="{{$depart->id}}">{{$depart->department_name ?? '' }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('department') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Job Role</label>
-                                    <div id="job-role-wrapper"></div>
-                                    @error('job_role') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Hire Date</label>
-                                    <input type="date" value="{{date('dd/mm/yyyy', strtotime(now()))}}" placeholder="Hire Date" name="hire_date" class="form-control">
-                                    @error('hire_date') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Employee/Staff ID</label>
-                                    <input type="text" value="{{old('employee_id')}}" placeholder="Employee/Staff ID" name="employee_id" class="form-control">
-                                    @error('employee_id') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Employment Type</label>
-                                    <select name="employment_type" id="employment_type" class="form-control js-example-theme-single">
-                                        <option selected disabled>--Select employment type--</option>
-                                        @foreach($employment_types as $e_type)
-                                            <option value="{{$e_type->id}}">{{$e_type->status ?? '' }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('employment_type') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Grade Level</label>
-                                    <select name="grade_level" id="grade-level" class="form-control js-example-theme-single">
-                                        <option selected disabled>--Select grade level--</option>
-                                        @foreach($grade_levels as $level)
-                                            <option value="{{$level->id}}">GL - {{$level->level ?? '' }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('grade_level') <i class="text-danger">{{$message}}</i> @enderror
-                                </div>
-                            </div>
-                        </div>
                         <hr>
                         <div class="row mt-4">
                             <div class="col-md-12 d-flex justify-content-center">
@@ -210,14 +155,14 @@
                     $('#local').select2();
                 });
             });
-            $('#department').on('change', function(e){
+           /* $('#department').on('change', function(e){
                 e.preventDefault();
                 axios.post('/load-job-roles', {department:$(this).val()})
                     .then(response=>{
                         $('#job-role-wrapper').html(response.data);
                         $('#job-role').select2();
                     });
-            });
+            });*/
         });
     </script>
 @endsection

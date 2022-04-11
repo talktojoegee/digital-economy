@@ -16,6 +16,59 @@
 
 @section('main-content')
     <div class="row">
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-warning">
+                <div class="card-body  p-4">
+                    <div class="media">
+                        <span class="mr-3">
+                            <i class="flaticon-381-stopwatch"></i>
+                        </span>
+                        <div class="media-body text-white text-right">
+                            <p class="mb-1">Processing</p>
+                            <h4 class="text-white">
+                                {{number_format($applications->where('status',2)->count())}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-danger">
+                <div class="card-body  p-4">
+                    <div class="media">
+                        <span class="mr-3">
+                            <i class="flaticon-381-close"></i>
+                        </span>
+                        <div class="media-body text-white text-right">
+                            <p class="mb-1">Discarded</p>
+                            <h4 class="text-white">
+                                {{number_format($applications->where('status',3)->count())}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-success">
+                <div class="card-body p-4">
+                    <div class="media">
+                        <span class="mr-3">
+                            <i class="flaticon-381-hourglass"></i>
+                        </span>
+                        <div class="media-body text-white text-right">
+                            <p class="mb-1">Approved/Closed</p>
+                            <h4 class="text-white">
+                                {{number_format($applications->where('status',4)->count())}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
@@ -67,19 +120,19 @@
                                     <td>
                                         @switch($app->status)
                                             @case(0)
-                                            <label for="" class="badge badge-light text-muted">Received</label>
+                                            <label for="" class="badge badge-light text-white">Received</label>
                                             @break
                                             @case(1)
-                                            <label for="" class="badge text-white badge-secondary text-muted">Acknowledged</label>
+                                            <label for="" class="badge text-white badge-secondary text-white">Acknowledged</label>
                                             @break
                                             @case(2)
-                                            <label for="" class="badge badge-primary text-muted">Processing...</label>
+                                            <label for="" class="badge badge-primary text-white">Processing...</label>
                                             @break
                                             @case(3)
-                                            <label for="" class="badge badge-danger text-muted">Discarded</label>
+                                            <label for="" class="badge badge-danger text-white">Discarded</label>
                                             @break
                                             @case(4)
-                                            <label for="" class="badge badge-success text-muted">Closed</label>
+                                            <label for="" class="badge badge-success text-white">Closed</label>
                                             @break
                                         @endswitch
                                     </td>

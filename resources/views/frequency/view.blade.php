@@ -56,7 +56,7 @@
                                                         <div class="mb-5">
                                                             <div class="title mb-4"><span class="fs-18 text-black font-w600">Details</span></div>
                                                             <div class="row">
-                                                                <div class="col-xl-12 col-sm-12">
+                                                                <div class="col-xl-6 col-sm-6">
                                                                     <div class="profile-personal-info">
                                                                         <div class="row mb-4 mb-sm-2">
                                                                             <div class="col-sm-3">
@@ -167,6 +167,50 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-xl-6 col-sm-6">
+                                                                    <div class="card bg-light">
+                                                                        <div class="card-header">
+                                                                            Update Licence Status
+                                                                        </div>
+                                                                        <div class="card-body">
+                                                                            <p></p>
+                                                                            <form action="">
+                                                                                @csrf
+                                                                                @php
+                                                                                    $statuses = ["Inactive", "Active", "Expired", "Withdrawn"];
+                                                                                @endphp
+                                                                                <div class="form-group">
+                                                                                    <label for="">Subject</label>
+                                                                                    <input type="text"
+                                                                                           class="form-control" placeholder="Subject" value="{{old('subject')}}">
+                                                                                    @error('subject')
+                                                                                        <i class="text-danger mt-2">{{$message}}</i>
+                                                                                    @enderror
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="">Licence Status</label>
+                                                                                    <select name="licence_status" id="licence_status"
+                                                                                            class="form-control">
+                                                                                        @for($i = 0; $i<count($statuses); $i++)
+                                                                                            <option value="{{$i}}" {{$i == $frequency->status ? 'selected' : '' }}>{{$statuses[$i]}}</option>
+                                                                                        @endfor
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="">Narration</label>
+                                                                                    <textarea name="narration" id="narration" placeholder="Narration"
+                                                                                              class="form-control" rows="5  " style="resize: none;">{{old('narration')}}</textarea>
+                                                                                    @error('narration')
+                                                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                                                    @enderror
+                                                                                </div>
+                                                                                <div class="form-group d-flex justify-content-center">
+                                                                                    <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -185,25 +229,65 @@
         </div>
         <div class="col-xl-12">
             <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Radio Licence Details</h4>
+                </div>
                 <div class="card-body">
-                    <h4 class="text-uppercase">Frequency Log</h4>
-                    <div class="table-responsive">
-                        <table class="table header-border table-responsive-sm">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User</th>
-                                <th>Section</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php $serial = 1; @endphp
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#home1"><i class="la la-redo-alt mr-2"></i> Renewal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#profile1"><i class="la la-folder-open mr-2"></i> Log</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home1" role="tabpanel">
+                                <div class="pt-4 mt-3">
+                                    <div class="table-responsive">
+                                        <table class="table header-border table-responsive-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Valid From</th>
+                                                <th>Expires</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php $serial = 1; @endphp
 
-                            </tbody>
-                        </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile1">
+                                <div class="pt-4 mt-3">
+                                    <div class="table-responsive">
+                                        <table class="table header-border table-responsive-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Logged By</th>
+                                                <th>Subject</th>
+                                                <th>Content</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php $index = 1; @endphp
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

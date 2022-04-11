@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\CompanyContactPerson;
 use App\Models\CompanyDirector;
 use App\Models\Country;
+use App\Models\FrequencyAssignment;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\LicenceApplication;
@@ -51,6 +52,7 @@ class CompanyController extends Controller
         $this->invoiceitem = new InvoiceItem();
         $this->radiolicenseapplication = new RadioLicenseApplication();
         $this->user = new User();
+        $this->frequencyassignment = new FrequencyAssignment();
     }
 
 
@@ -497,5 +499,18 @@ class CompanyController extends Controller
             return response()->json(['message'=>'Success']);
         }
 
+    }
+
+    public function myAssignedFrequencies(){
+        return view('operators.assigned-frequencies');
+    }
+    public function viewFrequency($id){
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            return view('operators.assigned-frequencies-view',['frequency'=>$frequency]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
     }
 }

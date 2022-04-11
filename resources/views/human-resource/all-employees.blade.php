@@ -76,13 +76,12 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th></th>
                                 <th>Name</th>
                                 <th>Department</th>
                                 <th>Gender</th>
                                 <th>Mobile</th>
                                 <th>Email</th>
-                                <th>Hire Date</th>
+                                <th> Date</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -91,13 +90,12 @@
                                 @foreach($employees as $employee)
                                     <tr>
                                         <td>{{$serial++}}</td>
-                                        <td><img class="rounded-circle" width="35"  src="/images/profile/small/pic1.jpg" alt=""></td>
                                         <td>{{$employee->first_name ?? '' }} {{$employee->last_name ?? '' }}</td>
                                         <td>{{$employee->getDepartment->department_name ?? '' }}</td>
                                         <td>{{$employee->gender == 1 ? 'Male' : 'Female' }}</td>
                                         <td><a href="javascript:void(0);"><strong>{{$employee->mobile_no ?? '' }}</strong></a></td>
                                         <td><a href="javascript:void(0);"><strong>{{$employee->email ?? '' }}</strong></a></td>
-                                        <td>{{ date('d M, Y', strtotime($employee->hire_date)) ?? '' }}</td>
+                                        <td>{{ date('d M, Y', strtotime($employee->created_at)) ?? '' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{route('view-employee-profile',$employee->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="ti-eye"></i></a>

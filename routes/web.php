@@ -127,6 +127,10 @@ Route::prefix('/company')->group(function (){
     Route::get('/make-payment/{slug}', [App\Http\Controllers\CompanyController::class, 'showMakePaymentForm'])->name('make-payment');
     Route::post('/transaction-payment-handler', [App\Http\Controllers\CompanyController::class, 'transactionPaymentHandler'])->name('transaction-payment-handler');
     Route::post('/verify-rrr-payment', [App\Http\Controllers\CompanyController::class, 'verifyRRRPayment'])->name('verify-rrr-payment');
+
+
+    Route::get('/my-assigned-frequencies', [App\Http\Controllers\CompanyController::class, 'myAssignedFrequencies'])->name('my-assigned-frequencies');
+    Route::get('/frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'viewFrequency'])->name('view-frequencies');
 });
 
 Route::prefix('/radio')->group(function(){

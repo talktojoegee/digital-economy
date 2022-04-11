@@ -1,6 +1,6 @@
-@extends('layouts.master-layout')
+@extends('layouts.operator-layout')
 @section('title')
-    Companies
+    Assigned Radio Frequencies
 @endsection
 @section('extra-styles')
     <link href="/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -11,39 +11,56 @@
     </style>
 @endsection
 @section('active-page')
-    Companies
+    Assigned Radio Frequencies
 @endsection
 
 @section('main-content')
     <div class="row">
-        <div class="col-xl-6 col-xxl-6 col-lg-6 col-sm-6">
-            <div class="widget-stat card bg-success">
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-warning">
                 <div class="card-body  p-4">
                     <div class="media">
                         <span class="mr-3">
-                            <i class="flaticon-381-archive"></i>
+                            <i class="flaticon-381-stopwatch"></i>
                         </span>
                         <div class="media-body text-white text-right">
-                            <p class="mb-1">No. of Companies</p>
+                            <p class="mb-1">Inactive</p>
                             <h4 class="text-white">
-                                {{number_format($companies->count())}}
+                                {{number_format(Auth::user()->getAssignedFrequencies->where('status',0)->count())}}
                             </h4>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-xxl-6 col-lg-6 col-sm-6">
-            <div class="widget-stat card bg-primary">
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-danger">
                 <div class="card-body  p-4">
                     <div class="media">
                         <span class="mr-3">
-                            <i class="flaticon-381-diploma"></i>
+                            <i class="flaticon-381-close"></i>
                         </span>
                         <div class="media-body text-white text-right">
-                            <p class="mb-1">Licences Issued</p>
+                            <p class="mb-1">Expired</p>
                             <h4 class="text-white">
-                                {{number_format($licenses)}}
+                                {{number_format(Auth::user()->getAssignedFrequencies->where('status',2)->count())}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-xxl-4 col-lg-4 col-sm-4">
+            <div class="widget-stat card bg-success">
+                <div class="card-body p-4">
+                    <div class="media">
+                        <span class="mr-3">
+                            <i class="flaticon-381-hourglass"></i>
+                        </span>
+                        <div class="media-body text-white text-right">
+                            <p class="mb-1">Active</p>
+                            <h4 class="text-white">
+                                {{number_format(Auth::user()->getAssignedFrequencies->where('status',1)->count())}}
                             </h4>
                         </div>
                     </div>
@@ -55,7 +72,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Companies</h4>
+                    <h4 class="card-title">Frequency Assignment <small class="text-success">(Assigned)</small></h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                     </div>
@@ -87,28 +104,52 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>CEO</th>
-                                <th>State</th>
-                                <th>Email</th>
-                                <th>Mobile No.</th>
+                                <th>Date</th>
+                                <th>Device</th>
+                                <th>Frequency</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach($companies as $app)
+                            @foreach(Auth::user()->getAssignedFrequencies as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{$app->company_name ?? '' }}</td>
-                                    <td>{{$app->ceo_name}}</td>
+                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
                                     <td>
-                                        {{$app->getState->state_name ?? ''}}
+                                        @switch($app->type_of_device)
+                                            @case(1)
+                                            Handheld
+                                            @break
+                                            @case(2)
+                                            Base
+                                            @break
+                                            @case(3)
+                                            Repeaters
+                                            @break
+                                            @case(1)
+                                            Vehicular
+                                            @break
+                                        @endswitch
                                     </td>
-                                    <td>{{$app->email ?? ''}}</td>
-                                    <td>{{$app->mobile_no ?? ''}}</td>
+                                    <td>{{$app->assigned_frequency ?? '' }}</td>
                                     <td>
-                                        <a href="{{route('read-company-profile', $app->slug)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        @switch($app->status)
+                                            @case(0)
+                                            <label for="" class="badge badge-warning text-white">Inactive</label>
+                                            @break
+                                            @case(1)
+                                            <label for="" class="badge text-white badge-success text-white">Active</label>
+                                            @break
+                                            @case(2)
+                                            <label for="" class="badge badge-danger text-white">Expired</label>
+                                            @break
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        <a href="{{route('view-frequencies', $app->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        <a href="{{route('read-frequencies', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

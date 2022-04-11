@@ -6,6 +6,7 @@ use App\Models\AdminNotification;
 use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\FrequencyAssignment;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\MessageCustomer;
@@ -31,6 +32,7 @@ class CustomerController extends Controller
         $this->invoiceitem = new InvoiceItem();
         $this->auditlog = new AuditLog();
         $this->assignfrequencyqueue = new AssignFrequencyQueue();
+        $this->frequencyassignment = new FrequencyAssignment();
     }
 
 
@@ -169,7 +171,10 @@ class CustomerController extends Controller
     }
 
     public function showCompanies(){
-        return view('customer.index',['companies'=>$this->company->getAllCompanies()]);
+        return view('customer.index',
+            ['companies'=>$this->company->getAllCompanies(),
+             'licenses'=>$this->frequencyassignment->getAllCompanyFrequencyCounter()
+            ]);
     }
 
     public function readCompanyProfile($slug){

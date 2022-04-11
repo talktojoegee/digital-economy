@@ -105,15 +105,15 @@ class User extends Authenticatable
         $employee->mobile_no = $request->mobile_no ?? '';
         $employee->state_id = $request->state;
         $employee->local_gov_id = $request->local_gov;
-        $employee->birth_date = $request->birth_date ?? '';
-        $employee->hire_date = $request->hire_date ?? '';
-        $employee->job_role_id = $request->job_role;
+        //$employee->birth_date = $request->birth_date ?? '';
+        //$employee->hire_date = $request->hire_date ?? '';
+        //$employee->job_role_id = $request->job_role;
         $employee->department_id = $request->department;
-        $employee->address = $request->address ?? '';
-        $employee->gender = $request->gender ?? '';
-        $employee->grade_level_id = $request->grade_level ?? '';
-        $employee->marital_status = $request->marital_status ?? '';
-        $employee->employee_id = $request->employee_id ?? '';
+        //$employee->address = $request->address ?? '';
+        //$employee->gender = $request->gender ?? '';
+        //$employee->grade_level_id = $request->grade_level ?? '';
+        //$employee->marital_status = $request->marital_status ?? '';
+        //$employee->employee_id = $request->employee_id ?? '';
         $employee->slug = Str::slug($request->first_name).'-'.substr(sha1(time()),27,40);
         $employee->save();
     }
@@ -127,15 +127,15 @@ class User extends Authenticatable
         $employee->mobile_no = $request->mobile_no ?? '';
         $employee->state_id = $request->state;
         $employee->local_gov_id = $request->local_gov;
-        $employee->birth_date = $request->birth_date ?? '';
-        $employee->hire_date = $request->hire_date ?? '';
-        $employee->job_role_id = $request->job_role;
+        //$employee->birth_date = $request->birth_date ?? '';
+        //$employee->hire_date = $request->hire_date ?? '';
+        //$employee->job_role_id = $request->job_role;
         $employee->department_id = $request->department;
         $employee->address = $request->address ?? '';
         $employee->gender = $request->gender ?? '';
-        $employee->grade_level_id = $request->grade_level ?? '';
+        //$employee->grade_level_id = $request->grade_level ?? '';
         $employee->marital_status = $request->marital_status ?? '';
-        $employee->employee_id = $request->employee_id ?? '';
+        //$employee->employee_id = $request->employee_id ?? '';
         $employee->slug = Str::slug($request->first_name).'-'.substr(sha1(time()),27,40);
         $employee->save();
     }
