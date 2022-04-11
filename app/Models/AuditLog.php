@@ -10,6 +10,9 @@ class AuditLog extends Model
     use HasFactory;
 
 
+    public function getOfficer(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function registerLog($user, $subject, $activity){
         $log = new AuditLog();
@@ -25,7 +28,7 @@ class AuditLog extends Model
     }
 
     public function getAuditLogByPeriod($start, $end){
-        return AuditLog()->whereBetween('created_at', [$start, $end])->get();
+        return AuditLog::whereBetween('created_at', [$start, $end])->orderBy('id', 'DESC')->get();
     }
 
 

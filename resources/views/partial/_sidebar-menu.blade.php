@@ -50,7 +50,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('all-employees')}}">All Employees</a></li>
                     <li><a href="{{route('add-new-employee')}}">Add New Employee</a></li>
-                    <li><a href="{{route('add-new-employee')}}">Audit Trail</a></li>
+                    <li><a href="{{route('audit-trail')}}">Audit Trail</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -69,7 +69,7 @@
                     <span class="nav-text">File Storage</span>
                 </a>
             </li>
-            <li><a href="#" class="ai-icon" aria-expanded="false">
+            <li><a href="{{route('faqs')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-help"></i>
                     <span class="nav-text">FAQs</span>
                 </a>

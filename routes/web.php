@@ -153,6 +153,8 @@ Route::prefix('/workflow')->group(function(){
 
     Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');
     Route::get('/generate-report', [App\Http\Controllers\WorkflowController::class, 'generateTransactionReport'])->name('generate-report');
+    Route::get('/audit-trail', [App\Http\Controllers\WorkflowController::class, 'showAuditTrailForm'])->name('audit-trail');
+    Route::get('/filter-audit-trail', [App\Http\Controllers\WorkflowController::class, 'auditTrail'])->name('filter-audit-trail');
 });
 
 Route::prefix('customer-support')->group(function(){
@@ -170,6 +172,9 @@ Route::prefix('customer-support')->group(function(){
 
     Route::get('/companies', [App\Http\Controllers\CustomerController::class, 'showCompanies'])->name('companies');
     Route::get('/companies/{slug}', [App\Http\Controllers\CustomerController::class, 'readCompanyProfile'])->name('read-company-profile');
+    Route::get('/faqs', [App\Http\Controllers\CustomerController::class, 'showFaqs'])->name('faqs');
+    Route::post('/faqs', [App\Http\Controllers\CustomerController::class, 'postFaq']);
+    Route::post('/edit-faq', [App\Http\Controllers\CustomerController::class, 'editFaq'])->name('edit-faq');
 });
 
 

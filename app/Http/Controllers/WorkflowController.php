@@ -59,6 +59,7 @@ class WorkflowController extends Controller
         $this->invoice = new Invoice();
         $this->assignfrequencyqueue = new AssignFrequencyQueue();
         $this->frequencyassignment = new FrequencyAssignment();
+        $this->auditlog = new AuditLog();
     }
 
     public function showWorkflowSettings(){
@@ -313,6 +314,26 @@ class WorkflowController extends Controller
             return back();
         }
     }
+    public function showAuditTrailForm(){
 
+        return view('human-resource.audit-trail',[
+            'logs'=>$this->auditlog->getAuditLog(),
+            'search'=>0
+        ]);
+    }
+
+    public function auditTrail(Request $request){
+        $this->validate($request,[
+            'start'=>'required',
+            'end'=>'required'
+        ],[
+            'start.required'=>'Select start date',
+            'end.required'=>'Select end date'
+        ]);
+        return view('human-resource.audit-trail',[
+            'search'=>1,
+            'logs'=>$this->auditlog->getAuditLogByPeriod($request->start, $request->end),
+        ]);
+    }
 
 }

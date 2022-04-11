@@ -6,6 +6,7 @@ use App\Models\AdminNotification;
 use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\Faqs;
 use App\Models\FrequencyAssignment;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -33,6 +34,7 @@ class CustomerController extends Controller
         $this->auditlog = new AuditLog();
         $this->assignfrequencyqueue = new AssignFrequencyQueue();
         $this->frequencyassignment = new FrequencyAssignment();
+        $this->faqs = new Faqs();
     }
 
 
@@ -185,5 +187,42 @@ class CustomerController extends Controller
             session()->flash("error", "No record found.");
             return back();
         }
+    }
+
+
+    public function showFaqs(){
+        return view('customer.faqs',['faqs'=>$this->faqs->getFaqs()]);
+    }
+
+    public function postFaq(Request $request){
+        $this->validate($request,[
+            'question'=>'required',
+            'answer'=>'required'
+        ],[
+            'answer.required'=>"What's the answer to this question?",
+            'question.required'=>"Enter a question with it's answer."
+        ]);
+        $this->faqs->publishFaq($request);
+        $message = Auth::user()->first_name." published new FAQs";
+        $subject = "New FAQ ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your FAQs was published!");
+        return back();
+    }
+    public function editFaq(Request $request){
+        $this->validate($request,[
+            'question'=>'required',
+            'answer'=>'required',
+            'faq'=>'required'
+        ],[
+            'answer.required'=>"What's the answer to this question?",
+            'question.required'=>"Enter a question with it's answer."
+        ]);
+        $this->faqs->updateFaq($request);
+        $message = Auth::user()->first_name." edited FAQ";
+        $subject = "FAQ edited";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your changes were saved!");
+        return back();
     }
 }
