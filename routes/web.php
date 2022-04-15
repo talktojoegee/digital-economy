@@ -59,8 +59,8 @@ Route::prefix('/human-resource')->group(function (){
     Route::post('/assign-section-head', [App\Http\Controllers\HumanResourceController::class, 'assignSectionHead'])->name('assign-section-head');
 });
 
-Route::prefix('/dashboard')->group(function(){
-    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('dashboard');
+Route::prefix('/admin-dashboard')->group(function(){
+    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('admin-dashboard');
 });
 
 Route::prefix('/account')->group(function(){

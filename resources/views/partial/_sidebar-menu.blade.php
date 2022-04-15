@@ -1,7 +1,7 @@
 <div class="deznav">
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
-            <li><a href="{{route('dashboard')}}" class="ai-icon" aria-expanded="false">
+            <li><a href="{{route('admin-dashboard')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-desktop"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
