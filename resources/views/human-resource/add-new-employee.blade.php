@@ -15,6 +15,9 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Add New Employee</h4>
+                    <div class="btn-group">
+                        <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <h4>Personal Information</h4>

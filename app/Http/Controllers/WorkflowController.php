@@ -305,6 +305,13 @@ class WorkflowController extends Controller
             ]);
     }
 
+    public function expiredFrequencies(){
+        return view('frequency.expired',
+            [
+                'frequencies'=>$this->frequencyassignment->getAllCompanyFrequenciesByStatus(2)
+            ]);
+    }
+
     public function readFrequency($id){
         $frequency = $this->frequencyassignment->getFrequencyById($id);
         if(!empty($frequency)){

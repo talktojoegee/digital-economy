@@ -9,12 +9,15 @@ use App\Models\GradeLevel;
 use App\Models\JobRole;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
+use App\Models\Permission as CusPermission;
 use App\Models\State;
 use App\Models\Supervisor;
 use App\Models\SupervisorLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class HumanResourceController extends Controller
 {
@@ -32,6 +35,7 @@ class HumanResourceController extends Controller
         $this->state = new State();
         $this->localgovernment = new LocalGovernment();
         $this->auditlog = new AuditLog();
+        $this->permissions = new CusPermission();
 
     }
 
@@ -194,5 +198,27 @@ class HumanResourceController extends Controller
         $this->supervisor->setNewSupervisor($request);
         session()->flash("success", "New section head assigned successfully!");
         return back();
+    }
+
+    public function createPermission(Request $request){
+        $this->validate($request, [
+            'name'=>'required|unique:permissions,name'
+        ],[
+            'name.required'=>'Enter name for this permission',
+            'name.unique'=>"There's a permission with this name."
+        ]);
+        $permission = Permission::create(['name'=>$request->name]);
+        session()->flash("success", "Permission created!");
+        return back();
+    }
+
+    public function grantPermissionToUser(){
+
+    }
+
+    public function managePermissions(){
+        return view("human-resource.manage-permissions",[
+            'permissions'=>$this->permissions->getPermissions()
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 <div class="deznav">
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
-            <li><a href="{{route('news-feed')}}" class="ai-icon" aria-expanded="false">
+            <li><a href="{{route('dashboard')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-desktop"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
@@ -22,6 +22,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('queued-frequency-assignment')}}">Pending</a></li>
                     <li><a href="{{route('assigned-frequencies')}}">Assigned</a></li>
+                    <li><a href="{{route('expired-frequencies')}}">Expired</a></li>
                 </ul>
             </li>
             <li><a href="{{route('companies')}}" class="ai-icon" aria-expanded="false">
@@ -51,9 +52,10 @@
                     <li><a href="{{route('all-employees')}}">All Employees</a></li>
                     <li><a href="{{route('add-new-employee')}}">Add New Employee</a></li>
                     <li><a href="{{route('audit-trail')}}">Audit Trail</a></li>
+                    <li><a href="{{route('manage-permissions')}}">Manage Permissions</a></li>
                 </ul>
             </li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
                     <i class="flaticon-381-smartphone"></i>
                     <span class="nav-text">Bulk SMS</span>
                 </a>

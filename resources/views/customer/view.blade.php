@@ -214,7 +214,7 @@
                                                 <th>Device</th>
                                                 <th>Frequency</th>
                                                 <th>Start</th>
-                                                <th>End</th>
+                                                <th style="width: 100px;">End</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>

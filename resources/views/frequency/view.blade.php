@@ -114,7 +114,7 @@
                                                                                         <label for="" class="badge text-white badge-success text-white">Active</label>
                                                                                         @break
                                                                                         @case(2)
-                                                                                        <label for="" class="badge badge-danger text-muted">Expired</label>
+                                                                                        <label for="" class="badge badge-danger text-white">Expired</label>
                                                                                         @break
                                                                                     @endswitch
                                                                                 </span>
@@ -174,7 +174,7 @@
                                                                         </div>
                                                                         <div class="card-body">
                                                                             <p></p>
-                                                                            <form action="">
+                                                                            <form action="{{route('update-radio-status')}}" method="post">
                                                                                 @csrf
                                                                                 @php
                                                                                     $statuses = ["Inactive", "Active", "Expired", "Withdrawn"];

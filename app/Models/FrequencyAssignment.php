@@ -43,6 +43,7 @@ class FrequencyAssignment extends Model
     public function getAllCompanyFrequencies(){
         return FrequencyAssignment::orderBy('id', 'DESC')->get();
     }
+
     public function getAllCompanyFrequencyCounter(){
         return FrequencyAssignment::count();
     }

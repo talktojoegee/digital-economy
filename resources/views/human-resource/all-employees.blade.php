@@ -81,7 +81,7 @@
                                 <th>Gender</th>
                                 <th>Mobile</th>
                                 <th>Email</th>
-                                <th> Date</th>
+                                <th style="width: 100px;"> Date</th>
                                 <th>Action</th>
                             </tr>
                             </thead>

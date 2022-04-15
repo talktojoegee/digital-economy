@@ -39,6 +39,8 @@ Route::prefix('/human-resource')->group(function (){
     Route::get('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'showNewEmployeeForm'])->name('add-new-employee');
     Route::post('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'storeNewEmployee']);
     Route::get('/employee/profile/{slug}', [App\Http\Controllers\HumanResourceController::class, 'viewEmployeeProfile'])->name('view-employee-profile');
+    Route::get('/manage-permissions', [App\Http\Controllers\HumanResourceController::class, 'managePermissions'])->name('manage-permissions');
+    Route::post('/create-permission', [App\Http\Controllers\HumanResourceController::class, 'createPermission'])->name('create-permission');
 
     #Recruitment routes
     Route::get('/post-job', [App\Http\Controllers\RecruitmentController::class, 'showPostJobForm'])->name('post-job');
@@ -57,8 +59,8 @@ Route::prefix('/human-resource')->group(function (){
     Route::post('/assign-section-head', [App\Http\Controllers\HumanResourceController::class, 'assignSectionHead'])->name('assign-section-head');
 });
 
-Route::prefix('/news-feed')->group(function(){
-    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('news-feed');
+Route::prefix('/dashboard')->group(function(){
+    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('dashboard');
 });
 
 Route::prefix('/account')->group(function(){
@@ -149,6 +151,7 @@ Route::prefix('/workflow')->group(function(){
     Route::post('/process-frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'assignRadioFrequency'])->name('process-frequency-assignment');
     Route::get('/frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'loadQueuedFrequencyAssignments'])->name('queued-frequency-assignment');
     Route::get('/assigned-frequencies', [App\Http\Controllers\WorkflowController::class, 'assignedFrequencies'])->name('assigned-frequencies');
+    Route::get('/expired-frequencies', [App\Http\Controllers\WorkflowController::class, 'expiredFrequencies'])->name('expired-frequencies');
     Route::get('/frequencies/{id}', [App\Http\Controllers\WorkflowController::class, 'readFrequency'])->name('read-frequencies');
 
     Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');

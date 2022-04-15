@@ -50,7 +50,7 @@
                                     @foreach($faqs as $faq)
                                     <div class="accordion__item">
                                         <div class="accordion__header rounded-lg" data-toggle="collapse" data-target="#default_collapse_{{$faq->id}}">
-                                            <span class="accordion__header--text">{{$faq->question ?? '' }} {{$index}}</span>
+                                            <span class="accordion__header--text"> <label for="" class="badge badge-danger" style="border-radius: 50%;">{{$index}}</label> {{$faq->question ?? '' }} </span>
                                             <span class="accordion__header--indicator"></span>
                                         </div>
                                         <div id="default_collapse_{{$faq->id}}" class="collapse accordion__body {{$index == 1 ? 'show' : '' }}" data-parent="#accordion-one">

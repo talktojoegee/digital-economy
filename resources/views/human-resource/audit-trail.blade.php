@@ -98,7 +98,7 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Date</th>
+                                    <th style="width: 100px;">Date</th>
                                     <th>User</th>
                                     <th>Subject</th>
                                     <th>Narration</th>
