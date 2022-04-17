@@ -135,6 +135,9 @@ Route::prefix('/company')->group(function (){
     Route::get('/my-assigned-frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'filterMyAssignedFrequencies'])->name('filter-my-assigned-frequencies');
     Route::get('/frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'viewFrequency'])->name('view-frequencies');
     Route::get('/frequently-asked-questions', [App\Http\Controllers\CompanyController::class, 'showFaqs'])->name('frequently-asked-questions');
+
+
+    Route::get('/renew-single-licence/{id}', [App\Http\Controllers\CompanyController::class, 'renewSingleLicence'])->name('renew-single-licence');
 });
 
 Route::prefix('/radio')->group(function(){

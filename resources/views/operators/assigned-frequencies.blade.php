@@ -84,6 +84,7 @@
                     <h4 class="card-title">Frequency Assignment <small class="text-success">(Assigned)</small></h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
+                        <a href="{{url()->previous()}}" class="btn btn-sm btn-danger float-right"> <i class="ti-loop mr-2"></i> Renew Expired Licences</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -164,7 +165,7 @@
                                     <td>
                                         <a href="{{route('view-frequencies', $app->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
                                         @if($app->status == 2)
-                                            <a href="{{route('read-frequencies', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
+                                            <a href="{{route('renew-single-licence', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
                                         @endif
                                     </td>
                                 </tr>

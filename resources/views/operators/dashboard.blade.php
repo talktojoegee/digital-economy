@@ -147,7 +147,7 @@
                                     <td>
                                         <a href="{{route('view-frequencies', $app->id)}}" title="View" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
                                         @if($app->status == 2)
-                                            <a href="{{route('read-frequencies', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
+                                            <a href="{{route('renew-single-licence', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
                                         @endif
                                     </td>
                                 </tr>

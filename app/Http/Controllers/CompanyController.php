@@ -19,6 +19,7 @@ use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
 use App\Models\MessageCustomer;
 use App\Models\RadioLicenseApplication;
+use App\Models\RadioLicenseApplicationDetail;
 use App\Models\State;
 use App\Models\Supervisor;
 use App\Models\User;
@@ -54,6 +55,7 @@ class CompanyController extends Controller
         $this->invoice = new Invoice();
         $this->invoiceitem = new InvoiceItem();
         $this->radiolicenseapplication = new RadioLicenseApplication();
+        $this->radiolicenseapplicationdetail = new RadioLicenseApplicationDetail();
         $this->user = new User();
         $this->frequencyassignment = new FrequencyAssignment();
         $this->frequencyassignmentlog = new FrequencyAssignmentLog();
@@ -540,5 +542,30 @@ class CompanyController extends Controller
 
     public function showFaqs(){
         return view('operators.faqs',['faqs'=>$this->faqs->getFaqs()]);
+    }
+
+    public function renewSingleLicence(Request $request){
+        $id = $request->id;
+        if(!is_numeric($id)){
+            session()->flash("error", "Invalid input. Try again later.");
+            return back();
+        }
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            $companyId = Auth::user()->id;
+            if($companyId == $frequency->company_id){
+                $radio_details = $this->radiolicenseapplicationdetail->getSingleDetailByRadioLicenseAppId($frequency->rla_id);
+                return view('operators.renew-single-licence',[
+                    'frequency'=>$frequency,
+                    'detail'=>$radio_details
+                ]);
+            }else{
+                session()->flash("error", "Whoops! We can't proceed with this request. Contact admin.");
+                return back();
+            }
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
     }
 }
