@@ -50,6 +50,13 @@ class FrequencyAssignment extends Model
     public function getAllCompanyFrequenciesByStatus($status){
         return FrequencyAssignment::where('status', $status)->orderBy('id', 'DESC')->get();
     }
+    public function updateFrequenciesStatus($id, $status){
+        $freq =  FrequencyAssignment::find($id);
+        $freq->status = $status;
+        $freq->save();
+        return $freq;
+
+    }
 
     public function getFrequencyById($id){
         return FrequencyAssignment::find($id);

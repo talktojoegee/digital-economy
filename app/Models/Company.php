@@ -105,4 +105,8 @@ class Company extends Authenticatable
     public function getAllCompanies(){
         return Company::orderBy('company_name', 'ASC')->get();
     }
+
+    public function getListOfCompaniesById($ids){
+        return Company::whereIn('id', $ids)->get();
+    }
 }

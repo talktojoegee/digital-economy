@@ -12,7 +12,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('new-radio-license-application')}}">New Application</a></li>
-                    <li><a href="{{route('all-radio-license-applications')}}">Application</a></li>
+                    <li><a href="{{route('all-radio-license-applications')}}">Application Log</a></li>
                     <li><a href="{{route('my-assigned-frequencies')}}">Assigned Freq.</a></li>
                 </ul>
             </li>
@@ -32,7 +32,7 @@
                     <span class="nav-text">Transactions</span>
                 </a>
             </li>
-            <li><a href="{{route('transactions')}}" class="ai-icon" aria-expanded="false">
+            <li><a href="{{route('frequently-asked-questions')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-help"></i>
                     <span class="nav-text">FAQs</span>
                 </a>

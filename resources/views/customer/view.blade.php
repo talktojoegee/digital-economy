@@ -254,6 +254,9 @@
                                                             @case(2)
                                                             <label for="" class="badge badge-danger text-white">Expired</label>
                                                             @break
+                                                            @case(3)
+                                                            <label for="" class="badge badge-danger text-white">Withdrawn</label>
+                                                            @break
                                                         @endswitch
                                                     </td>
                                                     <td>

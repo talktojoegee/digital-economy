@@ -59,110 +59,91 @@
                                                                 <div class="col-xl-6 col-sm-6">
                                                                     <div class="profile-personal-info">
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Company Name
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Company Name:
+                                                                                    <span class="text-muted">{{$frequency->getCompany->company_name ?? '' }}</span>
                                                                                 </h5>
-                                                                            </div>
-                                                                            <div class="col-sm-9">
-                                                                                <span>{{$frequency->getCompany->company_name ?? '' }}</span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Frequency
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Frequency:
+                                                                                    <span class="text-muted">{{$frequency->assigned_frequency ?? '' }}</span>
                                                                                 </h5>
                                                                             </div>
-                                                                            <div class="col-sm-9">
-                                                                                <span>{{$frequency->assigned_frequency ?? '' }}</span>
+
+                                                                        </div>
+                                                                        <div class="row mb-4 mb-sm-2">
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Valid From:
+                                                                                     <span class="text-muted">{{ date('d M, Y', strtotime($frequency->valid_from))}}</span>
+                                                                                </h5>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Valid From.
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Expires:
+                                                                                    <span class="text-danger">{{ date('d M, Y', strtotime($frequency->valid_to))}}</span>
                                                                                 </h5>
                                                                             </div>
-                                                                            <div class="col-9">
-                                                                                <span>{{ date('d M, Y', strtotime($frequency->valid_from))}}</span>
-                                                                            </div>
+
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Expires
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <div class="col-9">
-                                                                                <span class="text-danger">{{ date('d M, Y', strtotime($frequency->valid_to))}}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Status
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <div class="col-9">
-                                                                                <span class="text-danger">
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Status:
+                                                                                    <span class="text-danger">
                                                                                     @switch($frequency->status)
-                                                                                        @case(0)
-                                                                                        <label for="" class="badge badge-warning text-white">Inactive</label>
-                                                                                        @break
-                                                                                        @case(1)
-                                                                                        <label for="" class="badge text-white badge-success text-white">Active</label>
-                                                                                        @break
-                                                                                        @case(2)
-                                                                                        <label for="" class="badge badge-danger text-white">Expired</label>
-                                                                                        @break
-                                                                                    @endswitch
-                                                                                </span>
+                                                                                            @case(0)
+                                                                                            <label for="" class="badge badge-warning text-white">Inactive</label>
+                                                                                            @break
+                                                                                            @case(1)
+                                                                                            <label for="" class="badge text-white badge-success text-white">Active</label>
+                                                                                            @break
+                                                                                            @case(2)
+                                                                                            <label for="" class="badge badge-warning text-white">Expired</label>
+                                                                                            @break
+                                                                                                @case(3)
+                                                                                                <label for="" class="badge badge-danger text-white">Withdrawn</label>
+                                                                                                @break
+                                                                                        @endswitch
+                                                                                    </span>
+                                                                                </h5>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Type of Device
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <div class="col-9">
-                                                                                <span>
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Type of Device:
+                                                                                    <span class="text-muted">
                                                                                     @switch($frequency->type_of_device)
-                                                                                        @case(1)
-                                                                                        Handheld
-                                                                                        @break
-                                                                                        @case(2)
-                                                                                        Base
-                                                                                        @break
-                                                                                        @case(3)
-                                                                                        Repeaters
-                                                                                        @break
-                                                                                        @case(1)
-                                                                                        Vehicular
-                                                                                        @break
-                                                                                    @endswitch
-                                                                                </span>
+                                                                                            @case(1)
+                                                                                            Handheld
+                                                                                            @break
+                                                                                            @case(2)
+                                                                                            Base
+                                                                                            @break
+                                                                                            @case(3)
+                                                                                            Repeaters
+                                                                                            @break
+                                                                                            @case(1)
+                                                                                            Vehicular
+                                                                                            @break
+                                                                                        @endswitch
+                                                                                    </span>
+                                                                                </h5>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="row mb-4 mb-sm-2">
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Assigned By: <span class="text-muted">{{$frequency->getAssignedBy->first_name ?? '' }} {{$frequency->getAssignedBy->surname ?? '' }}</span>
+                                                                                </h5>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Assigned By
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
+                                                                            <div class="col-sm-12">
+                                                                                <h5 class="f-w-500">Date Issued:
+                                                                                    <span class="text-muted">{{ date('d M, Y', strtotime($frequency->created_at))}}</span>
                                                                                 </h5>
-                                                                            </div>
-                                                                            <div class="col-sm-9">
-                                                                                <span>{{$frequency->getAssignedBy->first_name ?? '' }} {{$frequency->getAssignedBy->surname ?? '' }}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row mb-4 mb-sm-2">
-                                                                            <div class="col-sm-3">
-                                                                                <h5 class="f-w-500">Date Issued
-                                                                                    <span class="pull-right d-none d-sm-block">:</span>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <div class="col-sm-9">
-                                                                                <span>{{ date('d M, Y', strtotime($frequency->created_at))}}</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -180,21 +161,25 @@
                                                                                     $statuses = ["Inactive", "Active", "Expired", "Withdrawn"];
                                                                                 @endphp
                                                                                 <div class="form-group">
+                                                                                    <input type="hidden" name="frequency_id" value="{{$frequency->id}}">
                                                                                     <label for="">Subject</label>
                                                                                     <input type="text"
-                                                                                           class="form-control" placeholder="Subject" value="{{old('subject')}}">
+                                                                                           class="form-control" placeholder="Subject" name="subject" value="{{old('subject')}}">
                                                                                     @error('subject')
                                                                                         <i class="text-danger mt-2">{{$message}}</i>
                                                                                     @enderror
                                                                                 </div>
                                                                                 <div class="form-group">
                                                                                     <label for="">Licence Status</label>
-                                                                                    <select name="licence_status" id="licence_status"
+                                                                                    <select name="status" id="status"
                                                                                             class="form-control">
                                                                                         @for($i = 0; $i<count($statuses); $i++)
                                                                                             <option value="{{$i}}" {{$i == $frequency->status ? 'selected' : '' }}>{{$statuses[$i]}}</option>
                                                                                         @endfor
                                                                                     </select>
+                                                                                    @error('status')
+                                                                                        <i class="text-danger mt-2">{{$message}}</i>
+                                                                                    @enderror
                                                                                 </div>
                                                                                 <div class="form-group">
                                                                                     <label for="">Narration</label>
@@ -271,15 +256,23 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Logged By</th>
+                                                <th style="width: 150px !important;">Logged By</th>
                                                 <th>Subject</th>
-                                                <th>Content</th>
-                                                <th>Action</th>
+                                                <th>Narration</th>
+                                                <th style="width: 150px !important;">Date</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @php $index = 1; @endphp
-
+                                            @foreach($logs as $log)
+                                                <tr>
+                                                    <td>{{$index++}}</td>
+                                                    <td>{{$log->getLoggedBy->first_name ?? '' }} {{$log->getLoggedBy->surname ?? '' }}</td>
+                                                    <td>{{$log->subject ?? '' }}</td>
+                                                    <td>{{$log->narration ?? '' }}</td>
+                                                    <td>{{date('d M, Y', strtotime($log->created_at))}}</td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>

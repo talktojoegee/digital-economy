@@ -13,7 +13,7 @@
 @section('main-content')
     <div class="row">
         <div class="col-md-12 mb-3">
-            <a href="{{route('licence-certificates')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-tag mr-2"></i> All Licence Certificates</a>
+            <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
         </div>
     </div>
     <div class="row">

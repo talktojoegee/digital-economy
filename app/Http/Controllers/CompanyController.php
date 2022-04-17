@@ -9,12 +9,15 @@ use App\Models\Company;
 use App\Models\CompanyContactPerson;
 use App\Models\CompanyDirector;
 use App\Models\Country;
+use App\Models\Faqs;
 use App\Models\FrequencyAssignment;
+use App\Models\FrequencyAssignmentLog;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
+use App\Models\MessageCustomer;
 use App\Models\RadioLicenseApplication;
 use App\Models\State;
 use App\Models\Supervisor;
@@ -53,6 +56,9 @@ class CompanyController extends Controller
         $this->radiolicenseapplication = new RadioLicenseApplication();
         $this->user = new User();
         $this->frequencyassignment = new FrequencyAssignment();
+        $this->frequencyassignmentlog = new FrequencyAssignmentLog();
+        $this->faqs = new Faqs();
+        $this->messagecustomer = new MessageCustomer();
     }
 
 
@@ -391,6 +397,13 @@ class CompanyController extends Controller
     }
 
     public function viewMessage($slug){
+        $message = $this->messagecustomer->getAllMessagesBySlug($slug);
+        if(!empty($message)){
+            return view('operators.message-view', ['message'=>$message]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
 
     }
 
@@ -504,13 +517,28 @@ class CompanyController extends Controller
     public function myAssignedFrequencies(){
         return view('operators.assigned-frequencies');
     }
+
+    public function filterMyAssignedFrequencies(Request $request){
+        $status = $request->id;
+        if(!is_numeric($status)){
+            session()->flash("error", "Invalid input. Try again later.");
+            return back();
+        }
+        return view('operators.assigned-frequencies-filter',['status'=>$status]);
+    }
+
     public function viewFrequency($id){
         $frequency = $this->frequencyassignment->getFrequencyById($id);
         if(!empty($frequency)){
-            return view('operators.assigned-frequencies-view',['frequency'=>$frequency]);
+            $logs = $this->frequencyassignmentlog->getLogByFrequencyAssignmentId($frequency->id);
+            return view('operators.assigned-frequencies-view',['frequency'=>$frequency, 'logs'=>$logs]);
         }else{
             session()->flash("error", "No record found.");
             return back();
         }
+    }
+
+    public function showFaqs(){
+        return view('operators.faqs',['faqs'=>$this->faqs->getFaqs()]);
     }
 }

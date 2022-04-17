@@ -187,7 +187,10 @@
                                             <label for="" class="badge text-white badge-success text-white">Active</label>
                                             @break
                                             @case(2)
-                                            <label for="" class="badge badge-danger text-white">Expired</label>
+                                            <label for="" class="badge badge-warning text-white">Expired</label>
+                                            @break
+                                            @case(3)
+                                            <label for="" class="badge badge-danger text-white">Withdrawn</label>
                                             @break
                                         @endswitch
                                     </td>

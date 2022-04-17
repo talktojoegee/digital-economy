@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\FrequencyAssignment;
+use App\Models\FrequencyAssignmentLog;
 use App\Models\GradeLevel;
 use App\Models\JobRole;
 use App\Models\Invoice;
@@ -59,7 +60,7 @@ class WorkflowController extends Controller
         $this->invoice = new Invoice();
         $this->assignfrequencyqueue = new AssignFrequencyQueue();
         $this->frequencyassignment = new FrequencyAssignment();
-        $this->auditlog = new AuditLog();
+        $this->frequencyassignmentlog = new FrequencyAssignmentLog();
     }
 
     public function showWorkflowSettings(){
@@ -267,6 +268,12 @@ class WorkflowController extends Controller
             //Update queued freq. assign. status
             $queue = $this->assignfrequencyqueue->updateQueuedFrequencyAssignmentBySlug($request->slug, 1);
 
+            #User notification
+            $subject = "Congratulations!";
+            $body = "Radio frequency licence assigned!";
+            $this->usernotification->addUserNotification($subject, $body, "view-radio-license-application", $application->slug, 1, $application->company_id);
+
+
             session()->flash("success", "You've successfully assigned frequencies.");
             return redirect()->route('queued-frequency-assignment');
         }else{
@@ -312,10 +319,22 @@ class WorkflowController extends Controller
             ]);
     }
 
+    public function expiredFrequencyNotification(){
+        $expired = $this->frequencyassignment->getAllCompanyFrequenciesByStatus(2);
+        $companyArray = [];
+        foreach($expired as $ex){
+            array_push($companyArray, $ex->company_id);
+        }
+        $companyIds = array_unique($companyArray);
+        $companies = $this->company->getListOfCompaniesById($companyIds);
+        return view('workflow.notify-customer',['customers'=>$companies]);
+    }
+
     public function readFrequency($id){
         $frequency = $this->frequencyassignment->getFrequencyById($id);
         if(!empty($frequency)){
-            return view('frequency.view',['frequency'=>$frequency]);
+            $logs = $this->frequencyassignmentlog->getLogByFrequencyAssignmentId($frequency->id);
+            return view('frequency.view',['frequency'=>$frequency, 'logs'=>$logs]);
         }else{
             session()->flash("error", "No record found.");
             return back();
@@ -341,6 +360,45 @@ class WorkflowController extends Controller
             'search'=>1,
             'logs'=>$this->auditlog->getAuditLogByPeriod($request->start, $request->end),
         ]);
+    }
+
+    public function updateRadioStatus(Request $request){
+        $this->validate($request,[
+            'subject'=>'required',
+            'status'=>'required',
+            'narration'=>'required',
+            'frequency_id'=>'required'
+        ],[
+            'subject.required'=>'Enter subject',
+            'status.required'=>'Choose status from the options provided',
+            'narration.required'=>'Enter narration or description for this action.'
+        ]);
+        $frequency = $this->frequencyassignment->getFrequencyById($request->frequency_id);
+        if(!empty($frequency)){
+            $update = $this->frequencyassignment->updateFrequenciesStatus($request->frequency_id, $request->status);
+            if($update){
+                $log = $this->frequencyassignmentlog->logRequest($request);
+                if($log){
+                    #User notification
+                    $subject = "There's an update on frequency.";
+                    $body = "There's been an update on your assigned frequency.";
+                    $this->usernotification->addUserNotification($subject, $body, "view-frequencies", $frequency->id, 1, $frequency->company_id);
+
+                    session()->flash("success", "Radio frequency status updated.");
+                    return redirect()->back();
+                }else{
+                    session()->flash("error", "Something went wrong.");
+                    return redirect()->route('assigned-frequencies');
+                }
+            }else{
+                session()->flash("error", "Something went wrong.");
+                return redirect()->route('assigned-frequencies');
+            }
+        }else{
+            session()->flash("error", "Something went wrong.");
+            return redirect()->route('assigned-frequencies');
+        }
+
     }
 
 }

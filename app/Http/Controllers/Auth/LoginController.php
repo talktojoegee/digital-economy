@@ -92,7 +92,7 @@ class LoginController extends Controller
 
             $user = $this->user->getUserByEmail($request->email);
             if($user){
-                return redirect()->route('news-feed');
+                return redirect()->route('admin-dashboard');
             }else{
                 session()->flash("error", "We could not log you in at the moment. Try again later.");
                 return back();

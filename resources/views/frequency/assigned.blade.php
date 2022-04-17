@@ -115,6 +115,7 @@
                             <tbody>
                             @php $serial = 1; @endphp
                             @foreach($frequencies as $app)
+
                                 <tr>
                                     <td>{{$serial++}}</td>
                                     <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
@@ -146,6 +147,9 @@
                                             @break
                                             @case(2)
                                             <label for="" class="badge badge-danger text-white">Expired</label>
+                                            @break
+                                            @case(3)
+                                            <label for="" class="badge badge-danger text-white">Withdrawn</label>
                                             @break
                                         @endswitch
                                     </td>

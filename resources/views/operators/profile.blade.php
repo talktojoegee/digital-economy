@@ -38,14 +38,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#directors">
-                                <span>
-                                    <i class="ti-user mr-2"></i>
-                                </span>
-                                Directors
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#messages8">
                                 <span>
                                     <i class="ti-settings mr-2"></i>

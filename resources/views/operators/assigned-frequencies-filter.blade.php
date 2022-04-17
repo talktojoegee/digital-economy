@@ -81,7 +81,22 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Frequency Assignment <small class="text-success">(Assigned)</small></h4>
+                    <h4 class="card-title">Frequency Assignment
+                        @switch($status)
+                            @case(0)
+                            <small class="text-secondary">(Inactive)</small>
+                            @break
+                            @case(1)
+                            <small class="text-success">(Active)</small>
+                            @break
+                            @case(2)
+                            <small class="text-warning">(Expired)</small>
+                            @break
+                            @case(3)
+                            <small class="text-danger">(Withdrawn)</small>
+                            @break
+                        @endswitch
+                    </h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                     </div>
@@ -123,7 +138,7 @@
                             </thead>
                             <tbody>
                             @php $serial = 1; @endphp
-                            @foreach(Auth::user()->getAssignedFrequencies as $app)
+                            @foreach(Auth::user()->getAssignedFrequencies->where('status', $status) as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
                                     <td>

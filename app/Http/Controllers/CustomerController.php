@@ -225,4 +225,32 @@ class CustomerController extends Controller
         session()->flash("success", "Your changes were saved!");
         return back();
     }
+
+    public function notifyCustomer(Request $request){
+        $this->validate($request,[
+            'subject'=>'required',
+            'customer'=>'required',
+            'compose_message'=>'required'
+        ],[
+            'subject.required'=>'Enter a subject for this conversation',
+            'compose_message.required'=>'Type a message in the box provided.',
+            'customer.required'=>'Select a customer'
+        ]);
+        $length = count($request->customer);
+        for($i = 0; $i<$length; $i++){
+            $message = $this->messagecustomer->sendNotification($request->customer[$i], $request->subject, $request->compose_message, 1);
+            //$customer, $subject, $compose_message, $type
+            #User notification
+            $subject = $request->subject;
+            $body = "You recently received a message from ".config('app.name');
+            $this->usernotification->addUserNotification($subject, $body, "view-message", $message->slug, 1, $request->customer[$i]);
+        }
+        //Log
+        #Admin notification
+        /*$subject = "Message Customer";
+        $body = Auth::user()->first_name." sent a message to customer.";
+        $this->adminnotification->addAdminNotification($subject, $body, "read-message", $message->slug, 1, Auth::user()->id);*/
+        session()->flash("success", "Your message was sent.");
+        return back();
+    }
 }

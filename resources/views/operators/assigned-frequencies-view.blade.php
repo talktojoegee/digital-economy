@@ -75,7 +75,7 @@
                                                                                     </h5>
                                                                                 </div>
                                                                                 <div class="col-sm-9">
-                                                                                    <span>{{$frequency->assigned_frequency ?? '' }}</span>
+                                                                                    <span>{{$frequency->status == 1 ? $frequency->assigned_frequency : '****'}}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row mb-4 mb-sm-2">
@@ -106,6 +106,7 @@
                                                                                 </div>
                                                                                 <div class="col-9">
                                                                                 <span class="text-danger">
+
                                                                                     @switch($frequency->status)
                                                                                         @case(0)
                                                                                         <label for="" class="badge badge-warning text-white">Inactive</label>
@@ -114,7 +115,10 @@
                                                                                         <label for="" class="badge text-white badge-success text-white">Active</label>
                                                                                         @break
                                                                                         @case(2)
-                                                                                        <label for="" class="badge badge-danger text-muted">Expired</label>
+                                                                                        <label for="" class="badge badge-warning text-muted">Expired</label>
+                                                                                        @break
+                                                                                        @case(3)
+                                                                                        <label for="" class="badge badge-danger text-white">Withdrawn</label>
                                                                                         @break
                                                                                     @endswitch
                                                                                 </span>
@@ -185,25 +189,73 @@
         </div>
         <div class="col-xl-12">
             <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Radio Licence Details</h4>
+                </div>
                 <div class="card-body">
-                    <h4 class="text-uppercase">Frequency Log</h4>
-                    <div class="table-responsive">
-                        <table class="table header-border table-responsive-sm">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User</th>
-                                <th>Section</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php $serial = 1; @endphp
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#home1"><i class="la la-redo-alt mr-2"></i> Renewal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#profile1"><i class="la la-folder-open mr-2"></i> Log</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home1" role="tabpanel">
+                                <div class="pt-4 mt-3">
+                                    <div class="table-responsive">
+                                        <table class="table header-border table-responsive-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Valid From</th>
+                                                <th>Expires</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php $serial = 1; @endphp
 
-                            </tbody>
-                        </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile1">
+                                <div class="pt-4 mt-3">
+                                    <div class="table-responsive">
+                                        <table class="table header-border table-responsive-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th style="width: 150px !important;">Logged By</th>
+                                                <th>Subject</th>
+                                                <th>Narration</th>
+                                                <th style="width: 150px !important;">Date</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php $index = 1; @endphp
+                                            @foreach($logs as $log)
+                                                <tr>
+                                                    <td>{{$index++}}</td>
+                                                    <td>{{$log->getLoggedBy->first_name ?? '' }} {{$log->getLoggedBy->surname ?? '' }}</td>
+                                                    <td>{{$log->subject ?? '' }}</td>
+                                                    <td>{{$log->narration ?? '' }}</td>
+                                                    <td>{{date('d M, Y', strtotime($log->created_at))}}</td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

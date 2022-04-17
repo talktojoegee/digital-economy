@@ -132,7 +132,9 @@ Route::prefix('/company')->group(function (){
 
 
     Route::get('/my-assigned-frequencies', [App\Http\Controllers\CompanyController::class, 'myAssignedFrequencies'])->name('my-assigned-frequencies');
+    Route::get('/my-assigned-frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'filterMyAssignedFrequencies'])->name('filter-my-assigned-frequencies');
     Route::get('/frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'viewFrequency'])->name('view-frequencies');
+    Route::get('/frequently-asked-questions', [App\Http\Controllers\CompanyController::class, 'showFaqs'])->name('frequently-asked-questions');
 });
 
 Route::prefix('/radio')->group(function(){
@@ -152,12 +154,14 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'loadQueuedFrequencyAssignments'])->name('queued-frequency-assignment');
     Route::get('/assigned-frequencies', [App\Http\Controllers\WorkflowController::class, 'assignedFrequencies'])->name('assigned-frequencies');
     Route::get('/expired-frequencies', [App\Http\Controllers\WorkflowController::class, 'expiredFrequencies'])->name('expired-frequencies');
+    Route::get('/expired-frequency/notification', [App\Http\Controllers\WorkflowController::class, 'expiredFrequencyNotification'])->name('expired-frequency-notification');
     Route::get('/frequencies/{id}', [App\Http\Controllers\WorkflowController::class, 'readFrequency'])->name('read-frequencies');
 
     Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');
     Route::get('/generate-report', [App\Http\Controllers\WorkflowController::class, 'generateTransactionReport'])->name('generate-report');
     Route::get('/audit-trail', [App\Http\Controllers\WorkflowController::class, 'showAuditTrailForm'])->name('audit-trail');
     Route::get('/filter-audit-trail', [App\Http\Controllers\WorkflowController::class, 'auditTrail'])->name('filter-audit-trail');
+    Route::post('/update-radio-status', [App\Http\Controllers\WorkflowController::class, 'updateRadioStatus'])->name('update-radio-status');
 });
 
 Route::prefix('customer-support')->group(function(){
@@ -172,6 +176,7 @@ Route::prefix('customer-support')->group(function(){
     Route::get('/read-invoice/{slug}', [App\Http\Controllers\CustomerController::class, 'readInvoice'])->name('read-invoice');
     Route::post('/update-invoice-status', [App\Http\Controllers\CustomerController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
     Route::get('/compose-message', [App\Http\Controllers\CustomerController::class, 'showComposeMessageForm'])->name('compose-message');
+    Route::post('/notify-customer', [App\Http\Controllers\CustomerController::class, 'notifyCustomer'])->name('notify-customer');
 
     Route::get('/companies', [App\Http\Controllers\CustomerController::class, 'showCompanies'])->name('companies');
     Route::get('/companies/{slug}', [App\Http\Controllers\CustomerController::class, 'readCompanyProfile'])->name('read-company-profile');

@@ -22,7 +22,7 @@
                     <h4 class="card-title">Frequency Assignment <small class="text-danger">(Expired)</small></h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
-                        <a href="{{url()->previous()}}" class="btn btn-sm btn-primary float-right"> <i class="ti-user mr-2"></i> Notify Customers</a>
+                        <a href="{{route('expired-frequency-notification')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-user mr-2"></i> Notify Customers</a>
                     </div>
                 </div>
                 <div class="card-body">

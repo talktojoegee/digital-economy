@@ -25,6 +25,9 @@
                             </h4>
                         </div>
                     </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        <a href="{{route('filter-my-assigned-frequencies',0)}}" class="text-white">View</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,6 +45,9 @@
                             </h4>
                         </div>
                     </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        <a href="{{route('filter-my-assigned-frequencies',2)}}" class="text-white">View</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,6 +64,9 @@
                                 {{number_format(Auth::user()->getAssignedFrequencies()->where('status',1)->count())}}
                             </h4>
                         </div>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        <a href="{{route('filter-my-assigned-frequencies',1)}}" class="text-white">View</a>
                     </div>
                 </div>
             </div>
@@ -87,8 +96,9 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Date</th>
                                 <th>Device</th>
+                                <th>Valid From</th>
+                                <th>Expires</th>
                                 <th>Frequency</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -99,7 +109,6 @@
                             @foreach(Auth::user()->getAssignedFrequencies->take(5) as $app)
                                 <tr>
                                     <td>{{$serial++}}</td>
-                                    <td>{{date('d M, Y h:ia', strtotime($app->created_at))}}</td>
                                     <td>
                                         @switch($app->type_of_device)
                                             @case(1)
@@ -116,6 +125,8 @@
                                             @break
                                         @endswitch
                                     </td>
+                                    <td>{{ date('d M, Y', strtotime($app->valid_from))}}</td>
+                                    <td class="text-danger">{{ date('d M, Y', strtotime($app->valid_to))}}</td>
                                     <td>{{$app->assigned_frequency ?? '' }}</td>
                                     <td>
                                         @switch($app->status)
@@ -126,13 +137,18 @@
                                             <label for="" class="badge text-white badge-success text-white">Active</label>
                                             @break
                                             @case(2)
-                                            <label for="" class="badge badge-danger text-white">Expired</label>
+                                            <label for="" class="badge badge-warning text-white">Expired</label>
+                                            @break
+                                            @case(3)
+                                            <label for="" class="badge badge-danger text-white">Withdrawn</label>
                                             @break
                                         @endswitch
                                     </td>
                                     <td>
                                         <a href="{{route('view-frequencies', $app->id)}}" title="View" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
-                                        <a href="{{route('read-frequencies', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
+                                        @if($app->status == 2)
+                                            <a href="{{route('read-frequencies', $app->id)}}" title="Renew License" class="btn btn-warning text-white shadow btn-xs sharp mr-1 "><i class="ti-loop"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

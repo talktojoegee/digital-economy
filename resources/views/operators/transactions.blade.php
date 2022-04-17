@@ -84,7 +84,9 @@
                                     </td>
                                     <td>
                                         <a href="{{route('view-invoice', $invoice->slug)}}" title="View Transaction" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-eye"></i></a>
+                                        @if($invoice->status == 0)
                                         <a href="{{route('make-payment', $invoice->slug)}}" title="Make Payment" class="btn btn-primary shadow btn-xs sharp mr-1 "><i class="ti-wallet"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

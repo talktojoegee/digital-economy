@@ -35,14 +35,7 @@
                                 Application
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#log">
-                                <span>
-                                    <i class="ti-briefcase mr-2"></i>
-                                </span>
-                                Log
-                            </a>
-                        </li>
+
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
