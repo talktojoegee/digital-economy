@@ -28,5 +28,9 @@ class InvoiceItem extends Model
         }
     }
 
+    public function getInvoiceItemByRadioDetailId($id){
+        return InvoiceItem::find($id);
+    }
+
 
 }

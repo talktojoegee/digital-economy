@@ -19,6 +19,8 @@ return [
     'email' => env('COMPANY_EMAIL', 'info@hello.ng'),
     'paystack_public_key'=>env('PAYSTACK_PUBLIC_KEY',''),
     'paystack_secret_key'=>env('PAYSTACK_SECRET_KEY',''),
+    'powered_by'=>env("POWERED_BY","O'Jive Solutions Ltd."),
+    'powered_link'=>env("POWERED_LINK","https://www.ojivenetworksolutions.com.ng/"),
 
 
     /*

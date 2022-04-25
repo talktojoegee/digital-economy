@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
                     return redirect()->route('dashboard');
                     break;
                 case 'admin':
-                    return redirect()->route('news-feed');
+                    return redirect()->route('admin-dashboard');
                     break;
             }
 

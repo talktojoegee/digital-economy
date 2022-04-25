@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminNotification;
+use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\Faqs;
+use App\Models\FrequencyAssignment;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\MessageCustomer;
@@ -29,6 +32,9 @@ class CustomerController extends Controller
         $this->invoice = new Invoice();
         $this->invoiceitem = new InvoiceItem();
         $this->auditlog = new AuditLog();
+        $this->assignfrequencyqueue = new AssignFrequencyQueue();
+        $this->frequencyassignment = new FrequencyAssignment();
+        $this->faqs = new Faqs();
     }
 
 
@@ -50,7 +56,8 @@ class CustomerController extends Controller
             'compose_message'=>'required'
         ],[
             'subject.required'=>'Enter a subject for this conversation',
-            'compose_message.required'=>'Type a message in the box provided.'
+            'compose_message.required'=>'Type a message in the box provided.',
+            'customer.required'=>'Select a customer'
         ]);
         $message = $this->messagecustomer->messageCustomer($request);
         //Log
@@ -149,7 +156,101 @@ class CustomerController extends Controller
             'comment.required'=>"Leave comment",
         ]);
         $this->invoice->updateInvoiceStatus($request);
+        if($request->status == 2){//verified
+            $invoice = $this->invoice->getInvoiceById($request->invoiceId);
+            if($invoice->invoice_type == 1){ //new license app
+                //let's queue for frequency assignment
+                $this->assignfrequencyqueue->queueFrequency($invoice->company_id, $invoice->slug, 1);
+            }
+        }
+
         session()->flash("success", "Transaction recorded.");
         return redirect()->route("manage-transactions");
+    }
+
+    public function showComposeMessageForm(){
+        return view('workflow.compose-message',['customers'=>$this->company->getAllCompanies()]);
+    }
+
+    public function showCompanies(){
+        return view('customer.index',
+            ['companies'=>$this->company->getAllCompanies(),
+             'licenses'=>$this->frequencyassignment->getAllCompanyFrequencyCounter()
+            ]);
+    }
+
+    public function readCompanyProfile($slug){
+        $company = $this->company->getCompanyBySlug($slug);
+        if(!empty($company)){
+            return view('customer.view',['company'=>$company]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
+    }
+
+
+    public function showFaqs(){
+        return view('customer.faqs',['faqs'=>$this->faqs->getFaqs()]);
+    }
+
+    public function postFaq(Request $request){
+        $this->validate($request,[
+            'question'=>'required',
+            'answer'=>'required'
+        ],[
+            'answer.required'=>"What's the answer to this question?",
+            'question.required'=>"Enter a question with it's answer."
+        ]);
+        $this->faqs->publishFaq($request);
+        $message = Auth::user()->first_name." published new FAQs";
+        $subject = "New FAQ ";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your FAQs was published!");
+        return back();
+    }
+    public function editFaq(Request $request){
+        $this->validate($request,[
+            'question'=>'required',
+            'answer'=>'required',
+            'faq'=>'required'
+        ],[
+            'answer.required'=>"What's the answer to this question?",
+            'question.required'=>"Enter a question with it's answer."
+        ]);
+        $this->faqs->updateFaq($request);
+        $message = Auth::user()->first_name." edited FAQ";
+        $subject = "FAQ edited";
+        $this->auditlog->registerLog(Auth::user()->id, $subject, $message);
+        session()->flash("success", "Your changes were saved!");
+        return back();
+    }
+
+    public function notifyCustomer(Request $request){
+        $this->validate($request,[
+            'subject'=>'required',
+            'customer'=>'required',
+            'compose_message'=>'required'
+        ],[
+            'subject.required'=>'Enter a subject for this conversation',
+            'compose_message.required'=>'Type a message in the box provided.',
+            'customer.required'=>'Select a customer'
+        ]);
+        $length = count($request->customer);
+        for($i = 0; $i<$length; $i++){
+            $message = $this->messagecustomer->sendNotification($request->customer[$i], $request->subject, $request->compose_message, 1);
+            //$customer, $subject, $compose_message, $type
+            #User notification
+            $subject = $request->subject;
+            $body = "You recently received a message from ".config('app.name');
+            $this->usernotification->addUserNotification($subject, $body, "view-message", $message->slug, 1, $request->customer[$i]);
+        }
+        //Log
+        #Admin notification
+        /*$subject = "Message Customer";
+        $body = Auth::user()->first_name." sent a message to customer.";
+        $this->adminnotification->addAdminNotification($subject, $body, "read-message", $message->slug, 1, Auth::user()->id);*/
+        session()->flash("success", "Your message was sent.");
+        return back();
     }
 }

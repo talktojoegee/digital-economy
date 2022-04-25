@@ -23,9 +23,9 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
+                                @if($application->status == 2)
                                 <a href="{{route('invoice-customer', ['slug'=>$application->getCompany->slug, 'appSlug'=>$application->slug])}}" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
-                                <a href="{{route('assign-frequency', $application->getCompany->slug)}}" class="btn btn-success mr-1 btn-sm">Assign Frequency</a>
-                                <a href="" class="btn btn-light mr-1 btn-sm">Ministerial Memo</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -37,14 +37,6 @@
                                     <i class="ti-briefcase mr-2"></i>
                                 </span>
                                 Application
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#log">
-                                <span>
-                                    <i class="ti-briefcase mr-2"></i>
-                                </span>
-                                Log
                             </a>
                         </li>
                         <li class="nav-item">
@@ -240,7 +232,7 @@
                                                                         <a class="timeline-panel text-muted" href="#">
                                                                             <span>{{date('d M, Y h:ia', strtotime($request->created_at))}}</span>
                                                                             <h6 class="mb-0">
-                                                                                {{$request->getOfficer->first_name ?? ''}} {{$request->getOfficer->last_name ?? ''}}
+                                                                                {{$request->getOfficer->title ?? ''}} {{$request->getOfficer->first_name ?? ''}} {{$request->getOfficer->last_name ?? ''}}
                                                                                 ({{$request->getSection->department_name ?? ''}})
                                                                                 @switch($request->status)
                                                                                     @case(0)
@@ -275,8 +267,116 @@
                                     <div class="col-xl-12 col-xxl-12 col-lg-12">
                                         <div class="card profile-card">
                                             <div class="card-body">
-                                                <h4>directors</h4>
-
+                                                <h4>Directors</h4>
+                                                <div class="table-responsive">
+                                                    <table id="example3" class="table table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Full Name</th>
+                                                            <th>Email</th>
+                                                            <th>Mobile No.</th>
+                                                            <th>Status</th>
+                                                            <th>Nationality</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @php $serial = 1; @endphp
+                                                        @foreach($application->getCompany->getDirectors as $director)
+                                                            <tr>
+                                                                <td>{{$serial++}}</td>
+                                                                <td>{{$director->full_name ?? '' }}</td>
+                                                                <td>{{$director->email ?? ''}}</td>
+                                                                <td>{{$director->mobile_no ?? ''}}</td>
+                                                                <td>{!! $director->status == 1 ? "<span class='text-success'>Active</span>" : "<span class='text-danger'>Inactive</span>"!!}</td>
+                                                                <td>{{$director->getCountry->nicename ?? ''}}</td>
+                                                                <td>
+                                                                    <div class="d-flex">
+                                                                        <button type="button" data-toggle="modal" data-target="#directorModal_{{$director->id}}" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="ti-eye"></i></button>
+                                                                        <div class="modal  fade" id="directorModal_{{$director->id}}">
+                                                                            <div class="modal-dialog modal-lg">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title"> <i class="ti-user mr-3"></i>  Record</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form action="#" method="post" autocomplete="off">
+                                                                                        @csrf
+                                                                                        <div class="modal-body">
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Full Name <sup class="text-danger">*</sup></label>
+                                                                                                        <input type="text" name="full_name" value="{{old('full_name', $director->full_name)}}" readonly placeholder="Full Name" class="form-control">
+                                                                                                        @error('full_name')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Email Address <sup class="text-danger">*</sup></label>
+                                                                                                        <input type="text" name="email" value="{{old('email', $director->email)}}" readonly placeholder="Email Address" class="form-control">
+                                                                                                        @error('email')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Mobile No. <sup class="text-danger">*</sup></label>
+                                                                                                        <input type="text" name="mobile_no" value="{{old('mobile_no', $director->mobile_no)}}" readonly placeholder="Mobile No." class="form-control">
+                                                                                                        @error('mobile_no')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Is this person currently a director? <sup class="text-danger">*</sup> {{$director->status == 1 ? 'Yes' : 'No'}}</label>
+                                                                                                        @error('director_status')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Nationality <sup class="text-danger">*</sup></label>
+                                                                                                        <input
+                                                                                                            type="text" style="margin-bottom:0px; padding:0px;" readonly class="form-control" value="{{$director->getCountry->nicename ?? '' }}">
+                                                                                                        @error('nationality')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-12">
+                                                                                                    <div class="form-group">
+                                                                                                        <label style="margin-bottom:0px; padding:0px;" for="">Address <sup class="text-danger">*</sup></label>
+                                                                                                        <textarea class="form-control" name="address" readonly placeholder="Type address here..." id="address" style="resize:none;">{{old('address', $director->address)}}</textarea>
+                                                                                                        @error('address')
+                                                                                                        <i class="text-danger">{{$message}}</i>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                    <input type="hidden" name="director" value="{{$director->id}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="modal-footer d-flex justify-content-center">
+                                                                                            <button type="button" class="btn btn-danger light btn-sm" data-dismiss="modal">Close</button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -458,7 +558,7 @@
                             <tr>
                                 <td>{{$serial++}}
                                 </td>
-                                <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                <td>{{$flow->getOfficer->title ?? '' }} {{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
                                 <td><span class="text-muted">{{$flow->getSection->department_name ?? ''}}</span>
                                 </td>
                                 <td>

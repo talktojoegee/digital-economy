@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\AdminNotification;
 use App\Models\AppDefaultSetting;
 use App\Models\AppSmsSetting;
+use App\Models\AssignFrequencyQueue;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmploymentStatus;
+use App\Models\FrequencyAssignment;
+use App\Models\FrequencyAssignmentLog;
 use App\Models\GradeLevel;
 use App\Models\JobRole;
+use App\Models\Invoice;
 use App\Models\LicenceApplication;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
@@ -28,8 +32,10 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkflowController extends Controller
 {
+
     public function __construct()
     {
+
         $this->middleware('auth:admin');
         $this->department = new Department();
         $this->user = new User();
@@ -51,7 +57,10 @@ class WorkflowController extends Controller
         $this->workflowprocess = new WorkflowProcess();
         $this->adminnotification = new AdminNotification();
         $this->usernotification = new UserNotification();
-        //$this->messagecustomer = new MessageCustomer();
+        $this->invoice = new Invoice();
+        $this->assignfrequencyqueue = new AssignFrequencyQueue();
+        $this->frequencyassignment = new FrequencyAssignment();
+        $this->frequencyassignmentlog = new FrequencyAssignmentLog();
     }
 
     public function showWorkflowSettings(){
@@ -154,6 +163,8 @@ class WorkflowController extends Controller
                 ]);
 
                 $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($request->section);
+                //return dd($supervisor);
+
                 if(!empty($supervisor)){
 
                     $update = $this->workflowprocess->updateWorkflowProcess($request);
@@ -199,15 +210,197 @@ class WorkflowController extends Controller
         }
     }
 
-    public function showAssignFrequencyForm($slug){
+    public function loadQueuedFrequencyAssignments(){
+        return view('frequency.index',[
+            'queue'=>$this->assignfrequencyqueue->getAllQueuedFrequencyAssignments()
+        ]);
+    }
+
+    public function showAssignFrequencyForm($slug, $invoice_slug){
         $company = $this->company->getCompanyBySlug($slug);
         if(!empty($company)){
-            return view("workflow.assign-frequency",['customer'=>$company]);
+            $invoice = $this->invoice->getInvoiceBySlug($invoice_slug);
+            if(empty($invoice)){
+                session()->flash("error", "No record found.");
+                return redirect()->route("manage-transactions");
+            }
+            $detail = $this->radiolicenseapplicationdetails->getSingleDetailByRadioLicenseAppId($invoice->radio_lic_app_id);
+            $handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 1);
+            $base = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 2);
+            $repeaters = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 3);
+            $vehicular = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 4);
+            return view("frequency.assign-frequency",[
+                'customer'=>$company,
+                'applicationId'=>$invoice->radio_lic_app_id,
+                'invoice_slug'=>$invoice->slug,
+                'handheld'=>$handheld,
+                'base'=>$base,
+                'repeaters'=>$repeaters,
+                'vehicular'=>$vehicular,
+                'detail'=>$detail
+            ]);
         }else{
             session()->flash("error", "No record found.");
             return redirect()->route("manage-transactions");
         }
     }
 
+
+    public function assignRadioFrequency(Request $request){
+        //return dd($request->all());
+        $this->validate($request,[
+            'start_date'=>'required|date',
+            'assign_frequency'=>'required|array',
+            'assign_frequency.*'=>'required',
+            'application'=>'required'
+
+        ],[
+            'assign_frequency.required'=>'Enter frequency value in the field provided',
+            'start_date.required'=>'Choose a date for license validity',
+            'start_date.date'=>'Enter a valid date format'
+        ]);
+        $application = $this->radiolicenseapplication->getRadioLicenseApplicationById($request->application);
+        $companyId = $application->company_id;
+        $batch_code = substr(sha1(time()),27,40);
+        if(count($request->assign_frequency) > 0){
+            for($i = 0; $i < count($request->assign_frequency); $i++){
+                $frequency = $this->frequencyassignment->addFrequency($companyId, $request->application,
+                    $request->type_of_device[$i], $request->assign_frequency[$i], $request->start_date, $batch_code);
+            }
+            //Update queued freq. assign. status
+            $queue = $this->assignfrequencyqueue->updateQueuedFrequencyAssignmentBySlug($request->slug, 1);
+
+            #User notification
+            $subject = "Congratulations!";
+            $body = "Radio frequency licence assigned!";
+            $this->usernotification->addUserNotification($subject, $body, "view-radio-license-application", $application->slug, 1, $application->company_id);
+
+
+            session()->flash("success", "You've successfully assigned frequencies.");
+            return redirect()->route('queued-frequency-assignment');
+        }else{
+            session()->flash("error", "Whoops! Something went wrong. Try again.");
+            return back();
+        }
+
+    }
+
+    public function showTransactionReportForm(){
+
+        return view('invoice.transaction-report',[
+            'thisMonth'=>$this->invoice->thisMonthsInvoice(),
+            'search'=>0
+        ]);
+    }
+
+    public function generateTransactionReport(Request $request){
+        $this->validate($request,[
+            'start'=>'required',
+            'end'=>'required'
+        ],[
+            'start.required'=>'Select start date',
+            'end.required'=>'Select end date'
+        ]);
+        return view('invoice.transaction-report',[
+            'search'=>1,
+            'invoices'=>$this->invoice->generateReport($request->start, $request->end),
+        ]);
+    }
+
+    public function assignedFrequencies(){
+        return view('frequency.assigned',
+            [
+                'frequencies'=>$this->frequencyassignment->getAllCompanyFrequencies()
+            ]);
+    }
+
+    public function expiredFrequencies(){
+        return view('frequency.expired',
+            [
+                'frequencies'=>$this->frequencyassignment->getAllCompanyFrequenciesByStatus(2)
+            ]);
+    }
+
+    public function expiredFrequencyNotification(){
+        $expired = $this->frequencyassignment->getAllCompanyFrequenciesByStatus(2);
+        $companyArray = [];
+        foreach($expired as $ex){
+            array_push($companyArray, $ex->company_id);
+        }
+        $companyIds = array_unique($companyArray);
+        $companies = $this->company->getListOfCompaniesById($companyIds);
+        return view('workflow.notify-customer',['customers'=>$companies]);
+    }
+
+    public function readFrequency($id){
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            $logs = $this->frequencyassignmentlog->getLogByFrequencyAssignmentId($frequency->id);
+            return view('frequency.view',['frequency'=>$frequency, 'logs'=>$logs]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
+    }
+    public function showAuditTrailForm(){
+
+        return view('human-resource.audit-trail',[
+            'logs'=>$this->auditlog->getAuditLog(),
+            'search'=>0
+        ]);
+    }
+
+    public function auditTrail(Request $request){
+        $this->validate($request,[
+            'start'=>'required',
+            'end'=>'required'
+        ],[
+            'start.required'=>'Select start date',
+            'end.required'=>'Select end date'
+        ]);
+        return view('human-resource.audit-trail',[
+            'search'=>1,
+            'logs'=>$this->auditlog->getAuditLogByPeriod($request->start, $request->end),
+        ]);
+    }
+
+    public function updateRadioStatus(Request $request){
+        $this->validate($request,[
+            'subject'=>'required',
+            'status'=>'required',
+            'narration'=>'required',
+            'frequency_id'=>'required'
+        ],[
+            'subject.required'=>'Enter subject',
+            'status.required'=>'Choose status from the options provided',
+            'narration.required'=>'Enter narration or description for this action.'
+        ]);
+        $frequency = $this->frequencyassignment->getFrequencyById($request->frequency_id);
+        if(!empty($frequency)){
+            $update = $this->frequencyassignment->updateFrequenciesStatus($request->frequency_id, $request->status);
+            if($update){
+                $log = $this->frequencyassignmentlog->logRequest($request);
+                if($log){
+                    #User notification
+                    $subject = "There's an update on frequency.";
+                    $body = "There's been an update on your assigned frequency.";
+                    $this->usernotification->addUserNotification($subject, $body, "view-frequencies", $frequency->id, 1, $frequency->company_id);
+
+                    session()->flash("success", "Radio frequency status updated.");
+                    return redirect()->back();
+                }else{
+                    session()->flash("error", "Something went wrong.");
+                    return redirect()->route('assigned-frequencies');
+                }
+            }else{
+                session()->flash("error", "Something went wrong.");
+                return redirect()->route('assigned-frequencies');
+            }
+        }else{
+            session()->flash("error", "Something went wrong.");
+            return redirect()->route('assigned-frequencies');
+        }
+
+    }
 
 }

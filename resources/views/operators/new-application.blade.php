@@ -1,13 +1,13 @@
 @extends('layouts.operator-layout')
 @section('title')
-    New Licence Application
+    New Radio License Application
 @endsection
 @section('extra-styles')
     <link href="/vendor/summernote/summernote.css" rel="stylesheet" type="text/css"/>
     <link href="/vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('active-page')
-    New Licence Application
+    New Radio License Application
 @endsection
 
 @section('main-content')
@@ -20,7 +20,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Apply For A New Licence</h4>
+                    <h4 class="card-title">Apply For A New Radio License</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">

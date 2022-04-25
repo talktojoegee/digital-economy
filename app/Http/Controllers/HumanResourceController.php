@@ -9,12 +9,15 @@ use App\Models\GradeLevel;
 use App\Models\JobRole;
 use App\Models\LocalGovernment;
 use App\Models\MaritalStatus;
+use App\Models\Permission as CusPermission;
 use App\Models\State;
 use App\Models\Supervisor;
 use App\Models\SupervisorLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class HumanResourceController extends Controller
 {
@@ -32,6 +35,7 @@ class HumanResourceController extends Controller
         $this->state = new State();
         $this->localgovernment = new LocalGovernment();
         $this->auditlog = new AuditLog();
+        $this->permissions = new CusPermission();
 
     }
 
@@ -56,17 +60,17 @@ class HumanResourceController extends Controller
             'surname'=>'required',
             'email'=>'required|email|unique:users,email',
             'mobile_no'=>'required',
-            'birth_date'=>'required|date',
-            'address'=>'required',
+            //'birth_date'=>'required|date',
+            //'address'=>'required',
             'local_gov'=>'required',
             'state'=>'required',
             'gender'=>'required',
             'marital_status'=>'required',
             'department'=>'required',
             'job_role'=>'required',
-            'hire_date'=>'required|date',
-            'employment_type'=>'required',
-            'grade_level'=>'required'
+            //'hire_date'=>'required|date',
+            //'employment_type'=>'required',
+            //'grade_level'=>'required'
         ],[
             'first_name.required'=>'Enter employee first name',
             'surname.required'=>'Enter employee surname',
@@ -74,19 +78,19 @@ class HumanResourceController extends Controller
             'email.email'=>'Enter a valid email address',
             'email.unique'=>"An account exist with this email. Choose another one",
             'mobile_no.required'=>'Enter employee mobile number',
-            'birth_date.required'=>'Enter employee birth date',
-            'birth_date.date'=>'Enter a valid date format',
-            'address.required'=>'Enter employee address',
+            //'birth_date.required'=>'Enter employee birth date',
+            //'birth_date.date'=>'Enter a valid date format',
+            //'address.required'=>'Enter employee address',
             'local_gov.required'=>'Select employee local government area',
             'state.required'=>'Select employee state of origin',
             'gender.required'=>'Select employee gender',
             'marital_status.required'=>'Select employee marital status',
             'department.required'=>'Assign department to employee',
-            'job_role.required'=>'Select job role related to what the employee will be doing',
-            'hire_date.required'=>'When was this employee hired or employed?',
-            'hire_date.date'=>'Choose or enter a valid date format',
-            'employment_type.required'=>'Select the mode of employment',
-            'grade_level.required'=>'Select grade level'
+            'job_role.required'=>'Choose position from the options provided.',
+            //'hire_date.required'=>'When was this employee hired or employed?',
+            //'hire_date.date'=>'Choose or enter a valid date format',
+            //'employment_type.required'=>'Select the mode of employment',
+            //'grade_level.required'=>'Select grade level'
         ]);
         $this->user->setNewEmployee($request);
         $message = Auth::user()->first_name." added a new employee (".$request->first_name." ".$request->surname.") to the system.";
@@ -194,5 +198,27 @@ class HumanResourceController extends Controller
         $this->supervisor->setNewSupervisor($request);
         session()->flash("success", "New section head assigned successfully!");
         return back();
+    }
+
+    public function createPermission(Request $request){
+        $this->validate($request, [
+            'name'=>'required|unique:permissions,name'
+        ],[
+            'name.required'=>'Enter name for this permission',
+            'name.unique'=>"There's a permission with this name."
+        ]);
+        $permission = Permission::create(['name'=>$request->name]);
+        session()->flash("success", "Permission created!");
+        return back();
+    }
+
+    public function grantPermissionToUser(){
+
+    }
+
+    public function managePermissions(){
+        return view("human-resource.manage-permissions",[
+            'permissions'=>$this->permissions->getPermissions()
+        ]);
     }
 }

@@ -246,7 +246,7 @@
                                                     <select name="supervisor"  id="supervisor" class="form-control js-example-theme-single">
                                                         <option disabled selected>--Select user--</option>
                                                         @foreach($employees as $emp)
-                                                            <option value="{{$emp->id}}">{{$emp->first_name ?? '' }} {{$emp->last_name ?? '' }} {{$emp->other_names ?? '' }}</option>
+                                                            <option value="{{$emp->id}}">{{$emp->title ?? '' }} {{$emp->first_name ?? '' }} {{$emp->last_name ?? '' }} {{$emp->other_names ?? '' }}</option>
                                                         @endforeach
                                                     </select>
                                                     @error('supervisor')
@@ -278,7 +278,7 @@
                                             @foreach($supervisors as $sup)
                                                 <tr>
                                                     <td><strong>{{$s++}}</strong></td>
-                                                    <td>{{$sup->getEmployee->first_name ?? '' }} {{$sup->getEmployee->last_name ?? '' }}
+                                                    <td>{{$sup->getEmployee->title ?? '' }} {{$sup->getEmployee->first_name ?? '' }} {{$sup->getEmployee->last_name ?? '' }}
                                                         @if($sup->status == 1)
                                                             <label for="" class="label label-success">Active</label>
                                                         @else

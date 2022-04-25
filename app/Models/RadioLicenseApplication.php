@@ -19,7 +19,7 @@ class RadioLicenseApplication extends Model
     }
 
     public function getWorkflowRequest(){
-        return $this->hasMany(WorkflowProcess::class, 'post_id');
+        return $this->hasMany(WorkflowProcess::class, 'post_id')->orderBy('id', 'DESC');
     }
 
 

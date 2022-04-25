@@ -1,9 +1,9 @@
 <div class="deznav">
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
-            <li><a href="{{route('news-feed')}}" class="ai-icon" aria-expanded="false">
-                    <i class="ti-book"></i>
-                    <span class="nav-text">Newsfeed</span>
+            <li><a href="{{route('admin-dashboard')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-desktop"></i>
+                    <span class="nav-text">Dashboard</span>
                 </a>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -12,9 +12,24 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('workflow')}}">Applications</a></li>
-                    <li><a href="{{route('add-new-employee')}}">Companies</a></li>
+                    <li><a href="{{route('workflow-settings')}}">Memo</a></li>
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                    <i class="ti-signal"></i>
+                    <span class="nav-text">Frequency Ass.</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{route('queued-frequency-assignment')}}">Pending</a></li>
+                    <li><a href="{{route('assigned-frequencies')}}">Assigned</a></li>
+                    <li><a href="{{route('expired-frequencies')}}">Expired</a></li>
+                </ul>
+            </li>
+            <li><a href="{{route('companies')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-briefcase"></i>
+                    <span class="nav-text">Customers</span>
+                </a>
             </li>
             <li><a href="{{route('messages')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-email"></i>
@@ -27,7 +42,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('manage-transactions')}}">All Transactions</a></li>
-                    <li><a href="{{route('manage-transactions')}}">Report</a></li>
+                    <li><a href="{{route('transaction-report')}}">Report</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -37,23 +52,29 @@
                 <ul aria-expanded="false">
                     <li><a href="{{route('all-employees')}}">All Employees</a></li>
                     <li><a href="{{route('add-new-employee')}}">Add New Employee</a></li>
-                    <li><a href="{{route('human-resource-settings')}}">Settings</a></li>
+                    <li><a href="{{route('audit-trail')}}">Audit Trail</a></li>
+                    <li><a href="{{route('manage-permissions')}}">Manage Permissions</a></li>
                 </ul>
             </li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
                     <i class="flaticon-381-smartphone"></i>
                     <span class="nav-text">Bulk SMS</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('top-up')}}">Top-up</a></li>
                     <li><a href="{{route('phone-group')}}">Phone Groups</a></li>
-                    <li><a href="{{route('manage-publication-categories')}}">Compose Message</a></li>
+                    <li><a href="{{route('manage-publication-categories')}}">Compose</a></li>
                     <li><a href="{{route('manage-publication-categories')}}">Messages</a></li>
                 </ul>
             </li>
             <li><a href="{{route('manage-files')}}" class="ai-icon" aria-expanded="false">
                     <i class="flaticon-381-file"></i>
                     <span class="nav-text">File Storage</span>
+                </a>
+            </li>
+            <li><a href="{{route('faqs')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-help"></i>
+                    <span class="nav-text">FAQs</span>
                 </a>
             </li>
         </ul>

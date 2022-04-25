@@ -36,6 +36,19 @@ class MessageCustomer extends Model
         return $message;
     }
 
+    public function sendNotification($customer, $subject, $compose_message, $type){
+        $message = new MessageCustomer();
+        $message->company_id = $customer;
+        $message->subject = $subject;
+        $message->message = $compose_message;
+        $message->slug = Str::slug($subject).'-'.substr(sha1(time()),32,40)."-".substr(sha1(time()),1,8);
+        $message->sent_by = Auth::user()->id;
+        $message->ref_code = substr(sha1(time()),30,40);
+        $message->message_type = $type;
+        $message->save();
+        return $message;
+    }
+
     public function getAllMessagesByCompanyId($companyId){
         return MessageCustomer::where('company_id', $companyId)->orderBy('id', 'DESC')->get();
     }

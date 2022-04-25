@@ -11,9 +11,9 @@
                     <span class="nav-text">Radio License</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{route('new-licence-application')}}">New Ministerial Memo</a></li>
                     <li><a href="{{route('new-radio-license-application')}}">New Application</a></li>
-                    <li><a href="{{route('all-radio-license-applications')}}">Application</a></li>
+                    <li><a href="{{route('all-radio-license-applications')}}">Application Log</a></li>
+                    <li><a href="{{route('my-assigned-frequencies')}}">Assigned Freq.</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -24,15 +24,17 @@
                     <li><a href="{{route('company-profile')}}">Profile</a></li>
                     <li><a href="{{route('show-directors')}}">Directors</a></li>
                     <li><a href="{{route('show-contact-persons')}}">Contact Persons</a></li>
-                    <li><a href="{{route('add-new-device-equipment')}}">Documents</a></li>
-                    <li><a href="{{route('add-new-device-equipment')}}">New Equipment</a></li>
-                    <li><a href="{{route('phone-group')}}">All Equipments</a></li>
                     <li><a href="{{route('radio-work-station')}}">Radio Work Stations</a></li>
                 </ul>
             </li>
             <li><a href="{{route('transactions')}}" class="ai-icon" aria-expanded="false">
                     <i class="ti-pulse"></i>
                     <span class="nav-text">Transactions</span>
+                </a>
+            </li>
+            <li><a href="{{route('frequently-asked-questions')}}" class="ai-icon" aria-expanded="false">
+                    <i class="ti-help"></i>
+                    <span class="nav-text">FAQs</span>
                 </a>
             </li>
         </ul>

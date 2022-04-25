@@ -9,23 +9,31 @@ use App\Models\Company;
 use App\Models\CompanyContactPerson;
 use App\Models\CompanyDirector;
 use App\Models\Country;
+use App\Models\Faqs;
+use App\Models\FrequencyAssignment;
+use App\Models\FrequencyAssignmentLog;
+use App\Models\FrequencyAssignmentRenewal;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\LicenceApplication;
 use App\Models\LicenceCategory;
 use App\Models\LocalGovernment;
+use App\Models\MessageCustomer;
 use App\Models\RadioLicenseApplication;
+use App\Models\RadioLicenseApplicationDetail;
 use App\Models\State;
 use App\Models\Supervisor;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Models\WorkflowProcess;
 use App\Models\Workstation;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
+    public $merchantId, $apiHash, $baseUrl;
     public function __construct()
     {
         $this->middleware('auth:web');
@@ -48,6 +56,13 @@ class CompanyController extends Controller
         $this->invoice = new Invoice();
         $this->invoiceitem = new InvoiceItem();
         $this->radiolicenseapplication = new RadioLicenseApplication();
+        $this->radiolicenseapplicationdetail = new RadioLicenseApplicationDetail();
+        $this->user = new User();
+        $this->frequencyassignment = new FrequencyAssignment();
+        $this->frequencyassignmentlog = new FrequencyAssignmentLog();
+        $this->frequencyassignmentrenewal = new FrequencyAssignmentRenewal();
+        $this->faqs = new Faqs();
+        $this->messagecustomer = new MessageCustomer();
     }
 
 
@@ -386,6 +401,13 @@ class CompanyController extends Controller
     }
 
     public function viewMessage($slug){
+        $message = $this->messagecustomer->getAllMessagesBySlug($slug);
+        if(!empty($message)){
+            return view('operators.message-view', ['message'=>$message]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
 
     }
 
@@ -407,6 +429,199 @@ class CompanyController extends Controller
         }else{
             session()->flash("error", "No record found.");
             return redirect()->route("transactions");
+        }
+    }
+
+    public function showMakePaymentForm($slug){
+        $transaction = $this->invoice->getInvoiceBySlug($slug);
+        if(empty($transaction)){
+            session()->flash("error", "No record found.");
+            return redirect()->route("transactions");
+        }
+        return view('operators.make-payment', ['transaction'=>$transaction]);
+    }
+
+    public function verifyRRRPayment(Request  $request){
+        $this->validate($request,[
+            'rrr'=>'required'
+        ],[
+            'rrr.required'=>'Enter Remita Retrieval Reference (RRR) for this transaction.'
+        ]);
+
+    }
+
+    public function transactionPaymentHandler(Request $request){
+        $this->validate($request,[
+            'amount'=>'required',
+            'paymentReference'=>'required',
+            'transactionId'=>'required',
+            'invoice'=>'required'
+        ]);
+        $invoice = $this->invoice->getInvoiceById($request->invoice);
+        if(!empty($invoice)){
+            $this->invoice->updatePayment($request);
+            //check whether invoice is for new license or renewal
+            if($invoice->invoice_type == 1){
+                //notify frequency assignment/license unit/section that of this payment to verify
+                $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+                if(!empty($defaultSettings)) {
+                    if (!empty($defaultSettings->new_app_section_handler)) {
+                        $department = $defaultSettings->new_app_section_handler;
+                        $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($department);
+                        if (!empty($supervisor)) {
+                            $user = $this->user->getEmployeeById($supervisor->user_id);
+                            #Admin notification
+                            $subject = "Payment on new license application";
+                            $body = "Hello ".$user->first_name.", a customer just paid for new radio license";
+                            $this->adminnotification->addAdminNotification($subject, $body, "read-invoice", $invoice->slug, 1, $supervisor->user_id);
+
+                        }
+                    }
+                }
+
+            }
+            if($invoice->invoice_type == 2 || $invoice->invoice_type == 3){
+                $defaultSettings = $this->appdefaultsetting->getAppDefaultSettings();
+                if(!empty($defaultSettings)) {
+                    if (!empty($defaultSettings->licence_renewal_handler)) {
+                        $department = $defaultSettings->licence_renewal_handler;
+                        $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($department);
+                        if (!empty($supervisor)) {
+                            $user = $this->user->getEmployeeById($supervisor->user_id);
+                            #Admin notification
+                            $subject = "Payment on license application";
+                            $body = "Hello ".$user->first_name.", a customer just paid for new radio license";
+                            $this->adminnotification->addAdminNotification($subject, $body, "read-invoice", $invoice->slug, 1, $supervisor->user_id);
+
+                        }
+                    }
+                }
+            }
+            //then wait for the officer/unit/section to assign frequency for each device
+            //permit him/her to select when the license should start reading
+            //log this operation for audit
+            //notify both parties(customer and officer) of this operation via approved means (SMS,Email)
+
+            #User notification
+            $subject = "Payment done!";
+            $body = "Your transaction was carried out successfully. We'll get back to you ASAP.";
+            $this->usernotification->addUserNotification($subject, $body, "view-invoice", $invoice->slug, 1, $invoice->company_id);
+
+            //Invoice type other than 1 is considered to be for renewal
+            //get all assigned frequencies to this customer with status expired(2)
+            //check how much time it has expired/remains then add or subtract the number of days from 365(1year)
+            //update status to active
+            //send notification to concerned parties
+
+            return response()->json(['message'=>'Success']);
+        }
+
+    }
+
+    public function processSingleLicenceRenewalPayment(Request $request){
+        $this->validate($request,[
+            'amount'=>'required',
+            'paymentReference'=>'required',
+            'transactionId'=>'required',
+            'frequency'=>'required'
+        ]);
+        $frequency = $this->frequencyassignment->getFrequencyById($request->frequency);
+        if(!empty($frequency)){
+            $renewal = $this->frequencyassignment->updateFrequencyValidityPeriod($request->frequency);
+            //Register log
+            $log = $this->frequencyassignmentrenewal
+                ->registerFrequencyRenewalLog($frequency->id, $request->amount, $renewal->valid_from,
+                    $renewal->valid_to, $request->paymentReference, $request->transactionId);
+
+            #User notification
+            $subject = "Radio Frequency Renewed!";
+            $body = "Your radio frequency licence was renewed successfully.";
+            $this->usernotification->addUserNotification($subject, $body, "view-frequencies", $frequency->id, 1, $frequency->company_id);
+
+            //Invoice type other than 1 is considered to be for renewal
+            //get all assigned frequencies to this customer with status expired(2)
+            //check how much time it has expired/remains then add or subtract the number of days from 365(1year)
+            //update status to active
+            //send notification to concerned parties
+
+            return response()->json(['message'=>'Success']);
+        }
+
+    }
+
+    public function myAssignedFrequencies(){
+        return view('operators.assigned-frequencies');
+    }
+
+    public function filterMyAssignedFrequencies(Request $request){
+        $status = $request->id;
+        if(!is_numeric($status)){
+            session()->flash("error", "Invalid input. Try again later.");
+            return back();
+        }
+        return view('operators.assigned-frequencies-filter',['status'=>$status]);
+    }
+
+    public function viewFrequency($id){
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            $logs = $this->frequencyassignmentlog->getLogByFrequencyAssignmentId($frequency->id);
+            return view('operators.assigned-frequencies-view',['frequency'=>$frequency, 'logs'=>$logs]);
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
+        }
+    }
+
+    public function showFaqs(){
+        return view('operators.faqs',['faqs'=>$this->faqs->getFaqs()]);
+    }
+
+    public function renewSingleLicence(Request $request){
+        $id = $request->id;
+        if(!is_numeric($id)){
+            session()->flash("error", "Invalid input. Try again later.");
+            return back();
+        }
+        $frequency = $this->frequencyassignment->getFrequencyById($id);
+        if(!empty($frequency)){
+            $companyId = Auth::user()->id;
+            if($companyId == $frequency->company_id){
+                $radio_details = $this->radiolicenseapplicationdetail
+                    ->getSingleDetailByRadioLicenseAppIdDeviceType($frequency->rla_id, $frequency->type_of_device);
+                $invoice_item = $this->invoiceitem->getInvoiceItemByRadioDetailId($radio_details->id);
+                //return dd($invoice_item);
+                $frequency_batch = $this->frequencyassignment->getFrequencyByBatchCode($frequency->batch_code);
+                $inactive_counter = 0;
+                $withdrawn_counter = 0;
+
+                //# of inactive + withdrawn
+                foreach ($frequency_batch as $bat){
+                    if($bat->status == 0 && $bat->type_of_device == $frequency->type_of_device){
+                        $inactive_counter += 1;
+                    }
+                    if($bat->status == 3 && $bat->type_of_device == $frequency->type_of_device){
+                        $withdrawn_counter += 1;
+                    }
+                }
+
+                $total_archived = $inactive_counter + $withdrawn_counter;
+                $quantity_left = $invoice_item->quantity - $total_archived;
+                $unit_price = ceil($invoice_item->sub_total/$invoice_item->quantity);
+                $amount = ceil($unit_price*$quantity_left);
+                return view('operators.renew-single-licence',[
+                    'frequency'=>$frequency,
+                    'detail'=>$radio_details,
+                    'amount'=>$unit_price,
+                    'grand_total'=>$amount
+                ]);
+            }else{
+                session()->flash("error", "Whoops! We can't proceed with this request. Contact admin.");
+                return back();
+            }
+        }else{
+            session()->flash("error", "No record found.");
+            return back();
         }
     }
 }

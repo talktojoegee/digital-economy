@@ -99,19 +99,8 @@
                                         <table class="table table-clear">
                                             <tbody>
                                             <tr>
-                                                <td class="left"><strong>Subtotal</strong></td>
-                                                <td class="right">$8.497,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="left"><strong>VAT (10%)</strong></td>
-                                                <td class="right">
-                                                    <input type="number" class="form-control" step="0.01" name="vat" placeholder="VAT">
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <td class="left"><strong>Total</strong></td>
-                                                <td class="right"><strong>$7.477,36</strong><br>
-                                                </td>
+                                                <td class="right">00</td>
                                             </tr>
                                             </tbody>
                                         </table>

@@ -22,6 +22,7 @@
                     <h4 class="card-title">Manage Messages</h4>
                     <div class="btn-group">
                         <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
+                        <a href="{{route('compose-message')}}" class="btn btn-sm btn-primary float-right"> <i class="ti-email mr-2"></i> Compose Message</a>
                     </div>
                 </div>
                 <div class="card-body">

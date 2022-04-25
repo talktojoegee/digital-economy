@@ -39,6 +39,8 @@ Route::prefix('/human-resource')->group(function (){
     Route::get('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'showNewEmployeeForm'])->name('add-new-employee');
     Route::post('/add-new-employee', [App\Http\Controllers\HumanResourceController::class, 'storeNewEmployee']);
     Route::get('/employee/profile/{slug}', [App\Http\Controllers\HumanResourceController::class, 'viewEmployeeProfile'])->name('view-employee-profile');
+    Route::get('/manage-permissions', [App\Http\Controllers\HumanResourceController::class, 'managePermissions'])->name('manage-permissions');
+    Route::post('/create-permission', [App\Http\Controllers\HumanResourceController::class, 'createPermission'])->name('create-permission');
 
     #Recruitment routes
     Route::get('/post-job', [App\Http\Controllers\RecruitmentController::class, 'showPostJobForm'])->name('post-job');
@@ -57,8 +59,8 @@ Route::prefix('/human-resource')->group(function (){
     Route::post('/assign-section-head', [App\Http\Controllers\HumanResourceController::class, 'assignSectionHead'])->name('assign-section-head');
 });
 
-Route::prefix('/news-feed')->group(function(){
-    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('news-feed');
+Route::prefix('/admin-dashboard')->group(function(){
+    Route::get('/',[App\Http\Controllers\NewsfeedController::class, 'index'])->name('admin-dashboard');
 });
 
 Route::prefix('/account')->group(function(){
@@ -124,6 +126,19 @@ Route::prefix('/company')->group(function (){
     Route::get('/view-message/{slug}', [App\Http\Controllers\CompanyController::class, 'viewMessage'])->name('view-message');
     Route::get('/view-invoice/{slug}', [App\Http\Controllers\CompanyController::class, 'viewInvoice'])->name('view-invoice');
     Route::get('/transactions', [App\Http\Controllers\CompanyController::class, 'transactions'])->name('transactions');
+    Route::get('/make-payment/{slug}', [App\Http\Controllers\CompanyController::class, 'showMakePaymentForm'])->name('make-payment');
+    Route::post('/transaction-payment-handler', [App\Http\Controllers\CompanyController::class, 'transactionPaymentHandler'])->name('transaction-payment-handler');
+    Route::post('/single-licence-renewal', [App\Http\Controllers\CompanyController::class, 'processSingleLicenceRenewalPayment'])->name('single-licence-renewal');
+    Route::post('/verify-rrr-payment', [App\Http\Controllers\CompanyController::class, 'verifyRRRPayment'])->name('verify-rrr-payment');
+
+
+    Route::get('/my-assigned-frequencies', [App\Http\Controllers\CompanyController::class, 'myAssignedFrequencies'])->name('my-assigned-frequencies');
+    Route::get('/my-assigned-frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'filterMyAssignedFrequencies'])->name('filter-my-assigned-frequencies');
+    Route::get('/frequencies/{id}', [App\Http\Controllers\CompanyController::class, 'viewFrequency'])->name('view-frequencies');
+    Route::get('/frequently-asked-questions', [App\Http\Controllers\CompanyController::class, 'showFaqs'])->name('frequently-asked-questions');
+
+
+    Route::get('/renew-single-licence/{id}', [App\Http\Controllers\CompanyController::class, 'renewSingleLicence'])->name('renew-single-licence');
 });
 
 Route::prefix('/radio')->group(function(){
@@ -138,7 +153,19 @@ Route::prefix('/workflow')->group(function(){
     Route::get('/read-radio-license-application/{slug}', [App\Http\Controllers\WorkflowController::class, 'readRadioLicenseApplication'])->name('read-radio-license-application');
     Route::get('/', [App\Http\Controllers\WorkflowController::class, 'workflow'])->name('workflow');
     Route::post('/process-radio-license-application', [App\Http\Controllers\WorkflowController::class, 'processRadioLicenseApplication'])->name('process-radio-license-application');
-    Route::get('/assign-frequency/{slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+    Route::get('/assign-frequency/{slug}/{invoice_slug}', [App\Http\Controllers\WorkflowController::class, 'showAssignFrequencyForm'])->name('assign-frequency');
+    Route::post('/process-frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'assignRadioFrequency'])->name('process-frequency-assignment');
+    Route::get('/frequency-assignment', [App\Http\Controllers\WorkflowController::class, 'loadQueuedFrequencyAssignments'])->name('queued-frequency-assignment');
+    Route::get('/assigned-frequencies', [App\Http\Controllers\WorkflowController::class, 'assignedFrequencies'])->name('assigned-frequencies');
+    Route::get('/expired-frequencies', [App\Http\Controllers\WorkflowController::class, 'expiredFrequencies'])->name('expired-frequencies');
+    Route::get('/expired-frequency/notification', [App\Http\Controllers\WorkflowController::class, 'expiredFrequencyNotification'])->name('expired-frequency-notification');
+    Route::get('/frequencies/{id}', [App\Http\Controllers\WorkflowController::class, 'readFrequency'])->name('read-frequencies');
+
+    Route::get('/transaction-report', [App\Http\Controllers\WorkflowController::class, 'showTransactionReportForm'])->name('transaction-report');
+    Route::get('/generate-report', [App\Http\Controllers\WorkflowController::class, 'generateTransactionReport'])->name('generate-report');
+    Route::get('/audit-trail', [App\Http\Controllers\WorkflowController::class, 'showAuditTrailForm'])->name('audit-trail');
+    Route::get('/filter-audit-trail', [App\Http\Controllers\WorkflowController::class, 'auditTrail'])->name('filter-audit-trail');
+    Route::post('/update-radio-status', [App\Http\Controllers\WorkflowController::class, 'updateRadioStatus'])->name('update-radio-status');
 });
 
 Route::prefix('customer-support')->group(function(){
@@ -152,6 +179,14 @@ Route::prefix('customer-support')->group(function(){
     Route::get('/manage-transactions', [App\Http\Controllers\CustomerController::class, 'manageTransactions'])->name('manage-transactions');
     Route::get('/read-invoice/{slug}', [App\Http\Controllers\CustomerController::class, 'readInvoice'])->name('read-invoice');
     Route::post('/update-invoice-status', [App\Http\Controllers\CustomerController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
+    Route::get('/compose-message', [App\Http\Controllers\CustomerController::class, 'showComposeMessageForm'])->name('compose-message');
+    Route::post('/notify-customer', [App\Http\Controllers\CustomerController::class, 'notifyCustomer'])->name('notify-customer');
+
+    Route::get('/companies', [App\Http\Controllers\CustomerController::class, 'showCompanies'])->name('companies');
+    Route::get('/companies/{slug}', [App\Http\Controllers\CustomerController::class, 'readCompanyProfile'])->name('read-company-profile');
+    Route::get('/faqs', [App\Http\Controllers\CustomerController::class, 'showFaqs'])->name('faqs');
+    Route::post('/faqs', [App\Http\Controllers\CustomerController::class, 'postFaq']);
+    Route::post('/edit-faq', [App\Http\Controllers\CustomerController::class, 'editFaq'])->name('edit-faq');
 });
 
 

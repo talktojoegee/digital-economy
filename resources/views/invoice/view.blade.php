@@ -16,7 +16,9 @@
                 <a href="{{url()->previous()}}" class="btn btn-sm btn-light float-right"> <i class="ti-control-backward mr-2"></i> Go Back</a>
                 @if($invoice->status == 0)
                 <a href="javascript:void(0);" data-toggle="modal" data-target="#discardTransaction" class="btn btn-sm btn-danger float-right mr-1"> <i class="ti-close mr-2"></i> Discard Transaction</a>
-                <a href="javascript:void(0);" data-toggle="modal" data-target="#verifyPayment" class="btn btn-sm btn-primary float-right mr-1"> <i class="ti-check mr-2"></i> Verify Payment</a>
+                @endif
+                @if($invoice->status == 1)
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#verifyPayment" class="btn btn-sm btn-primary float-right mr-1"> <i class="ti-check mr-2"></i> Verify Payment</a>
                 @endif
 
             </div>
@@ -156,16 +158,6 @@
                                         <input type="hidden" name="company" value="{{$application->company_id}}">
                                         <table class="table table-clear">
                                             <tbody>
-                                            <tr>
-                                                <td class="left"><strong>Subtotal</strong></td>
-                                                <td class="right text-right">{{number_format($invoice->sub_total,2)}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="left"><strong>VAT (10%)</strong></td>
-                                                <td class="right">
-                                                    <p class="text-muted text-right">{{number_format($invoice->total - $invoice->sub_total)}}</p>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td class="left"><strong>Total</strong></td>
                                                 <td class="right text-right"><strong>₦{{number_format($invoice->total,2)}}</strong><br>

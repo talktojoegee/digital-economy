@@ -112,41 +112,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-5">
-                                    <div class="title mb-4"><span class="fs-18 text-black font-w600">Employment Information</span></div>
-                                    <div class="row">
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Department</label>
-                                                <input style="height: 20px;" type="text" disabled value="{{$employee->getDepartment->department_name ?? '' }}" class="form-control" placeholder="Enter name">
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Job Role</label>
-                                                <input style="height: 20px;" type="text" disabled value="{{$employee->getJobRole->role_name ?? '' }}" class="form-control" placeholder="Enter name">
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Employee ID</label>
-                                                <input style="height: 20px;" type="text" disabled value="{{$employee->employee_id ?? '' }}" class="form-control" placeholder="Enter name">
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Grade Level</label>
-                                                <input style="height: 20px;" type="text" disabled value="{{$employee->getGradeLevel->level ?? '' }}" class="form-control" placeholder="Enter name">
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Hire Date</label>
-                                                <input style="height: 20px;" type="text" disabled value="{{date('d M, Y', strtotime($employee->hire_date)) ?? '' }}" class="form-control" placeholder="Enter name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </form>
                            @if(Auth::user()->id == $employee->id)
@@ -207,8 +172,8 @@
                             <div class="profile-image mb-4">
                                 <img  src="/images/avatar/1.jpg" class="rounded-circle" alt="" id="avatar-preview">
                             </div>
-                            <h4 class="fs-22 text-black mb-1">{{$employee->first_name ?? '' }} {{$employee->last_name ?? '' }}</h4>
-                            <p class="mb-4">{{$employee->getJobRole->role_name ?? '' }}</p>
+                            <h4 class="fs-22 text-black mb-1">{{$employee->title ?? '' }} {{$employee->first_name ?? '' }} {{$employee->last_name ?? '' }}</h4>
+                            <p class="mb-4"> <span class="text-primary">{{$employee->getJobRole->role_name ?? '' }}</span> <br> {{$employee->getDepartment->department_name ?? '' }}</p>
                             @if(Auth::user()->id == $employee->id)
                             <form id="avatarForm" enctype="multipart/form-data">
                                 <button class="btn btn-outline-primary btn-sm mt-3" id="uploadAvatarBtn">

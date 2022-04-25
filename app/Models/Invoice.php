@@ -18,7 +18,7 @@ class Invoice extends Model
     public function thisMonthsInvoice(){
         $month = date('m');
         $year = date('Y');
-        return Invoice::whereMonth('created_at', $month)->whereYear('created_at', $year)->orderBy('id', 'DESC');
+        return Invoice::whereMonth('date_paid', $month)->whereYear('date_paid', $year)->orderBy('id', 'DESC')->get();
     }
     public function getInvoiceItems(){
         return $this->hasMany(InvoiceItem::class, 'invoice_id');
@@ -26,6 +26,12 @@ class Invoice extends Model
 
     public function getAllInvoices(){
         return Invoice::orderBy('id', 'DESC')->get();
+    }
+
+    public function generateReport($from, $to){
+        //$month = date('m');
+        //$year = date('Y');
+        return Invoice::whereBetween('created_at', [$from, $to])->get();
     }
 
     public function getIssuedBy(){
@@ -87,6 +93,20 @@ class Invoice extends Model
         $invoice->officer_id = Auth::user()->id;
         $invoice->date_actioned = now();
         $invoice->comment = $request->comment ?? '';
+        $invoice->save();
+    }
+
+    public function updatePayment(Request $request){
+        $invoice = Invoice::find($request->invoice);
+        $invoice->paid_amount += $invoice->total;
+        $invoice->service_fee = ($request->amount - $invoice->total);
+        $invoice->ref_no = $request->paymentReference;
+        $invoice->r_order_id = $request->transactionId;
+        $invoice->r_payment_date = now();
+        $invoice->r_amount = $request->amount; //plus service fee
+        $invoice->date_paid = now();
+        $invoice->status = 1; //paid
+        $invoice->payment_method = !empty($request->paymentReference) ? 1 : 2;
         $invoice->save();
     }
 }

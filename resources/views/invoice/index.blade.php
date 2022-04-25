@@ -43,7 +43,7 @@
                         <div class="media-body text-white text-right">
                             <p class="mb-1">Paid</p>
                             <h4 class="text-white">
-                                ₦{{number_format($thisMonth->where('status', 1)->sum('total') ?? 0,2)}}
+                                ₦{{number_format($thisMonth->where('status', 2)->sum('total') ?? 0,2)}}
                             </h4>
                         </div>
                     </div>
