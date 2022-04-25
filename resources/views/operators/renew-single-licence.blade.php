@@ -3,7 +3,7 @@
     Renew Licence
 @endsection
 @section('extra-styles')
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 @endsection
 @section('active-page')
     Renew Licence
@@ -59,7 +59,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Company Name</label>
-                                            <input type="text" placeholder="Company Name" value="{{$frequency->getCompany->company_name}}" readonly name="company" class="form-control">
+                                            <input type="text" placeholder="Company Name" value="{{$frequency->getCompany->company_name}}" readonly name="firstName" class="form-control">
+                                            <input type="hidden" placeholder="Company Name" value="{{$frequency->getCompany->email}}" name="email" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -76,32 +77,28 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="">Sub-category</label>
-                                            <input name="narration" class="form-control" readonly placeholder="Narration" value="{$transaction->invoice_no ?? ''}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             <label for="">Radio Station</label>
                                             <input name="work_station" class="form-control" readonly placeholder="Radio Workstation" value="{{$detail->getWorkstation->work_station_name ?? ''}}">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="">Amount</label>
-                                            <input type="text"  placeholder="Amount" value="{number_format($transaction->total)}}" readonly class="form-control">
-                                            <input type="hidden" step="0.01" placeholder="Amount" value="{$transaction->total}}" id="amount" name="amount" class="form-control">
+                                            <label for="">Amount </label>
+                                            <input type="text"  placeholder="Amount" value="{{number_format($amount)}}" readonly class="form-control">
+                                            <input type="hidden" step="0.01" placeholder="Amount" value="{{$amount}}" id="amount" name="amount" class="form-control">
+                                            <input type="hidden"  value="Licence renewal" id="narration" name="narration" class="form-control">
+                                            <input type="hidden"  value="lastName" id="lastName" name="lastName" class="form-control">
                                         </div>
                                     </div>
                                     <p id="inWords" class="ml-2 text-muted"></p>
                                     <div class="col-md-12 d-flex justify-content-center">
 
-                                        <button class="btn btn-primary" type="button" onclick="makePayment()">Pay ₦{ number_format($transaction->total) }}</button>
+                                        <button class="btn btn-primary" type="button" onclick="makePayment()">Pay ₦{{number_format($amount) }}</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        script type="text/javascript" src="https://remitademo.net/payment/v1/remita-pay-inline.bundle.js">/script>
+                        <script type="text/javascript" src="https://remitademo.net/payment/v1/remita-pay-inline.bundle.js"></script>
                     </div>
 
                 </div>
@@ -112,9 +109,11 @@
 
 @section('extra-scripts')
     <script src="/js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
         function makePayment() {
             var form = document.querySelector("#makePaymentForm");
+            var baseUrl = "{{route('my-assigned-frequencies')}}";
             var paymentEngine = RmPaymentEngine.init({
                 key: 'QzAwMDAyNzEyNTl8MTEwNjE4NjF8OWZjOWYwNmMyZDk3MDRhYWM3YThiOThlNTNjZTE3ZjYxOTY5NDdmZWE1YzU3NDc0ZjE2ZDZjNTg1YWYxNWY3NWM4ZjMzNzZhNjNhZWZlOWQwNmJhNTFkMjIxYTRiMjYzZDkzNGQ3NTUxNDIxYWNlOGY4ZWEyODY3ZjlhNGUwYTY=',
                 transactionId: Math.floor(Math.random()*1101233), // Replace with a reference you generated or remove the entire field for us to auto-generate a reference for you. Note that you will be able to check the status of this transaction using this transaction Id
@@ -130,20 +129,34 @@
                         amount:response.amount,
                         paymentReference:response.paymentReference,
                         transactionId:response.transactionId,
-                        invoice:"{$transaction->id}}",
+                        frequency:"{{$frequency->id}}",
                     }
-                    axios.post('/company/transaction-payment-handler', data)
+                    axios.post('/company/single-licence-renewal', data)
                         .then(res=>{
-                            console.log(res);
+                            Toastify({
+                                text: "Radio frequency licence renewed!",
+                                duration: 3000,
+                                destination: baseUrl,
+                                newWindow: true,
+                                close: true,
+                                gravity: "top", // `top` or `bottom`
+                                position: "right", // `left`, `center` or `right`
+                                stopOnFocus: true, // Prevents dismissing of toast on hover
+                                style: {
+                                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                },
+                                onClick: function(){} // Callback after click
+                            }).showToast();
                         });
-                    console.log({data});
+                    window.location.replace(baseUrl);
+                    //console.log({data});
                 },
                 onError: function (response) {
-                    console.log('callback Error Response', response);
+                    //console.log('callback Error Response', response);
 
                 },
                 onClose: function () {
-                    console.log("closed");
+                    //console.log("closed");
                 }
             });
             paymentEngine.showPaymentWidget();

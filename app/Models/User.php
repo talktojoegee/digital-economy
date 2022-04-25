@@ -98,6 +98,7 @@ class User extends Authenticatable
     public function setNewEmployee(Request $request){
         $password = 'password123';
         $employee = new User();
+        $employee->title = $request->title;
         $employee->first_name = $request->first_name;
         $employee->last_name = $request->surname ;
         $employee->other_names = $request->other_names ?? '';
@@ -108,10 +109,10 @@ class User extends Authenticatable
         $employee->local_gov_id = $request->local_gov;
         //$employee->birth_date = $request->birth_date ?? '';
         //$employee->hire_date = $request->hire_date ?? '';
-        //$employee->job_role_id = $request->job_role;
+        $employee->job_role_id = $request->job_role;
         $employee->department_id = $request->department;
         //$employee->address = $request->address ?? '';
-        //$employee->gender = $request->gender ?? '';
+        $employee->gender = $request->gender ?? '';
         //$employee->grade_level_id = $request->grade_level ?? '';
         //$employee->marital_status = $request->marital_status ?? '';
         //$employee->employee_id = $request->employee_id ?? '';

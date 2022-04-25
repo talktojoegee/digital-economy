@@ -163,6 +163,8 @@ class WorkflowController extends Controller
                 ]);
 
                 $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($request->section);
+                //return dd($supervisor);
+
                 if(!empty($supervisor)){
 
                     $update = $this->workflowprocess->updateWorkflowProcess($request);

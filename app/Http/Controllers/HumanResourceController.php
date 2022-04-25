@@ -67,7 +67,7 @@ class HumanResourceController extends Controller
             'gender'=>'required',
             'marital_status'=>'required',
             'department'=>'required',
-            //'job_role'=>'required',
+            'job_role'=>'required',
             //'hire_date'=>'required|date',
             //'employment_type'=>'required',
             //'grade_level'=>'required'
@@ -86,7 +86,7 @@ class HumanResourceController extends Controller
             'gender.required'=>'Select employee gender',
             'marital_status.required'=>'Select employee marital status',
             'department.required'=>'Assign department to employee',
-            //'job_role.required'=>'Select job role related to what the employee will be doing',
+            'job_role.required'=>'Choose position from the options provided.',
             //'hire_date.required'=>'When was this employee hired or employed?',
             //'hire_date.date'=>'Choose or enter a valid date format',
             //'employment_type.required'=>'Select the mode of employment',

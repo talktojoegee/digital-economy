@@ -74,16 +74,16 @@
                                                                                 <label for="" class="badge badge-light float-right">Received</label>
                                                                                 @break
                                                                                 @case(1)
-                                                                                <label for="" class="badge badge-secondary float-right">Acknowledged</label>
+                                                                                <label for="" class="badge badge-secondary text-white float-right">Acknowledged</label>
                                                                                 @break
                                                                                 @case(2)
-                                                                                <label for="" class="badge badge-primary float-right">Processing...</label>
+                                                                                <label for="" class="badge badge-primary text-white float-right">Processing...</label>
                                                                                 @break
                                                                                 @case(3)
-                                                                                <label for="" class="badge badge-danger float-right">Discarded</label>
+                                                                                <label for="" class="badge badge-danger text-white float-right">Discarded</label>
                                                                                 @break
                                                                                 @case(4)
-                                                                                <label for="" class="badge badge-success float-right">Closed</label>
+                                                                                <label for="" class="badge badge-success text-white float-right">Closed</label>
                                                                                 @break
                                                                             @endswitch
                                                                             <h4 class="text-uppercase">Purpose</h4>

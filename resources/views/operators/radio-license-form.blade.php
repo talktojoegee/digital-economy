@@ -7,7 +7,7 @@
     <link href="/vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('active-page')
-    New Radio License Application
+    New Radio Licence Application
 @endsection
 
 @section('main-content')
@@ -20,7 +20,7 @@
         <div class="col-xl-12 col-xxl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Submit A New Radio License Application</h4>
+                    <h4 class="card-title">Submit A New Radio Licence Application</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -62,13 +62,13 @@
                                 </div>
                                 <div class="col-md-12">
                                     <h4>Device</h4>
-                                    <div class="row">
+                                    <div class="row mb-3">
                                         <div class="table-responsive">
                                             <table class="table card-table table-vcenter text-nowrap mb-0 invoice-detail-table">
                                                 <thead>
                                                 <tr>
                                                     <th>Radio Station</th>
-                                                    <th>Licence Category</th>
+                                                    <th>Category</th>
                                                     <th>Type of Device</th>
                                                     <th>No. of Devices</th>
                                                     <th>Action</th>
@@ -113,7 +113,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <div class="row mt-3">
                                         <div class="col-md-12 col-sm-12 col-lg-12">
                                             <button class="btn btn-sm btn-primary add-line" type="button"> <i class="ti-plus mr-2"></i> Add Another Equipment</button>
                                         </div>

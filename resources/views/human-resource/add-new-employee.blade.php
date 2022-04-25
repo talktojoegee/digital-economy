@@ -34,6 +34,13 @@
                         <div class="form-section row">
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="first_name">Title</label>
+                                    <input type="text" id="" name="title" value="{{old('title')}}" placeholder="Title"  class="form-control">
+                                    @error('title') <i class="text-danger">{{$message}}</i> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="first_name">First Name</label>
                                     <input type="text" id="" name="first_name" value="{{old('first_name')}}" placeholder="First Name"  class="form-control">
                                     @error('first_name') <i class="text-danger">{{$message}}</i> @enderror
@@ -77,6 +84,18 @@
                                         @endforeach
                                     </select>
                                     @error('department') <i class="text-danger">{{$message}}</i> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Position</label>
+                                    <select name="job_role" id="position" class="form-control js-example-theme-single">
+                                        <option selected disabled>--Select position--</option>
+                                        @foreach($job_roles as $job_role)
+                                            <option value="{{$job_role->id}}">{{$job_role->role_name ?? '' }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('job_role') <i class="text-danger">{{$message}}</i> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">

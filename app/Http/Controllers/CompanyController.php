@@ -12,6 +12,7 @@ use App\Models\Country;
 use App\Models\Faqs;
 use App\Models\FrequencyAssignment;
 use App\Models\FrequencyAssignmentLog;
+use App\Models\FrequencyAssignmentRenewal;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\LicenceApplication;
@@ -59,6 +60,7 @@ class CompanyController extends Controller
         $this->user = new User();
         $this->frequencyassignment = new FrequencyAssignment();
         $this->frequencyassignmentlog = new FrequencyAssignmentLog();
+        $this->frequencyassignmentrenewal = new FrequencyAssignmentRenewal();
         $this->faqs = new Faqs();
         $this->messagecustomer = new MessageCustomer();
     }
@@ -516,6 +518,37 @@ class CompanyController extends Controller
 
     }
 
+    public function processSingleLicenceRenewalPayment(Request $request){
+        $this->validate($request,[
+            'amount'=>'required',
+            'paymentReference'=>'required',
+            'transactionId'=>'required',
+            'frequency'=>'required'
+        ]);
+        $frequency = $this->frequencyassignment->getFrequencyById($request->frequency);
+        if(!empty($frequency)){
+            $renewal = $this->frequencyassignment->updateFrequencyValidityPeriod($request->frequency);
+            //Register log
+            $log = $this->frequencyassignmentrenewal
+                ->registerFrequencyRenewalLog($frequency->id, $request->amount, $renewal->valid_from,
+                    $renewal->valid_to, $request->paymentReference, $request->transactionId);
+
+            #User notification
+            $subject = "Radio Frequency Renewed!";
+            $body = "Your radio frequency licence was renewed successfully.";
+            $this->usernotification->addUserNotification($subject, $body, "view-frequencies", $frequency->id, 1, $frequency->company_id);
+
+            //Invoice type other than 1 is considered to be for renewal
+            //get all assigned frequencies to this customer with status expired(2)
+            //check how much time it has expired/remains then add or subtract the number of days from 365(1year)
+            //update status to active
+            //send notification to concerned parties
+
+            return response()->json(['message'=>'Success']);
+        }
+
+    }
+
     public function myAssignedFrequencies(){
         return view('operators.assigned-frequencies');
     }
@@ -554,10 +587,33 @@ class CompanyController extends Controller
         if(!empty($frequency)){
             $companyId = Auth::user()->id;
             if($companyId == $frequency->company_id){
-                $radio_details = $this->radiolicenseapplicationdetail->getSingleDetailByRadioLicenseAppId($frequency->rla_id);
+                $radio_details = $this->radiolicenseapplicationdetail
+                    ->getSingleDetailByRadioLicenseAppIdDeviceType($frequency->rla_id, $frequency->type_of_device);
+                $invoice_item = $this->invoiceitem->getInvoiceItemByRadioDetailId($radio_details->id);
+                //return dd($invoice_item);
+                $frequency_batch = $this->frequencyassignment->getFrequencyByBatchCode($frequency->batch_code);
+                $inactive_counter = 0;
+                $withdrawn_counter = 0;
+
+                //# of inactive + withdrawn
+                foreach ($frequency_batch as $bat){
+                    if($bat->status == 0 && $bat->type_of_device == $frequency->type_of_device){
+                        $inactive_counter += 1;
+                    }
+                    if($bat->status == 3 && $bat->type_of_device == $frequency->type_of_device){
+                        $withdrawn_counter += 1;
+                    }
+                }
+
+                $total_archived = $inactive_counter + $withdrawn_counter;
+                $quantity_left = $invoice_item->quantity - $total_archived;
+                $unit_price = ceil($invoice_item->sub_total/$invoice_item->quantity);
+                $amount = ceil($unit_price*$quantity_left);
                 return view('operators.renew-single-licence',[
                     'frequency'=>$frequency,
-                    'detail'=>$radio_details
+                    'detail'=>$radio_details,
+                    'amount'=>$unit_price,
+                    'grand_total'=>$amount
                 ]);
             }else{
                 session()->flash("error", "Whoops! We can't proceed with this request. Contact admin.");

@@ -43,6 +43,13 @@ class ShareResourceController extends Controller
         return view('partial._job-roles', ['job_roles'=>$this->jobrole->getJobRoleByDepartmentId($request->department)]);
     }
 
+    public function serviceWorker(){
+        //Check expiration
+            /*
+             * 1. If expired; notify customer via email + SMS + In-app notification
+             */
+
+    }
 
 
 

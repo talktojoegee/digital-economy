@@ -205,20 +205,31 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="home1" role="tabpanel">
                                 <div class="pt-4 mt-3">
+                                    <h4 class="text-primary mb-3">Renewed: <small class="text-danger" style="font-weight: 700">{{$frequency->getFrequencyRenewalLog->count()}} <span class="text-muted">time(s)</span></small> </h4>
                                     <div class="table-responsive">
                                         <table class="table header-border table-responsive-sm">
                                             <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date</th>
+                                                <th>Ref. Code</th>
                                                 <th>Valid From</th>
                                                 <th>Expires</th>
-                                                <th>Status</th>
+                                                <th>Amount</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @php $serial = 1; @endphp
-
+                                            @foreach($frequency->getFrequencyRenewalLog as $renew)
+                                                <tr>
+                                                    <td>{{$serial++}}</td>
+                                                    <td>{{date('d M, Y h:ia', strtotime($renew->created_at))}}</td>
+                                                    <td>{{$renew->ref_no ?? '' }}</td>
+                                                    <td>{{date('d M, Y', strtotime($renew->valid_from))}}</td>
+                                                    <td class="text-danger">{{date('d M, Y', strtotime($renew->valid_to))}}</td>
+                                                    <td>{{number_format($renew->amount ?? 0, 2)}}</td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>

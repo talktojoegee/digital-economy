@@ -25,7 +25,7 @@ class Company extends Authenticatable
     }
 
     public function getAssignedFrequencies(){
-        return $this->hasMany(FrequencyAssignment::class, 'company_id');
+        return $this->hasMany(FrequencyAssignment::class, 'company_id')->orderBy('id', 'DESC');
     }
 
     public function getDirectors(){

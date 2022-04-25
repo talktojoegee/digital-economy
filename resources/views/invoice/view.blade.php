@@ -159,16 +159,6 @@
                                         <table class="table table-clear">
                                             <tbody>
                                             <tr>
-                                                <td class="left"><strong>Subtotal</strong></td>
-                                                <td class="right text-right">{{number_format($invoice->sub_total,2)}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="left"><strong>VAT (10%)</strong></td>
-                                                <td class="right">
-                                                    <p class="text-muted text-right">{{number_format($invoice->total - $invoice->sub_total)}}</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <td class="left"><strong>Total</strong></td>
                                                 <td class="right text-right"><strong>₦{{number_format($invoice->total,2)}}</strong><br>
                                                 </td>

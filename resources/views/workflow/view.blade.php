@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
-                                @if($application->status == 0)
+                                @if($application->status == 2)
                                 <a href="{{route('invoice-customer', ['slug'=>$application->getCompany->slug, 'appSlug'=>$application->slug])}}" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
                                 @endif
                             </div>
@@ -232,7 +232,7 @@
                                                                         <a class="timeline-panel text-muted" href="#">
                                                                             <span>{{date('d M, Y h:ia', strtotime($request->created_at))}}</span>
                                                                             <h6 class="mb-0">
-                                                                                {{$request->getOfficer->first_name ?? ''}} {{$request->getOfficer->last_name ?? ''}}
+                                                                                {{$request->getOfficer->title ?? ''}} {{$request->getOfficer->first_name ?? ''}} {{$request->getOfficer->last_name ?? ''}}
                                                                                 ({{$request->getSection->department_name ?? ''}})
                                                                                 @switch($request->status)
                                                                                     @case(0)
@@ -298,7 +298,7 @@
                                                                             <div class="modal-dialog modal-lg">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        <h5 class="modal-title"> <i class="ti-user mr-3"></i> Edit Record</h5>
+                                                                                        <h5 class="modal-title"> <i class="ti-user mr-3"></i>  Record</h5>
                                                                                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                                                         </button>
                                                                                     </div>
@@ -309,7 +309,7 @@
                                                                                                 <div class="col-md-6">
                                                                                                     <div class="form-group">
                                                                                                         <label style="margin-bottom:0px; padding:0px;" for="">Full Name <sup class="text-danger">*</sup></label>
-                                                                                                        <input type="text" name="full_name" value="{{old('full_name', $director->full_name)}}" placeholder="Full Name" class="form-control">
+                                                                                                        <input type="text" name="full_name" value="{{old('full_name', $director->full_name)}}" readonly placeholder="Full Name" class="form-control">
                                                                                                         @error('full_name')
                                                                                                         <i class="text-danger">{{$message}}</i>
                                                                                                         @enderror
@@ -318,7 +318,7 @@
                                                                                                 <div class="col-md-6">
                                                                                                     <div class="form-group">
                                                                                                         <label style="margin-bottom:0px; padding:0px;" for="">Email Address <sup class="text-danger">*</sup></label>
-                                                                                                        <input type="text" name="email" value="{{old('email', $director->email)}}" placeholder="Email Address" class="form-control">
+                                                                                                        <input type="text" name="email" value="{{old('email', $director->email)}}" readonly placeholder="Email Address" class="form-control">
                                                                                                         @error('email')
                                                                                                         <i class="text-danger">{{$message}}</i>
                                                                                                         @enderror
@@ -327,7 +327,7 @@
                                                                                                 <div class="col-md-6">
                                                                                                     <div class="form-group">
                                                                                                         <label style="margin-bottom:0px; padding:0px;" for="">Mobile No. <sup class="text-danger">*</sup></label>
-                                                                                                        <input type="text" name="mobile_no" value="{{old('mobile_no', $director->mobile_no)}}" placeholder="Mobile No." class="form-control">
+                                                                                                        <input type="text" name="mobile_no" value="{{old('mobile_no', $director->mobile_no)}}" readonly placeholder="Mobile No." class="form-control">
                                                                                                         @error('mobile_no')
                                                                                                         <i class="text-danger">{{$message}}</i>
                                                                                                         @enderror
@@ -354,7 +354,7 @@
                                                                                                 <div class="col-md-12">
                                                                                                     <div class="form-group">
                                                                                                         <label style="margin-bottom:0px; padding:0px;" for="">Address <sup class="text-danger">*</sup></label>
-                                                                                                        <textarea class="form-control" name="address" placeholder="Type address here..." id="address" style="resize:none;">{{old('address', $director->address)}}</textarea>
+                                                                                                        <textarea class="form-control" name="address" readonly placeholder="Type address here..." id="address" style="resize:none;">{{old('address', $director->address)}}</textarea>
                                                                                                         @error('address')
                                                                                                         <i class="text-danger">{{$message}}</i>
                                                                                                         @enderror
@@ -558,7 +558,7 @@
                             <tr>
                                 <td>{{$serial++}}
                                 </td>
-                                <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                <td>{{$flow->getOfficer->title ?? '' }} {{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
                                 <td><span class="text-muted">{{$flow->getSection->department_name ?? ''}}</span>
                                 </td>
                                 <td>

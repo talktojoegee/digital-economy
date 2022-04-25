@@ -38,6 +38,9 @@ class RadioLicenseApplicationDetail extends Model
     public function getSingleDetailByRadioLicenseAppId($id){
         return RadioLicenseApplicationDetail::where('radio_la_id', $id)->first();
     }
+    public function getSingleDetailByRadioLicenseAppIdDeviceType($id, $type){
+        return RadioLicenseApplicationDetail::where('radio_la_id', $id)->where('type_of_device',$type)->first();
+    }
 
     public function sumNumberOfDevicesByParam($appId, $type_of_device){
         return RadioLicenseApplicationDetail::where('radio_la_id', $appId)
