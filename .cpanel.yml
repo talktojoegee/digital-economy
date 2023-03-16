@@ -2,5 +2,5 @@
 deployment:
   tasks:
     # - export DEPLOYPATH=/home/connexx1/public_html/
-    - export DEPLOYPATH=/home/prepsng/public_html/digitale/
+    - export DEPLOYPATH=/home/ojivenet/public_html/digitale/
     - /bin/cp -R * $DEPLOYPATH
