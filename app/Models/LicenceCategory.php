@@ -15,6 +15,6 @@ class LicenceCategory extends Model
     */
 
     public function getLicenceCategories(){
-        return LicenceCategory::orderBy('category_name', 'ASC')->get();
+        return LicenceCategory::orderBy('id', 'ASC')->get();
     }
 }

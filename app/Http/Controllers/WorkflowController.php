@@ -154,7 +154,7 @@ class WorkflowController extends Controller
         ]);
         $radioApp = $this->radiolicenseapplication->getRadioLicenseApplicationById($request->appId);
         if(!empty($radioApp)){
-
+            $finalStatus = $request->status == 1 ? 4 : 3;
             if($request->action_type == 1){ //forward
                 $this->validate($request,[
                     'section'=>'required'
@@ -163,17 +163,17 @@ class WorkflowController extends Controller
                 ]);
 
                 $supervisor = $this->supervisor->getActiveSupervisorByDepartmentId($request->section);
-                //return dd($supervisor);
 
-                if(!empty($supervisor)){
+                if(!empty($supervisor)) {
 
                     $update = $this->workflowprocess->updateWorkflowProcess($request);
 
+
                     //$company, $request, $officer, $is_seen, $status, $type
-                    $this->workflowprocess->addWorkflowProcess($radioApp->company_id, $radioApp->id, $supervisor->user_id, $supervisor->department_id,0, 0, 1, $request->comment);
+                    $this->workflowprocess->addWorkflowProcess($radioApp->company_id, $radioApp->id, $supervisor->user_id, $supervisor->department_id, 0, 0, 1, $request->comment);
                     #Admin notification
                     $subject = "Update on New Radio license application";
-                    $body = Auth::user()->first_name." acted on a new radio license application";
+                    $body = Auth::user()->first_name . " acted on a new radio license application";
                     $this->adminnotification->addAdminNotification($subject, $body, "read-radio-license-application", $radioApp->slug, 1, $supervisor->user_id);
 
                     #User notification
@@ -189,7 +189,7 @@ class WorkflowController extends Controller
                 }
             }else{
                 $update = $this->workflowprocess->updateWorkflowProcess($request);
-                $appUpdate = $this->radiolicenseapplication->updateRadioLicenceApplicationStatus($request->appId, $request->status);
+                $appUpdate = $this->radiolicenseapplication->updateRadioLicenceApplicationStatus($request->appId, $finalStatus);
                 #Admin notification
                 $subject = "Process Completed!";
                 $body = Auth::user()->first_name." marked this application as final";
@@ -225,7 +225,8 @@ class WorkflowController extends Controller
                 return redirect()->route("manage-transactions");
             }
             $detail = $this->radiolicenseapplicationdetails->getSingleDetailByRadioLicenseAppId($invoice->radio_lic_app_id);
-            $handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 1);
+            $handheld = $this->radiolicenseapplicationdetails->getRadioAppDetailsByAppIdType($invoice->radio_lic_app_id, 1);
+            //$handheld = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 1);
             $base = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 2);
             $repeaters = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 3);
             $vehicular = $this->radiolicenseapplicationdetails->sumNumberOfDevicesByParam($invoice->radio_lic_app_id, 4);

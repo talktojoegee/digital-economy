@@ -66,7 +66,6 @@
                         </div>
                         <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                             <h6>Other Details:</h6>
-                            <div> <span class="text-uppercase">Issued By:</span> {{$invoice->getIssuedBy->first_name ?? ''}} {{$invoice->getIssuedBy->last_name ?? ''}}</div>
                             <div><span class="text-uppercase">Date:</span> {{date('d M, Y', strtotime($invoice->date_issued))}}</div>
                             <div><span class="text-uppercase"> Status:</span>
                                 @switch($invoice->status)
@@ -88,8 +87,7 @@
                             <div><span class="text-uppercase">Invoice No.</span> {{$invoice->invoice_no ?? '' }}</div>
                         </div>
                         <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                            <h6>...:</h6>
-                            <div><span class="text-uppercase">Date Paid:</span></div>
+                            <div><span class="text-uppercase">Date Paid:</span> {{ !is_null($invoice->date_paid) ? date('d M, Y', strtotime($invoice->date_paid)) : '' }}</div>
                         </div>
                     </div>
                     <div class="row">
@@ -102,6 +100,8 @@
                                         <th class="text-uppercase">Radio Station</th>
                                         <th class="text-uppercase">Category</th>
                                         <th class="text-uppercase">Type of Device</th>
+                                        <th class="text-uppercase">Op. Mode</th>
+                                        <th class="text-uppercase">Freq. Band</th>
                                         <th class="text-uppercase">Quantity</th>
                                         <th class="text-uppercase">Amount(₦)</th>
                                     </tr>
@@ -130,6 +130,28 @@
                                                         @break
                                                         @case(4)
                                                         Vehicular Station
+                                                        @break
+                                                    @endswitch
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-muted">{{$app->getRadioDetailApplication->operation_mode == 1 ? 'Simplex' : 'Duplex'}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-muted">
+                                                    @switch($app->getRadioDetailApplication->frequency_band)
+                                                        @case(1)
+                                                        MF/HF
+                                                        @break
+                                                        @case(2)
+                                                        VHF
+                                                        @break
+                                                        @case(3)
+                                                        UHF
+                                                        @break
+                                                        @case(4)
+                                                        SHF
                                                         @break
                                                     @endswitch
                                                 </p>

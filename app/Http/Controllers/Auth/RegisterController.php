@@ -98,7 +98,7 @@ class RegisterController extends Controller
             #Send mail
             try{
                 \Mail::to($subscriber)->send(new VerificationMail($subscriber) );
-                session()->flash("success", "Success! A verification link has been sent to your email account. Please click on the link
+                session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
             provided to continue with the registration process.");
                 return back();
             }catch (\Exception $ex){

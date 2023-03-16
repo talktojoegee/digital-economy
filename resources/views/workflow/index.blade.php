@@ -120,7 +120,7 @@
                                     <td>
                                         @switch($app->status)
                                             @case(0)
-                                            <label for="" class="badge badge-light text-white">Received</label>
+                                            <label for="" class="badge badge-light text-muted">Received</label>
                                             @break
                                             @case(1)
                                             <label for="" class="badge text-white badge-secondary text-white">Acknowledged</label>
@@ -132,7 +132,7 @@
                                             <label for="" class="badge badge-danger text-white">Discarded</label>
                                             @break
                                             @case(4)
-                                            <label for="" class="badge badge-success text-white">Closed</label>
+                                            <label for="" class="badge badge-success text-white">Approved</label>
                                             @break
                                         @endswitch
                                     </td>

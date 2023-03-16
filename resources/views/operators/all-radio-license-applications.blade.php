@@ -79,7 +79,7 @@
                                             <label for="" class="badge badge-danger">Discarded</label>
                                             @break
                                             @case(4)
-                                            <label for="" class="badge badge-success">Closed</label>
+                                            <label for="" class="badge badge-success">Approved</label>
                                             @break
                                          @endswitch
                                     </td>

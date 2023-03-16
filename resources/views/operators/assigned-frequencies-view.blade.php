@@ -151,16 +151,6 @@
                                                                             </div>
                                                                             <div class="row mb-4 mb-sm-2">
                                                                                 <div class="col-sm-3">
-                                                                                    <h5 class="f-w-500">Assigned By
-                                                                                        <span class="pull-right d-none d-sm-block">:</span>
-                                                                                    </h5>
-                                                                                </div>
-                                                                                <div class="col-sm-9">
-                                                                                    <span>{{$frequency->getAssignedBy->first_name ?? '' }} {{$frequency->getAssignedBy->surname ?? '' }}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="row mb-4 mb-sm-2">
-                                                                                <div class="col-sm-3">
                                                                                     <h5 class="f-w-500">Date Issued
                                                                                         <span class="pull-right d-none d-sm-block">:</span>
                                                                                     </h5>

@@ -49,6 +49,8 @@
                                         <th class="text-uppercase">Category</th>
                                         <th class="text-uppercase">Type of Device</th>
                                         <th class="text-uppercase">Quantity</th>
+                                        <th class="text-uppercase">Op. Mode</th>
+                                        <th class="text-uppercase">Freq. Band</th>
                                         <th class="text-uppercase">Amount</th>
                                     </tr>
                                     </thead>
@@ -84,6 +86,29 @@
                                                 <p class="text-muted">{{number_format($app->no_of_devices)}}</p>
                                                 <input type="hidden"  name="quantity[]" value="{{$app->no_of_devices}}" class="form-control">
                                             </td>
+                                            <td>
+                                                <p class="text-muted">{{$app->operation_mode == 1 ? 'Simplex' : 'Duplex'}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-muted">
+                                                    @switch($app->frequency_band)
+                                                        @case(1)
+                                                        MF/HF
+                                                        @break
+                                                        @case(2)
+                                                        VHF
+                                                        @break
+                                                        @case(3)
+                                                        UHF
+                                                        @break
+                                                        @case(4)
+                                                        SHF
+                                                        @break
+                                                    @endswitch
+                                                </p>
+                                            </td>
+
                                             <td>
                                                 <input type="number" step="0.01" placeholder="Amount" name="amount[]" class="form-control">
                                             </td>
