@@ -61,12 +61,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                @if($handheld > 0)
+                                @if($handheld->no_of_devices > 0)
 
-                                        <h5>Handheld Devices({{$handheld}})</h5>
-                                    @for($i = 0; $i < $handheld; $i++)
+                                        <h5>Handheld Devices({{ $handheld->no_of_devices }})</h5>
+                                    @for($i = 0; $i < $handheld->no_of_devices; $i++)
                                             <div class="form-group row">
                                                 <label class="col-sm-4 col-form-label">Handheld Device (#{{$i+1}})</label>
+                                                <label class="col-sm-4 col-form-label">Operation Mode <span>{{ $handheld->operation_mode == 1 ? 'Simplex' : 'Duplex'  }}</span></label>
                                                 <div class="col-sm-8">
                                                     <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
                                                     <input type="hidden" name="type_of_device[]" value="1">

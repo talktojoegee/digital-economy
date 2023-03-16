@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <a href="{{route('message-customer', $application->getCompany->slug)}}" class="btn btn-primary mr-1 btn-sm">Message Customer</a>
-                                @if($application->status == 2)
+                                @if($application->status == 4)
                                 <a href="{{route('invoice-customer', ['slug'=>$application->getCompany->slug, 'appSlug'=>$application->slug])}}" class="btn btn-warning mr-1 text-white btn-sm">Issue Invoice</a>
                                 @endif
                             </div>
@@ -102,7 +102,7 @@
                                                                                 <label for="" class="badge badge-danger float-right">Discarded</label>
                                                                                 @break
                                                                                 @case(4)
-                                                                                <label for="" class="badge badge-success float-right">Closed</label>
+                                                                                <label for="" class="badge badge-success float-right">Approved</label>
                                                                                 @break
                                                                             @endswitch
                                                                             <h4 class="text-uppercase">Purpose</h4>
@@ -116,7 +116,7 @@
                                                                                 <th>Radio Station</th>
                                                                                 <th> Category</th>
                                                                                 <th>Device</th>
-                                                                                <th># of Devices</th>
+                                                                                <th>Action</th>
                                                                                 </thead>
                                                                                 @php $serial = 1; @endphp
                                                                                 @foreach($application->getRadioLicenseDetails as $detail)
@@ -140,10 +140,231 @@
                                                                                                 @break
                                                                                             @endswitch
                                                                                         </td>
-                                                                                        <td>{{number_format($detail->no_of_devices ?? 0)}}</td>
+                                                                                        <td>
+                                                                                            <a href="javascript:void(0);"
+                                                                                               class="btn btn-info btn-sm" data-toggle="modal" data-target="#list_{{$detail->id}}"><i class="ti ti-eye"></i></a>
+                                                                                            <div class="modal fade" id="list_{{$detail->id}}">
+                                                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                        <div class="modal-header">
+                                                                                                            <h5 class="modal-title">Details</h5>
+                                                                                                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                        <div class="modal-body">
+                                                                                                            <div class="profile-personal-info">
+                                                                                                                <h4 class="text-primary mb-4">Device Information</h4>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Radio Station:
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-8">
+                                                                                                                        <span>{{$detail->getWorkstation->work_station_name  ?? ''}}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Category
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-8">
+                                                                                                                        <span>{{$detail->getLicenseCategory->category_name ?? '' }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Other Category
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-8">
+                                                                                                                        <span>{{$detail->other_category ?? '' }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Type of Device
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-8">
+                                                                                                                        <span>
+                                                                                                                            @switch($detail->type_of_device)
+                                                                                                                                @case(1)
+                                                                                                                                Handheld
+                                                                                                                                @break
+                                                                                                                                @case(2)
+                                                                                                                                Base Station
+                                                                                                                                @break
+                                                                                                                                @case(3)
+                                                                                                                                Repeaters Station
+                                                                                                                                @break
+                                                                                                                                @case(4)
+                                                                                                                                Vehicular Station
+                                                                                                                                @break
+                                                                                                                            @endswitch
+                                                                                                                        </span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500"># of Device(s)
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-8">
+                                                                                                                        <span>{{$detail->no_of_devices ?? ''   }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <h4 class="text-primary mb-4">Frequency Information</h4>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <h5 class="f-w-500">Operation Mode:
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <span>{{$detail->operation_mode == 1 ? 'Simplex' : 'Duplex' }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <h5 class="f-w-500">Frequency Band
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <span>
+                                                                                                                            @switch($detail->frequency_band)
+                                                                                                                                @case(1)
+                                                                                                                                MF/HF
+                                                                                                                                @break
+                                                                                                                                @case(2)
+                                                                                                                                VHF
+                                                                                                                                @break
+                                                                                                                                @case(3)
+                                                                                                                                UHF
+                                                                                                                                @break
+                                                                                                                                @case(4)
+                                                                                                                                SHF
+                                                                                                                                @break
+                                                                                                                            @endswitch
+                                                                                                                        </span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 @endforeach
                                                                             </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-12 mt-4">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <h4 class="text-uppercase">Workflow Log</h4>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table header-border table-responsive-sm">
+                                                                                        <thead>
+                                                                                        <tr>
+                                                                                            <th>#</th>
+                                                                                            <th>User</th>
+                                                                                            <th>Section</th>
+                                                                                            <th>Status</th>
+                                                                                        </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        @php $serial = 1; @endphp
+                                                                                        @foreach($workflow_processes as $flow)
+                                                                                            <tr>
+                                                                                                <td>{{$serial++}}
+                                                                                                </td>
+                                                                                                <td>{{$flow->getOfficer->title ?? '' }} {{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                                                                                <td><span class="text-muted">{{$flow->getSection->department_name ?? ''}}</span>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    @switch($flow->status)
+                                                                                                        @case(0)
+                                                                                                        <small class="text-primary">Received</small>
+                                                                                                        @break
+                                                                                                        @case(1)
+                                                                                                        <small class="text-success">Approved</small>
+                                                                                                        @break
+                                                                                                        @case(2)
+                                                                                                        <small class="text-danger">Declined</small>
+                                                                                                        @break
+                                                                                                    @endswitch
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <a href="javascript:void(0)" data-target="#flow_{{$flow->id}}" class="btn btn-info btn-sm" data-toggle="modal"><i class="ti-eye mr-2"></i> </a>
+                                                                                                    <div class="modal fade" id="flow_{{$flow->id}}">
+                                                                                                        <div class="modal-dialog">
+                                                                                                            <div class="modal-content">
+                                                                                                                <div class="modal-header">
+                                                                                                                    <h5 class="modal-title text-uppercase">Details</h5>
+                                                                                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                                <div class="modal-body">
+                                                                                                                    <table class="table table-stripped">
+                                                                                                                        <tr>
+                                                                                                                            <td><strong>User</strong></td>
+                                                                                                                            <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><strong>Section</strong></td>
+                                                                                                                            <td>{{$flow->getSection->department_name ?? ''}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><strong>Date</strong></td>
+                                                                                                                            <td>{{date('d M, Y h:ia', strtotime($flow->created_at))}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><strong>Status</strong></td>
+                                                                                                                            <td>
+                                                                                                                                @switch($flow->status)
+                                                                                                                                    @case(0)
+                                                                                                                                    <small class="text-primary">Received</small>
+                                                                                                                                    @break
+                                                                                                                                    @case(1)
+                                                                                                                                    <small class="text-success">Approved</small>
+                                                                                                                                    @break
+                                                                                                                                    @case(2)
+                                                                                                                                    <small class="text-danger">Declined</small>
+                                                                                                                                    @break
+                                                                                                                                @endswitch
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><strong>Comment</strong></td>
+                                                                                                                            <td>{{$flow->comment ?? ''}}</td>
+                                                                                                                        </tr>
+                                                                                                                    </table>
+                                                                                                                </div>
+                                                                                                                <div class="modal-footer">
+                                                                                                                    <button type="button" class="btn btn-danger light btn-sm" data-dismiss="modal">Close</button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        @endforeach
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -194,7 +415,7 @@
                                                                         <i class="text-danger mt-2">{{$message}}</i>
                                                                     @enderror
                                                                 </div>
-                                                                <div class="col-md-12 mt-3">
+                                                                <div class="col-md-12 mt-3" id="sectionWrapper">
                                                                     <label for="">Section/Unit</label>
                                                                     <select name="section" id="section"
                                                                             class="form-control js-example-theme-single">
@@ -206,9 +427,9 @@
                                                                     @error('section')
                                                                         <i class="text-danger mt-2">{{$message}}</i>
                                                                     @enderror
-                                                                    <input type="hidden" name="appId" value="{{$application->id}}">
-                                                                    <input type="hidden" name="processId" value="{{$processId}}">
                                                                 </div>
+                                                                <input type="hidden" name="appId" value="{{$application->id}}">
+                                                                <input type="hidden" name="processId" value="{{$processId}}">
                                                                 <div class="col-md-12 mt-3 d-flex justify-content-center">
                                                                     <button class="btn btn-primary btn-sm" type="submit">Submit</button>
                                                                 </div>
@@ -537,107 +758,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="text-uppercase">Workflow Log</h4>
-                    <div class="table-responsive">
-                        <table class="table header-border table-responsive-sm">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User</th>
-                                <th>Section</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php $serial = 1; @endphp
-                            @foreach($workflow_processes as $flow)
-                            <tr>
-                                <td>{{$serial++}}
-                                </td>
-                                <td>{{$flow->getOfficer->title ?? '' }} {{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
-                                <td><span class="text-muted">{{$flow->getSection->department_name ?? ''}}</span>
-                                </td>
-                                <td>
-                                    @switch($flow->status)
-                                        @case(0)
-                                        <small class="text-primary">Received</small>
-                                        @break
-                                        @case(1)
-                                        <small class="text-success">Approved</small>
-                                        @break
-                                        @case(2)
-                                        <small class="text-danger">Declined</small>
-                                        @break
-                                    @endswitch
-                                </td>
-                                <td>
-                                    {{date('d M, Y h:ia', strtotime($flow->created_at))}}
-                                </td>
-                                <td>
-                                    <a href="javascript:void(0)" data-target="#flow_{{$flow->id}}" class="btn btn-info btn-sm" data-toggle="modal"><i class="ti-eye mr-2"></i> View</a>
-                                    <div class="modal fade" id="flow_{{$flow->id}}">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title text-uppercase">Details</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <table class="table table-stripped">
-                                                        <tr>
-                                                            <td><strong>User</strong></td>
-                                                            <td>{{$flow->getOfficer->first_name ?? '' }} {{$flow->getOfficer->last_name ?? ''}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Section</strong></td>
-                                                            <td>{{$flow->getSection->department_name ?? ''}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Date</strong></td>
-                                                            <td>{{date('d M, Y h:ia', strtotime($flow->created_at))}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Status</strong></td>
-                                                            <td>
-                                                                @switch($flow->status)
-                                                                    @case(0)
-                                                                    <small class="text-primary">Received</small>
-                                                                    @break
-                                                                    @case(1)
-                                                                    <small class="text-success">Approved</small>
-                                                                    @break
-                                                                    @case(2)
-                                                                    <small class="text-danger">Declined</small>
-                                                                    @break
-                                                                @endswitch
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Comment</strong></td>
-                                                            <td>{{$flow->comment ?? ''}}</td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger light btn-sm" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 
 
@@ -647,6 +768,18 @@
     <script src="/js/parsley.min.js"></script>
     <script src="/vendor/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/js/plugins-init/select2-init.js" type="text/javascript"></script>
-
+    <script>
+        $(document).ready(function(){
+            $('#action_type').on('change',function(){
+                let actionType = $(this).val();
+                if(actionType == 2){
+                    $('#sectionWrapper').hide();
+                }else{
+                    $('#sectionWrapper').show();
+                }
+                console.log(actionType);
+            });
+        });
+    </script>
 @endsection
 

@@ -97,7 +97,7 @@
                                                                                     <th>Radio Station</th>
                                                                                     <th> Category</th>
                                                                                     <th>Device</th>
-                                                                                    <th># of Devices</th>
+                                                                                    <th>Action</th>
                                                                                 </thead>
                                                                                 @php $serial = 1; @endphp
                                                                                 @foreach($application->getRadioLicenseDetails as $detail)
@@ -121,7 +121,121 @@
                                                                                                 @break
                                                                                             @endswitch
                                                                                         </td>
-                                                                                        <td>{{number_format($detail->no_of_devices ?? 0)}}</td>
+                                                                                        <td>
+                                                                                            <a href="javascript:void(0);"
+                                                                                               class="btn btn-info btn-sm" data-toggle="modal" data-target="#list_{{$detail->id}}"><i class="ti ti-eye"></i></a>
+                                                                                            <div class="modal fade" id="list_{{$detail->id}}">
+                                                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                        <div class="modal-header">
+                                                                                                            <h5 class="modal-title">Details</h5>
+                                                                                                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                        <div class="modal-body">
+                                                                                                            <div class="profile-personal-info">
+                                                                                                                <h4 class="text-primary mb-4">Device Information</h4>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Radio Station:
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-8">
+                                                                                                                        <span>{{$detail->getWorkstation->work_station_name  ?? ''}}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Category
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-8">
+                                                                                                                        <span>{{$detail->getLicenseCategory->category_name ?? '' }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500">Type of Device
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-8">
+                                                                                                                        <span>
+                                                                                                                            @switch($detail->type_of_device)
+                                                                                                                                @case(1)
+                                                                                                                                Handheld
+                                                                                                                                @break
+                                                                                                                                @case(2)
+                                                                                                                                Base Station
+                                                                                                                                @break
+                                                                                                                                @case(3)
+                                                                                                                                Repeaters Station
+                                                                                                                                @break
+                                                                                                                                @case(4)
+                                                                                                                                Vehicular Station
+                                                                                                                                @break
+                                                                                                                            @endswitch
+                                                                                                                        </span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-4">
+                                                                                                                        <h5 class="f-w-500"># of Device(s)
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-8">
+                                                                                                                        <span>{{$detail->no_of_devices ?? ''   }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <h4 class="text-primary mb-4">Frequency Information</h4>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <h5 class="f-w-500">Operation Mode:
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <span>{{$detail->operation_mode == 1 ? 'Simplex' : 'Duplex' }}</span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row mb-4 mb-sm-2">
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <h5 class="f-w-500">Frequency Band
+                                                                                                                            <span class="pull-right d-none d-sm-block">:</span>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-6">
+                                                                                                                        <span>
+                                                                                                                            @switch($detail->frequency_band)
+                                                                                                                                @case(1)
+                                                                                                                                MF/HF
+                                                                                                                                @break
+                                                                                                                                @case(2)
+                                                                                                                                VHF
+                                                                                                                                @break
+                                                                                                                                @case(3)
+                                                                                                                                UHF
+                                                                                                                                @break
+                                                                                                                                @case(4)
+                                                                                                                                SHF
+                                                                                                                                @break
+                                                                                                                            @endswitch
+                                                                                                                        </span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 @endforeach
                                                                             </table>

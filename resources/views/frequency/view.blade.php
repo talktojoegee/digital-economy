@@ -135,7 +135,7 @@
                                                                         </div>
                                                                         <div class="row mb-4 mb-sm-2">
                                                                             <div class="col-sm-12">
-                                                                                <h5 class="f-w-500">Assigned By: <span class="text-muted">{{$frequency->getAssignedBy->first_name ?? '' }} {{$frequency->getAssignedBy->surname ?? '' }}</span>
+                                                                                <h5 class="f-w-500">Assigned By: <span class="text-muted">{{$frequency->getAssignedBy->first_name ?? '' }} {{$frequency->getAssignedBy->last_name ?? '' }}</span>
                                                                                 </h5>
                                                                             </div>
                                                                         </div>
@@ -278,7 +278,7 @@
                                             @foreach($logs as $log)
                                                 <tr>
                                                     <td>{{$index++}}</td>
-                                                    <td>{{$log->getLoggedBy->first_name ?? '' }} {{$log->getLoggedBy->surname ?? '' }}</td>
+                                                    <td>{{$log->getLoggedBy->first_name ?? '' }} {{$log->getLoggedBy->last_name ?? '' }}</td>
                                                     <td>{{$log->subject ?? '' }}</td>
                                                     <td>{{$log->narration ?? '' }}</td>
                                                     <td>{{date('d M, Y', strtotime($log->created_at))}}</td>

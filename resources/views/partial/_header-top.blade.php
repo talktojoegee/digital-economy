@@ -41,7 +41,7 @@
                     </li>
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                            <img  src="/images/profile/17.jpg" width="20" alt=""/>
+                            <img  src="/images/avatar.png" width="20" alt=""/>
                             <div class="header-info">
                                 <span class="text-black">{{Auth::user()->first_name ?? '' }} </span>
                                 <p class="fs-12 mb-0">{{Auth::user()->getJobRole->role_name ?? '' }}</p>

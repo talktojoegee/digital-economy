@@ -14250,8 +14250,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   color: #fff; }
 [data-headerbg="color_3"][data-theme-version="dark"] .header-left input,
 [data-headerbg="color_3"] .header-left input {
-  border-color: #521fc9;
-  background-color: #521fc9 !important;
+  border-color: #012F1F;
+  background-color: #012F1F !important;
   color: #fff; }
   [data-headerbg="color_3"][data-theme-version="dark"] .header-left input::placeholder,
   [data-headerbg="color_3"] .header-left input::placeholder {
@@ -14261,7 +14261,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     border-color: #2e1171; }
 [data-headerbg="color_3"][data-theme-version="dark"] .header-left .search_icon,
 [data-headerbg="color_3"] .header-left .search_icon {
-  background-color: #521fc9 !important; }
+  background-color: #012F1F !important; }
   [data-headerbg="color_3"][data-theme-version="dark"] .header-left .search_icon i,
   [data-headerbg="color_3"] .header-left .search_icon i {
     color: #fff; }
@@ -14287,7 +14287,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     background-color: inherit; }
 [data-headerbg="color_3"][data-theme-version="dark"] .header-right .notification_dropdown .nav-link,
 [data-headerbg="color_3"] .header-right .notification_dropdown .nav-link {
-  background-color: #521fc9 !important; }
+  background-color: #012F1F !important; }
 [data-headerbg="color_3"][data-theme-version="dark"] .header-right .right-sidebar a,
 [data-headerbg="color_3"] .header-right .right-sidebar a {
   border-color: rgba(255, 255, 255, 0.1);
@@ -14302,7 +14302,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   color: rgba(255, 255, 255, 0.7); }
 [data-headerbg="color_3"][data-theme-version="dark"] .nav-control,
 [data-headerbg="color_3"] .nav-control {
-  background-color: #521fc9;
+  background-color: #012F1F;
   color: #fff; }
 
 [data-headerbg="color_4"][data-theme-version="dark"] .header,
@@ -15144,7 +15144,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     [data-sibebarbg="color_3"] .deznav .metismenu > li.mm-active > a svg {
       color: #fff; }
   [data-layout="horizontal"][data-sibebarbg="color_3"][data-theme-version="dark"] .deznav .metismenu > li, [data-sibebarbg="color_3"] .deznav .metismenu > li {
-    border-color: #521fc9; }
+    border-color: #012F1F; }
   [data-sibebarbg="color_3"][data-theme-version="dark"] .deznav .metismenu a,
   [data-sibebarbg="color_3"] .deznav .metismenu a {
     color: rgba(255, 255, 255, 0.7); }
@@ -15161,19 +15161,19 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       background-color: rgba(255, 255, 255, 0.2); }
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu li > ul,
 [data-sibebarbg="color_3"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu li > ul {
-  background-color: #521fc9; }
+  background-color: #012F1F; }
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a,
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li:hover > a,
 [data-sibebarbg="color_3"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a,
 [data-sibebarbg="color_3"][data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li:hover > a {
-  background-color: #521fc9; }
+  background-color: #012F1F; }
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li > ul,
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li.mm-active > a,
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li:hover > a,
 [data-sibebarbg="color_3"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li > ul,
 [data-sibebarbg="color_3"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li.mm-active > a,
 [data-sibebarbg="color_3"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li:hover > a {
-  background-color: #521fc9; }
+  background-color: #012F1F; }
 [data-sibebarbg="color_3"][data-theme-version="dark"][data-sidebar-style="icon-hover"][data-layout="vertical"] .deznav .metismenu ul,
 [data-sibebarbg="color_3"][data-sidebar-style="icon-hover"][data-layout="vertical"] .deznav .metismenu ul {
   border-color: rgba(255, 255, 255, 0.2); }

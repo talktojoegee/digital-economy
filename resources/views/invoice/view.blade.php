@@ -108,6 +108,8 @@
                                         <th class="text-uppercase">Radio Station</th>
                                         <th class="text-uppercase">Category</th>
                                         <th class="text-uppercase">Type of Device</th>
+                                        <th class="text-uppercase">Op. Mode</th>
+                                        <th class="text-uppercase">Freq. Band</th>
                                         <th class="text-uppercase">Quantity</th>
                                         <th class="text-uppercase">Amount(₦)</th>
                                     </tr>
@@ -136,6 +138,28 @@
                                                         @break
                                                         @case(4)
                                                         Vehicular Station
+                                                        @break
+                                                    @endswitch
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-muted">{{$app->getRadioDetailApplication->operation_mode == 1 ? 'Simplex' : 'Duplex'}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-muted">
+                                                    @switch($app->getRadioDetailApplication->frequency_band)
+                                                        @case(1)
+                                                        MF/HF
+                                                        @break
+                                                        @case(2)
+                                                        VHF
+                                                        @break
+                                                        @case(3)
+                                                        UHF
+                                                        @break
+                                                        @case(4)
+                                                        SHF
                                                         @break
                                                     @endswitch
                                                 </p>
@@ -223,7 +247,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">Comment <sup class="text-danger">*</sup></label>
-                                    <textarea rows="5" style="resize: none;" name="comment"  placeholder="Type comment here..." class="form-control"></textarea>
+                                    <textarea rows="5" style="resize: none;" name="comment"  placeholder="Why would you want to discard this transaction? Leave a comment here..." class="form-control"></textarea>
                                     @error('comment')
                                     <i class="text-danger">{{$message}}</i>
                                     @enderror

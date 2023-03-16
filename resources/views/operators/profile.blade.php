@@ -299,7 +299,9 @@
                                                                 <label for="">Type of Company</label>
                                                                 <select name="company_type" id="company_type" class="form-control">
                                                                     <option disabled selected>-- Select type of company --</option>
-
+                                                                    <option value="1">Sole proprietorship</option>
+                                                                    <option value="2">Private Limited Company </option>
+                                                                    <option value="3">Public Limited Company </option>
                                                                 </select>
                                                                 @error('company_type')
                                                                     <i class="text-danger mt-2">{{$message}}</i>

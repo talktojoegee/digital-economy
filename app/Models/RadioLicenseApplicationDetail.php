@@ -28,6 +28,9 @@ class RadioLicenseApplicationDetail extends Model
             $details->type_of_device = $request->type_of_device[$i];
             $details->no_of_devices = $request->no_of_devices[$i];
             $details->radio_la_id = $appId;
+            $details->operation_mode = $request->operation_mode[$i] ?? '';
+            $details->frequency_band = $request->frequency_band[$i] ?? '';
+            $details->other_category = $request->other_category[$i] ?? '';
             $details->save();
         }
 
@@ -45,6 +48,10 @@ class RadioLicenseApplicationDetail extends Model
     public function sumNumberOfDevicesByParam($appId, $type_of_device){
         return RadioLicenseApplicationDetail::where('radio_la_id', $appId)
             ->where('type_of_device', $type_of_device)->sum('no_of_devices');
+    }
+    public function getRadioAppDetailsByAppIdType($appId, $type_of_device){
+        return RadioLicenseApplicationDetail::where('radio_la_id', $appId)
+            ->where('type_of_device', $type_of_device)->first();
     }
 
 }

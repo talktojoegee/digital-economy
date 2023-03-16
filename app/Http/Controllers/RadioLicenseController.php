@@ -48,6 +48,7 @@ class RadioLicenseController extends Controller
     }
 
     public function addRadioLicenseApplication(Request  $request){
+
         $this->validate($request,[
             'purpose'=>'required',
             'type_of_device'=>'required|array',

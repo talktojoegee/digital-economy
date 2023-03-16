@@ -152,6 +152,9 @@
                                     <label for="">Class of Station</label>
                                     <select name="station_class" id="station_class" class="form-control">
                                         <option selected disabled>Select Class of Station</option>
+                                        <option value="1">First Class</option>
+                                        <option value="2">Second Class</option>
+                                        <option value="3">Third Class</option>
                                     </select>
                                     @error('station_class')
                                     <i class="text-danger">{{$message}}</i>
@@ -161,7 +164,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Schedule of Operation</label>
-                                    <input type="text" name="schedule_of_operation" class="form-control" placeholder="Schedule of Operation">
+                                    <select name="schedule_of_operation" id="schedule_of_operation" class="form-control">
+                                        <option selected disabled>Select Operation Schedule</option>
+                                        <option value="1">Day</option>
+                                        <option value="2">Night</option>
+                                        <option value="3">Both Day & Night</option>
+                                    </select>
                                     @error('schedule_of_operation')
                                     <i class="text-danger">{{$message}}</i>
                                     @enderror
