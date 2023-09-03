@@ -48,7 +48,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="map_canvas"></div>
+                            <div id="map_canvas">
+                                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCRRkKFlMtq2u3XoglN_1nQP6X62lewbJc&q={{$station->lat ?? '' }},{{$station->long ?? ''}}" width="100%" height="750" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
                         </div>
                     </div>
 
@@ -157,7 +159,7 @@
     <script src="/js/plugins-init/select2-init.js" type="text/javascript"></script>
     <script>
       /*  var long = "{{$station->long}}";
-        var lat = "{{$station->lat}}";
+        var lat = "$station->lat}}";
         //console.log(`Long: ${long} Lat:${lat}`)
         function initialize() {
             var myLatlng = new google.maps.LatLng(-34.397, 150.644);
@@ -180,5 +182,6 @@
 */
 
     </script>
+
 @endsection
 

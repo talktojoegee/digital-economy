@@ -38,7 +38,7 @@ class Workstation extends Model
         $station->lat = $request->lat;
         $station->status = $request->status;
         $station->station_class = $request->station_class;
-        $station->operation_schedule = $request->schedule_of_operation;
+        $station->operation_schedule = $request->schedule_of_operation ?? 1;
         $station->nature_of_frequency = $request->frequency_usage;
         $station->transmitter_location = $request->transmitting_location;
         $station->save();
@@ -57,7 +57,7 @@ class Workstation extends Model
         $station->lat = $request->lat;
         $station->status = $request->status;
          $station->station_class = $request->station_class;
-         $station->operation_schedule = $request->schedule_of_operation;
+         $station->operation_schedule = $request->schedule_of_operation ?? 1;
          $station->nature_of_frequency = $request->frequency_usage;
          $station->transmitter_location = $request->transmitting_location;
         $station->save();
