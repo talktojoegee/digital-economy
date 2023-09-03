@@ -53,7 +53,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Purpose of Application</label>
-                                            <textarea name="purpose" id="purpose" placeholder="Type purpose of application here..." style="resize: none;" class="form-control content">{{old('purpose')}}</textarea>
+                                            <textarea name="purpose" id="purpose" placeholder="Type the purpose of your application here..." style="resize: none;" class="form-control content">{{old('purpose')}}</textarea>
                                             @error('purpose')
                                             <i class="text-danger mt-2">{{$message}}</i>
                                             @enderror

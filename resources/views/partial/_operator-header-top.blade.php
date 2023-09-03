@@ -43,7 +43,7 @@
                     </li>
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                            <img  src="/images/profile/17.jpg" width="20" alt=""/>
+                            <img  src="/images/avatar.png" width="20" alt=""/>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="{{route('company-profile')}}" class="dropdown-item ai-icon">
