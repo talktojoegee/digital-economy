@@ -55,8 +55,7 @@ class LoginController extends Controller
             ]);
         if(Auth::guard('web')->attempt([
             'email'=>$request->email,
-            'password'=>$request->password],
-            $request->remember)){
+            'password'=>$request->password])){
 
             $company = $this->company->getCompanyByEmail($request->email);
             if($company){
