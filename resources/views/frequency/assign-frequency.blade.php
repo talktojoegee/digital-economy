@@ -52,7 +52,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-4 col-form-label">License Start Date</label>
                                         <div class="col-sm-8">
-                                            <input type="date" name="start_date" class="form-control" placeholder="Start Date" value="{{old('start_date')}}">
+                                            <input type="date"  name="start_date" class="form-control" placeholder="Start Date" value="{{ date('Y-m-d')}}">
                                             <input type="hidden" name="application" value="{{$applicationId}}">
                                             @error('start_date')
                                             <i class="text-danger mt-2">{{$message}}</i>
@@ -61,70 +61,77 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                @if($handheld->no_of_devices > 0)
+                                    @if(!is_null($handheld))
+                                        @if($handheld->no_of_devices > 0)
 
-                                        <h5>Handheld Devices({{ $handheld->no_of_devices }})</h5>
-                                    @for($i = 0; $i < $handheld->no_of_devices; $i++)
+                                                <h5>Handheld Devices({{ $handheld->no_of_devices }})</h5>
+                                            @for($i = 0; $i < $handheld->no_of_devices; $i++)
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Handheld Device (#{{$i+1}})</label>
+                                                        <label class="col-sm-4 col-form-label">Operation Mode <span>{{ $handheld->operation_mode == 1 ? 'Simplex' : 'Duplex'  }}</span></label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                            <input type="hidden" name="type_of_device[]" value="1">
+                                                            @error('assign_frequency')
+                                                            <i class="text-danger mt-2">{{$message}}</i>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                            @endfor
+                                        @endif
+                                    @endif
+                                @if(!is_null($base))
+                                    @if($base > 0)
+
+                                            <h5>Base({{$base}})</h5>
+                                        @for($b = 0; $b < $base; $b++)
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Base Station (#{{$b+1}})</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
+                                                        <input type="hidden" name="type_of_device[]" value="2">
+                                                        @error('assign_frequency')
+                                                        <i class="text-danger mt-2">{{$message}}</i>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                        @endfor
+                                    @endif
+                                    @endif
+                                @if(!is_null($repeaters))
+                                    @if($repeaters > 0)
+
+                                        <h5>Repeaters({{$repeaters}})</h5>
+                                        @for($r = 0; $r < $repeaters; $r++)
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Handheld Device (#{{$i+1}})</label>
-                                                <label class="col-sm-4 col-form-label">Operation Mode <span>{{ $handheld->operation_mode == 1 ? 'Simplex' : 'Duplex'  }}</span></label>
+                                                <label class="col-sm-4 col-form-label">Repeaters Station (#{{$r+1}})</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
-                                                    <input type="hidden" name="type_of_device[]" value="1">
+                                                    <input type="hidden" name="type_of_device[]" value="3">
                                                     @error('assign_frequency')
                                                     <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
                                                 </div>
                                             </div>
-                                    @endfor
+                                        @endfor
+                                    @endif
                                 @endif
-                                @if($base > 0)
-
-                                        <h5>Base({{$base}})</h5>
-                                    @for($b = 0; $b < $base; $b++)
+                                @if(!is_null($vehicular))
+                                    @if($vehicular > 0)
+                                        <h5>Vehicular({{$vehicular}})</h5>
+                                        @for($v = 0; $v < $vehicular; $v++)
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Base Station (#{{$b+1}})</label>
+                                                <label class="col-sm-4 col-form-label">Vehicular Station (#{{$v+1}})</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
-                                                    <input type="hidden" name="type_of_device[]" value="2">
+                                                    <input type="hidden" name="type_of_device[]" value="4">
                                                     @error('assign_frequency')
-                                                    <i class="text-danger mt-2">{{$message}}</i>
+                                                        <i class="text-danger mt-2">{{$message}}</i>
                                                     @enderror
                                                 </div>
                                             </div>
-                                    @endfor
-                                @endif
-                                @if($repeaters > 0)
-
-                                    <h5>Repeaters({{$repeaters}})</h5>
-                                    @for($r = 0; $r < $repeaters; $r++)
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label">Repeaters Station (#{{$r+1}})</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
-                                                <input type="hidden" name="type_of_device[]" value="3">
-                                                @error('assign_frequency')
-                                                <i class="text-danger mt-2">{{$message}}</i>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    @endfor
-                                @endif
-                                @if($vehicular > 0)
-
-                                    <h5>Vehicular({{$vehicular}})</h5>
-                                    @for($v = 0; $r < $vehicular; $v++)
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label">Vehicular Station (#{{$v+1}})</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" name="assign_frequency[]" class="form-control" placeholder="Assign Frequency" value="{{old('assign_frequency[0]')}}">
-                                                <input type="hidden" name="type_of_device[]" value="4">
-                                                @error('assign_frequency')
-                                                    <i class="text-danger mt-2">{{$message}}</i>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    @endfor
+                                        @endfor
+                                    @endif
                                 @endif
                                 </div>
                                 <hr>

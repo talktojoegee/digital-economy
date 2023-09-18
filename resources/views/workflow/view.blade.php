@@ -613,7 +613,6 @@
                                                 <div class="card profile-card">
                                                     <div class="card-header flex-wrap border-0 pb-0">
                                                         <h3 class="fs-24 text-black font-w600 mr-auto mb-2 pr-3">{{$application->getCompany->company_name ?? '' }}</h3>
-
                                                     </div>
                                                     <div class="card-body">
                                                         @if(session()->has('success'))
@@ -675,15 +674,15 @@
                                                                     <div class="col-xl-4 col-sm-6">
                                                                         <div class="form-group">
                                                                             <label>Year of Incorporation</label>
-                                                                            <input  type="text" disabled value="{{ date('d M, Y', strtotime($application->getCompany->incorporation_year)) ?? '' }}" class="input-changes form-control" placeholder="Year of Incorporation">
+                                                                            <input  type="text" disabled value="{{ !is_null($application->getCompany->incorporation_year) ? date('d M, Y', strtotime($application->getCompany->incorporation_year)) : '-' }}" class="input-changes form-control" placeholder="Year of Incorporation">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-xl-4 col-sm-6">
+<!--                                                                    <div class="col-xl-4 col-sm-6">
                                                                         <div class="form-group">
                                                                             <label>Company Type</label>
                                                                             <input  type="text" disabled value="" class="form-control input-changes" placeholder="Company Type">
                                                                         </div>
-                                                                    </div>
+                                                                    </div>-->
                                                                     <div class="col-xl-4 col-sm-6">
                                                                         <div class="form-group">
                                                                             <label>State</label>
@@ -717,8 +716,8 @@
                                             <div class="col-xl-12 col-lg-6">
                                                 <div class="card  flex-lg-column flex-md-row ">
                                                     <div class="card-body card-body  text-center border-bottom profile-bx">
-                                                        <div class="profile-image mb-4">
-                                                            <img  src="/assets/drive/logos/{{$application->getCompany->logo ?? 'logo.png'}}" class="rounded-circle" alt="" id="avatar-preview">
+                                                        <div class=" mb-4">
+                                                            <img  src="/assets/drive/logos/{{$application->getCompany->logo ?? 'logo.png'}}" width="132" height="132" class="" alt="" id="avatar-preview">
                                                         </div>
                                                         <h4 class="fs-22 text-black mb-1">{{$application->getCompany->company_name ?? '' }} </h4>
                                                     </div>

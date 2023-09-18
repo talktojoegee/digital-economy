@@ -177,14 +177,6 @@
                     $('#local').select2();
                 });
             });
-           /* $('#department').on('change', function(e){
-                e.preventDefault();
-                axios.post('/load-job-roles', {department:$(this).val()})
-                    .then(response=>{
-                        $('#job-role-wrapper').html(response.data);
-                        $('#job-role').select2();
-                    });
-            });*/
         });
     </script>
 @endsection

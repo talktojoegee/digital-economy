@@ -54,49 +54,57 @@
                 </div>
             @endif
             <div class="card">
-                <div class="card-header"> Invoice <strong>{{date('d M, Y', strtotime(now()))}}</strong> <span class="float-right"></span> </div>
-                <div class="card-body">
+                <div class="card-header"> Invoice <strong></strong> <span class="float-right"></span> </div>
+                <div class="card-body" id="invoiceWrapper">
                     <div class="row mb-5">
-                        <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
+                        <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-6">
                             <h6>From:</h6>
-                            <div> <strong>{{config('app.name')}}</strong> </div>
-                            <div>{{config('app.address')}}</div>
-                            <div>Email: {{config('app.email')}}</div>
-                            <div>Phone: {{config('app.phone')}}</div>
-                           </div>
-                        <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
+                            <img src="/images/logo-1.jpeg" class="img-fluid width110">
+                            <div><strong>Address: </strong>{!! env('APP_ADDRESS') !!}</div>
+                            <div><strong>Email: </strong> {{env('APP_EMAIL')}}</div>
+                            <div><strong>Phone: </strong> {{env('APP_PHONE')}}</div>
+                        </div>
+                        <div class="mt-4 col-xl-4 offset-xl-1 col-lg-4 offset-lg-1 col-md-4 offset-md-1 col-sm-4 offset-sm-1 text-left align-content-end">
                             <h6>To:</h6>
-                            <div> <strong>{{$invoice->getCompany->company_name ?? ''}}</strong> </div>
-                            <div>{{$invoice->getCompany->office_address ?? ''}}</div>
-                            <div>Email: {{$invoice->getCompany->email ?? ''}}</div>
-                            <div>Phone: {{$invoice->getCompany->mobile_no ?? ''}}</div>
-                        </div>
-                        <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                            <h6>Other Details:</h6>
-                            <div> <span class="text-uppercase">Issued By:</span> {{$invoice->getIssuedBy->first_name ?? ''}} {{$invoice->getIssuedBy->last_name ?? ''}}</div>
-                            <div><span class="text-uppercase">Date:</span> {{date('d M, Y', strtotime($invoice->date_issued))}}</div>
-                            <div><span class="text-uppercase"> Status:</span>
-                                @switch($invoice->status)
-                                    @case(0)
-                                    <label for="" class="label label-warning text-white">Unpaid</label>
-                                    @break
-                                    @case(1)
-                                    <label for="" class="label label-primary text-white">Paid</label>
-                                    @break
-                                    @case(2)
-                                    <label for="" class="label label-success text-white">Verified</label>
-                                    @break
-                                    @case(3)
-                                    <label for="" class="label label-danger text-white">Discarded</label>
-                                    @break
-                                @endswitch
-
+                            <img src="/assets/drive/logos/{{$invoice->getCompany->logo ?? 'logo.png'}}" class="img-fluid width110">
+                            <div class="">
+                                <div> <strong>{{$invoice->getCompany->company_name ?? ''}}</strong> </div>
+                                <div><strong>Address: </strong>{{$invoice->getCompany->office_address ?? ''}}</div>
+                                <div><strong>Email: </strong> {{$invoice->getCompany->email ?? ''}}</div>
+                                <div><strong>Phone: </strong> {{$invoice->getCompany->mobile_no ?? ''}}</div>
                             </div>
-                            <div><span class="text-uppercase">Invoice No.</span> {{$invoice->invoice_no ?? '' }}</div>
                         </div>
-                        <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                            <h6>...:</h6>
-                            <div><span class="text-uppercase">Date Paid:</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="mt-4 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td class=""><strong>Issued By: </strong> {{$invoice->getIssuedBy->first_name ?? ''}} {{$invoice->getIssuedBy->last_name ?? ''}}</td>
+                                        <td class=""><strong>Date: </strong> {{date('d M, Y', strtotime($invoice->date_issued))}}</td>
+                                        <td class=""><strong>Status: </strong>
+                                            @switch($invoice->status)
+                                                @case(0)
+                                                <label for="" class="label label-warning text-white">Unpaid</label>
+                                                @break
+                                                @case(1)
+                                                <label for="" class="label label-primary text-white">Paid</label>
+                                                @break
+                                                @case(2)
+                                                <label for="" class="label label-success text-white">Verified</label>
+                                                @break
+                                                @case(3)
+                                                <label for="" class="label label-danger text-white">Discarded</label>
+                                                @break
+                                            @endswitch
+                                        </td>
+                                        <td class="right"><strong>Invoice No.: </strong> {{$invoice->invoice_no ?? '' }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -105,10 +113,10 @@
                                 <table class="table card-table table-vcenter text-nowrap mb-0 invoice-detail-table">
                                     <thead>
                                     <tr>
-                                        <th class="text-uppercase">Radio Station</th>
+                                        <th class="text-uppercase"> Station</th>
                                         <th class="text-uppercase">Category</th>
-                                        <th class="text-uppercase">Type of Device</th>
-                                        <th class="text-uppercase">Op. Mode</th>
+                                        <th class="text-uppercase">Device</th>
+                                        <th class="text-uppercase">Mode</th>
                                         <th class="text-uppercase">Freq. Band</th>
                                         <th class="text-uppercase">Quantity</th>
                                         <th class="text-uppercase">Amount(₦)</th>
@@ -117,12 +125,12 @@
                                     <tbody id="products">
                                     @foreach($invoice->getInvoiceItems as $app)
                                         <tr class="item">
-                                            <td >
-                                                <p  class="text-muted">{{$app->getRadioDetailApplication->getWorkstation->work_station_name ?? '' }}</p>
+                                            <td style="width: 20px;">
+                                                <p  class="text-muted text-wrap">{{$app->getRadioDetailApplication->getWorkstation->work_station_name ?? '' }}</p>
                                                 <input type="hidden" name="detailHandle[]" value="{{$app->id}}">
                                             </td>
-                                            <td>
-                                                <p class="text-muted">{{$app->getRadioDetailApplication->getLicenseCategory->category_name ?? ''}}</p>
+                                            <td style="width: 20px;">
+                                                <p class="text-muted text-wrap">{{$app->getRadioDetailApplication->getLicenseCategory->category_name ?? ''}}</p>
                                             </td>
                                             <td>
                                                 <p class="text-muted">
@@ -165,36 +173,32 @@
                                                 </p>
                                             </td>
                                             <td>
-                                                <p class="text-muted text-right">{{number_format($app->getRadioDetailApplication->no_of_devices)}}</p>
+                                                <p class="text-muted">{{number_format($app->getRadioDetailApplication->no_of_devices)}}</p>
                                             </td>
                                             <td>
-                                                <p class="text-muted text-right">{{number_format($app->sub_total,2)}}</p>
+                                                <p class="text-muted">{{number_format($app->sub_total,2)}}</p>
                                             </td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <input type="hidden" name="company" value="{{$application->company_id}}">
+                                        <td colspan="6" class="text-right"><strong>Total</strong></td>
+                                        <td colspan="1" class="right text-right">
+                                            <strong>₦{{number_format($invoice->total,2)}}</strong>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
-
-                                <div class="row">
-                                    <div class="col-lg-4 col-sm-5"> </div>
-                                    <div class="col-lg-4 col-sm-5 ml-auto">
-                                        <input type="hidden" name="company" value="{{$application->company_id}}">
-                                        <table class="table table-clear">
-                                            <tbody>
-                                            <tr>
-                                                <td class="left"><strong>Total</strong></td>
-                                                <td class="right text-right"><strong>₦{{number_format($invoice->total,2)}}</strong><br>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                        <form action="#" method="post">
-                        </form>
                     </div>
-
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-12 col-sm-12 d-flex justify-content-center">
+                        <div class="btn-group">
+                            <a class="btn btn-light"> <i class="ti-control-backward mr-2"></i> Go Back</a>
+                            <button class="btn btn-secondary" onclick="generatePDF()" type="button"> <i class="ti-printer text-white mr-2"></i> Print</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -268,6 +272,18 @@
 @endsection
 
 @section('extra-scripts')
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF(){
+            var element = document.getElementById('invoiceWrapper');
+            html2pdf(element,{
+                margin:       10,
+                filename:     "Invoice_No_{{$invoice->invoice_no}}"+".pdf",
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            });
+        }
+    </script>
 @endsection
 
