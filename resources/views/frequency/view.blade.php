@@ -72,11 +72,16 @@
                                                                     <ol class="mt-4">
                                                                         <li> Licensee <u>{{$frequency->getCompany->company_name ?? '' }}</u> of <u>___________________</u> is hereby licensed in accordance with particulars on the attached conditions.</li>
                                                                         <li> The special conditions governing the licence are Regulations 8, 10, 11, 15, 19, 20 and 21 ______</li>
-                                                                        <li>_____________________________</li>
-                                                                        <li>for: Honourable Minister</li>
-                                                                        <li>_____________________________</li>
-                                                                        <li>An Officer of the Ministry of Communications duly authorised in that behalf</li>
                                                                     </ol>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 offset-md-7">
+
+                                                                            <p>_____________________________</p>
+                                                                            <p>for: Honourable Minister</p>
+                                                                            <p>_____________________________</p>
+                                                                            <p>An Officer of the Ministry of Communications duly authorised in that behalf</p>
+                                                                        </div>
+                                                                    </div>
                                                                     <p class="text-center mb-2 mt-5"><span class="text-uppercase font-w800">Private Fixed </span>(Very High Frequency) <span class="text-uppercase font-w800">Radio Station Licence</span></p>
                                                                     <p class="text-center mb-2"><span class="text-uppercase font-w800">THE CONDITIONS </span></p>
                                                                     <div class="row">
