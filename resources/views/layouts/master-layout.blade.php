@@ -2,7 +2,7 @@
 <body>
 <div id="main-wrapper">
     <div class="nav-header">
-        <a href="index.html" class="brand-logo">
+        <a href="#" class="brand-logo">
             <img class="logo-abbr" src="/images/arm_.png" alt="">
            {{-- <img class="logo-compact" src="/images/logo.jpg" alt="">
             <img class="brand-title" src="/images/logo.jpg" alt="">--}}

@@ -9,8 +9,6 @@
                 </div>
 
                 <ul class="navbar-nav header-right">
-
-
                     <li class="nav-item dropdown notification_dropdown">
                         <a class="nav-link  ai-icon" href="#" role="button" data-toggle="dropdown">
                             <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">

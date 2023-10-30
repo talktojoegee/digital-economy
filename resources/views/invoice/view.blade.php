@@ -1,12 +1,12 @@
 @extends('layouts.master-layout')
 @section('title')
-    Invoice Details
+    Receipt Details
 @endsection
 @section('extra-styles')
 
 @endsection
 @section('active-page')
-    Invoice Details
+    Receipt Details
 @endsection
 
 @section('main-content')
@@ -82,9 +82,9 @@
                                 <table class="table table-striped">
                                     <tbody>
                                     <tr>
-                                        <td class=""><strong>Issued By: </strong> {{$invoice->getIssuedBy->first_name ?? ''}} {{$invoice->getIssuedBy->last_name ?? ''}}</td>
-                                        <td class=""><strong>Date: </strong> {{date('d M, Y', strtotime($invoice->date_issued))}}</td>
-                                        <td class=""><strong>Status: </strong>
+                                        <td class=""><strong>Issued By: </strong> <br> {{$invoice->getIssuedBy->first_name ?? ''}} {{$invoice->getIssuedBy->last_name ?? ''}}</td>
+                                        <td class=""><strong>Date: </strong> <br> {{date('d M, Y', strtotime($invoice->date_issued))}}</td>
+                                        <td class=""><strong>Status: </strong> <br>
                                             @switch($invoice->status)
                                                 @case(0)
                                                 <label for="" class="label label-warning text-white">Unpaid</label>
@@ -100,7 +100,7 @@
                                                 @break
                                             @endswitch
                                         </td>
-                                        <td class="right"><strong>Invoice No.: </strong> {{$invoice->invoice_no ?? '' }}</td>
+                                        <td class="right"><strong>Invoice No.: </strong> <br> {{$invoice->invoice_no ?? '' }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -125,7 +125,7 @@
                                     <tbody id="products">
                                     @foreach($invoice->getInvoiceItems as $app)
                                         <tr class="item">
-                                            <td style="width: 20px;">
+                                            <td style="width: 20px; display: ">
                                                 <p  class="text-muted text-wrap">{{$app->getRadioDetailApplication->getWorkstation->work_station_name ?? '' }}</p>
                                                 <input type="hidden" name="detailHandle[]" value="{{$app->id}}">
                                             </td>
@@ -278,7 +278,7 @@
             var element = document.getElementById('invoiceWrapper');
             html2pdf(element,{
                 margin:       10,
-                filename:     "Invoice_No_{{$invoice->invoice_no}}"+".pdf",
+                filename:     "Receipt_No_{{$invoice->invoice_no}}"+".pdf",
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }

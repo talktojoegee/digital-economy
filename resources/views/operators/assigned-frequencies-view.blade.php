@@ -26,8 +26,6 @@
                 </div>
                 <div class="">
                     <div class="card-body">
-
-                        <!-- Tab panes -->
                         <div class="tab-content tabcontent-border">
                             <div class="tab-pane fade active show" id="application" role="tabpanel">
                                 <div class="pt-4">

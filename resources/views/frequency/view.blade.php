@@ -26,8 +26,6 @@
             </div>
             <div class="">
                 <div class="card-body">
-
-                    <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
                         <div class="tab-pane fade active show" id="application" role="tabpanel">
                             <div class="pt-4">
@@ -56,6 +54,26 @@
                                                         <div class="mb-5">
                                                             <div class="title mb-4"><span class="fs-18 text-black font-w600">Details</span></div>
                                                             <div class="row">
+                                                                <div class="col-xl-12 col-sm-12 text-center text-black">
+                                                                    <p class="text-uppercase ">Wireless Telegraphy Act, 1961</p>
+                                                                    <a href="#" class="brand-logo">
+                                                                        <img style="width: 92px; height: 92px; margin: 0px auto" class="logo-abbr" src="/images/arm_.png" alt="">
+                                                                    </a>
+                                                                    <p class="text-uppercase mt-2">Federal Republic of Nigeria</p>
+                                                                </div>
+                                                                <div class="col-xl-12 col-sm-12 text-black">
+                                                                    <p class="text-right mb-1"><strong>No</strong> <u><span class="fs-22">004739</span></u></p>
+                                                                    <p class="text-center mb-2"><span class="text-uppercase font-w800">Private Fixed </span>(Very High Frequency) <span class="text-uppercase font-w800">Radio Station Licence</span></p>
+                                                                    <p class="text-center font-w800">Form No. 19(B)</p>
+                                                                    <p class="mb-0"><strong>Date:</strong> {{ date('d M, Y', strtotime($frequency->created_at))}}</p>
+                                                                    <p class="mb-0"><strong>Renewal:</strong> {{env('APP_CURRENCY')}}{{number_format(400,2)}}</p>
+                                                                    <p class="mb-0"><strong>Fee on Issue:</strong> {{env('APP_CURRENCY')}}{{number_format(400,2)}}</p>
+
+                                                                    <ol class="mt-4">
+                                                                        <li> Licensee <u>{{$frequency->getCompany->company_name ?? '' }}</u> of <u>statement</u></li>
+                                                                        <li> The special conditions governing the licence are Regulations 8, 10, 11, 15, 19, 20 and 21 ______</li>
+                                                                    </ol>
+                                                                </div>
                                                                 <div class="col-xl-6 col-sm-6">
                                                                     <div class="profile-personal-info">
                                                                         <div class="row mb-4 mb-sm-2">
