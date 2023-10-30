@@ -26,8 +26,6 @@
             </div>
             <div class="">
                 <div class="card-body">
-
-                    <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
                         <div class="tab-pane fade active show" id="application" role="tabpanel">
                             <div class="pt-4">
@@ -56,6 +54,58 @@
                                                         <div class="mb-5">
                                                             <div class="title mb-4"><span class="fs-18 text-black font-w600">Details</span></div>
                                                             <div class="row">
+                                                                <div class="col-xl-12 col-sm-12 text-center text-black">
+                                                                    <p class="text-uppercase ">Wireless Telegraphy Act, 1961</p>
+                                                                    <a href="#" class="brand-logo">
+                                                                        <img style="width: 92px; height: 92px; margin: 0px auto" class="logo-abbr" src="/images/arm_.png" alt="">
+                                                                    </a>
+                                                                    <p class="text-uppercase mt-2">Federal Republic of Nigeria</p>
+                                                                </div>
+                                                                <div class="col-xl-12 col-sm-12 text-black">
+                                                                    <p class="text-right mb-1"><strong>No</strong> <u><span class="fs-22">{{$frequency->assigned_frequency ?? '' }}</span></u></p>
+                                                                    <p class="text-center mb-2"><span class="text-uppercase font-w800">Private Fixed </span>(Very High Frequency) <span class="text-uppercase font-w800">Radio Station Licence</span></p>
+                                                                    <p class="text-center font-w800">Form No. 19(B)</p>
+                                                                    <p class="mb-0"><strong>Date:</strong> {{ date('d M, Y', strtotime($frequency->created_at))}}</p>
+                                                                    <p class="mb-0"><strong>Renewal:</strong> {{env('APP_CURRENCY')}}{{number_format(400,2)}}</p>
+                                                                    <p class="mb-0"><strong>Fee on Issue:</strong> {{env('APP_CURRENCY')}}{{number_format(400,2)}}</p>
+
+                                                                    <ol class="mt-4">
+                                                                        <li> Licensee <u>{{$frequency->getCompany->company_name ?? '' }}</u> of <u>___________________</u> is hereby licensed in accordance with particulars on the attached conditions.</li>
+                                                                        <li> The special conditions governing the licence are Regulations 8, 10, 11, 15, 19, 20 and 21 ______</li>
+                                                                        <li>_____________________________</li>
+                                                                        <li>for: Honourable Minister</li>
+                                                                        <li>_____________________________</li>
+                                                                        <li>An Officer of the Ministry of Communications duly authorised in that behalf</li>
+                                                                    </ol>
+                                                                    <p class="text-center mb-2 mt-5"><span class="text-uppercase font-w800">Private Fixed </span>(Very High Frequency) <span class="text-uppercase font-w800">Radio Station Licence</span></p>
+                                                                    <p class="text-center mb-2"><span class="text-uppercase font-w800">THE CONDITIONS </span></p>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <p class="mb-0"><strong>State:</strong> {{$frequency->getCompany->getState->state_name ?? '' }}</p>
+                                                                            <p class="mb-0"><strong>Name and Address of Licensee:</strong> {{$frequency->getCompany->company_name ?? '' }}
+                                                                                <a href="#">@</a> {{$frequency->getCompany->office_address ?? '' }}</p>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <p class="mb-0"><strong>Area:</strong> __</p>
+                                                                            <p class="mb-0"><strong>Category:</strong> ___</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+
+
+                                                                <div class="col-xl-12 col-sm-12 text-black">
+
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-bordered">
+                                                                            <tr>
+
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="col-xl-6 col-sm-6">
                                                                     <div class="profile-personal-info">
                                                                         <div class="row mb-4 mb-sm-2">
@@ -148,54 +198,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-xl-6 col-sm-6">
-                                                                    <div class="card bg-light">
-                                                                        <div class="card-header">
-                                                                            Update Licence Status
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <p></p>
-                                                                            <form action="{{route('update-radio-status')}}" method="post">
-                                                                                @csrf
-                                                                                @php
-                                                                                    $statuses = ["Inactive", "Active", "Expired", "Withdrawn"];
-                                                                                @endphp
-                                                                                <div class="form-group">
-                                                                                    <input type="hidden" name="frequency_id" value="{{$frequency->id}}">
-                                                                                    <label for="">Subject</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control" placeholder="Subject" name="subject" value="{{old('subject')}}">
-                                                                                    @error('subject')
-                                                                                        <i class="text-danger mt-2">{{$message}}</i>
-                                                                                    @enderror
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="">Licence Status</label>
-                                                                                    <select name="status" id="status"
-                                                                                            class="form-control">
-                                                                                        @for($i = 0; $i<count($statuses); $i++)
-                                                                                            <option value="{{$i}}" {{$i == $frequency->status ? 'selected' : '' }}>{{$statuses[$i]}}</option>
-                                                                                        @endfor
-                                                                                    </select>
-                                                                                    @error('status')
-                                                                                        <i class="text-danger mt-2">{{$message}}</i>
-                                                                                    @enderror
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="">Narration</label>
-                                                                                    <textarea name="narration" id="narration" placeholder="Narration"
-                                                                                              class="form-control" rows="5  " style="resize: none;">{{old('narration')}}</textarea>
-                                                                                    @error('narration')
-                                                                                    <i class="text-danger mt-2">{{$message}}</i>
-                                                                                    @enderror
-                                                                                </div>
-                                                                                <div class="form-group d-flex justify-content-center">
-                                                                                    <button class="btn btn-primary btn-sm" type="submit">Submit</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
