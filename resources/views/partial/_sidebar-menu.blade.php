@@ -12,7 +12,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{route('workflow')}}">Applications</a></li>
-                    <li><a href="{{route('workflow-settings')}}">Memo</a></li>
+                    <!-- <li><a href="route('workflow-settings')}}">Memo</a></li> -->
                     <li><a href="{{route('workflow-settings')}}">Settings</a></li>
                 </ul>
             </li>

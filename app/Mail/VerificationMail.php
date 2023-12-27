@@ -30,7 +30,7 @@ class VerificationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@intercountry.com')
+        return $this->from('noreply@digitaleconomy.gov.ng')
             ->subject(config('app.name').' : Email Verification')
             ->markdown('mails.user.verification-email');
     }
