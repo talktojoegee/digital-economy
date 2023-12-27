@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::prefix('/')->group(function(){
+Route::prefix('/')->group(function(){
     Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('homepage');
-});*/
+});
 Route::get('/', function(){
     return redirect()->route('register');
 });
