@@ -169,18 +169,18 @@
                 <div class="col-xl-12 col-lg-6">
                     <div class="card  flex-lg-column flex-md-row ">
                         <div class="card-body card-body  text-center border-bottom profile-bx">
-                            <div class="profile-image mb-4">
+                            <!-- <div class="profile-image mb-4">
                                 <img  src="/images/avatar/1.jpg" class="rounded-circle" alt="" id="avatar-preview">
-                            </div>
+                            </div> -->
                             <h4 class="fs-22 text-black mb-1">{{$employee->title ?? '' }} {{$employee->first_name ?? '' }} {{$employee->last_name ?? '' }}</h4>
                             <p class="mb-4"> <span class="text-primary">{{$employee->getJobRole->role_name ?? '' }}</span> <br> {{$employee->getDepartment->department_name ?? '' }}</p>
                             @if(Auth::user()->id == $employee->id)
-                            <form id="avatarForm" enctype="multipart/form-data">
+                           <!-- <form id="avatarForm" enctype="multipart/form-data">
                                 <button class="btn btn-outline-primary btn-sm mt-3" id="uploadAvatarBtn">
                                     <i class="ti-camera mr-2"></i>  Change Picture
                                 </button>
                                 <input type="file" id="avatarFile" hidden>
-                            </form>
+                            </form> -->
                             @endif
                         </div>
                         <div class="card-body  border-left">
