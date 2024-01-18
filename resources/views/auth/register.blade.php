@@ -48,7 +48,7 @@
                                         </button>
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <a href="/" class="btn btn-primary btn-sm">Go Back Home</a>
+                                        <a href="{{route('register')}}" class="btn btn-primary btn-sm">Go Back Home</a>
                                     </div>
                                 @endif
                                 @if(!session()->has('success'))

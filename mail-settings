@@ -1,0 +1,8 @@
+MAIL_MAILER=smtp
+MAIL_HOST=mail.ojivenetworksolutions.com.ng
+MAIL_PORT=465
+MAIL_USERNAME=noreply@ojivenetworksolutions.com.ng
+MAIL_PASSWORD="k&FToS!s#*lM"
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=noreply@ojivenetworksolutions.com.ng
+MAIL_FROM_NAME="${APP_NAME}"

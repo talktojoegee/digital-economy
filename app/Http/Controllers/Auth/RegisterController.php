@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\EmailVerification;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -96,15 +97,28 @@ class RegisterController extends Controller
         }else{
             $subscriber = $this->emailverification->addRegistration($request);
             #Send mail
-            try{
-                \Mail::to($subscriber)->send(new VerificationMail($subscriber) );
+            //try{
+            $url = "https://digitale.ojivenetworksolutions.com.ng/mailer/send/{$subscriber->slug}/{$subscriber->email}";
+            $client = new Client();
+            $response = $client->get($url);
+            if($response->getStatusCode() == 200){
                 session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
             provided to continue with the registration process.");
                 return back();
-            }catch (\Exception $ex){
+            }else{
                 session()->flash("error", "<strong>Whoops!</strong> We had trouble sending a mail to this email address"."(".$request->email.")");
-                return back();
+                  return back();
             }
+                //\Mail::to($subscriber)->send(new VerificationMail($subscriber) );
+                //session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
+            //provided to continue with the registration process.");
+            //session()->flash("success", "Phase one of the registration process was successful.");
+            //return redirect()->route('verify-e-registration', $subscriber->slug);
+                //return back();
+            //}catch (\Exception $ex){
+              //  session()->flash("error", "<strong>Whoops!</strong> We had trouble sending a mail to this email address"."(".$request->email.")");
+              //  return back();
+            //}
         }
 
     }
