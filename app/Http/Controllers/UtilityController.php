@@ -15,6 +15,7 @@ class UtilityController extends Controller
     public function attendToRemoteRegistrationRequest(Request $request){
         $email = $request->email;
         $slug = $request->slug;
+        //return response()->json(['email'=>$email, 'slug'=>$slug]);
         $subscriber = EmailVerification::storeFromRemoteRegistration($email, $slug);
         //return response()->json(['from'=>env('MAIL_FROM_ADDRESS')],200);
         try{

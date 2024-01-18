@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/mailer/send', [App\Http\Controllers\UtilityController::class, 'attendToRemoteRegistrationRequest'])->name('remote-registration');
