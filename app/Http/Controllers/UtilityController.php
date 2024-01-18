@@ -17,10 +17,9 @@ class UtilityController extends Controller
         $slug = $request->slug;
         //return response()->json(['email'=>$email, 'slug'=>$slug]);
         $subscriber = EmailVerification::storeFromRemoteRegistration($email, $slug);
-        //return response()->json(['from'=>env('MAIL_FROM_ADDRESS')],200);
         try{
             Mail::to($subscriber)->send(new VerificationMail($subscriber));
-            return response()->json(['success'=>'Action successful']);
+            return response()->json($subscriber);
         }catch (\Exception $exception){
             return response()->json(['error'=>"Something went wrong. {$exception->getMessage()}"],500);
         }

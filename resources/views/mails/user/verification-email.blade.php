@@ -198,7 +198,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr>
                                             <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                                                <a href="{{route('verify-e-registration', $sub->slug)}}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
+                                                <a href="https://licensing.fmcide.gov.ng/e-registration/{{$sub->slug}}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -213,7 +213,7 @@
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                         <p style="margin: 0;">If that didn't work, copy and paste the following link in your browser:</p>
-                        <p style="margin: 0;"><a href="{{route('verify-e-registration', $sub->slug)}}" target="_blank">{{route('verify-e-registration', $sub->slug)}}</a></p>
+                        <p style="margin: 0;"><a href="https://licensing.fmcide.gov.ng/e-registration/{{$sub->slug}}" target="_blank">https://licensing.fmcide.gov.ng/e-registration/{{$sub->slug}}</a></p>
                     </td>
                 </tr>
                 <!-- end copy -->

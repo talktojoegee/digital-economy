@@ -97,15 +97,15 @@ class RegisterController extends Controller
         }else{
             $subscriber = $this->emailverification->addRegistration($request);
             #Send mail
-            //try{
-            //$url = "https://digitale.ojivenetworksolutions.com.ng/api/mailer/send";
-            $url = "https://digitale.ojivenetworksolutions.com.ng/mailer/send/{$subscriber->slug}/{$subscriber->email}";
-            //$form['slug'] = $subscriber->slug;
-            //$form['email'] = $subscriber->email;
-            //$req = $this->sendAPIRequest($url, json_encode($form));
-            $client = new Client();
-            $response = $client->get($url);
-            if($response->getStatusCode() == 200){
+            $url = "https://digitale.ojivenetworksolutions.com.ng/api/mailer/send/{$subscriber->slug}/{$subscriber->email}";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $data = json_decode($response, true);
+
+            if(!empty($data)){
                 session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
             provided to continue with the registration process.");
                 return back();
@@ -113,16 +113,6 @@ class RegisterController extends Controller
                 session()->flash("error", "<strong>Whoops!</strong> We had trouble sending a mail to this email address"."(".$request->email.")");
                   return back();
             }
-                //\Mail::to($subscriber)->send(new VerificationMail($subscriber) );
-                //session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
-            //provided to continue with the registration process.");
-            //session()->flash("success", "Phase one of the registration process was successful.");
-            //return redirect()->route('verify-e-registration', $subscriber->slug);
-                //return back();
-            //}catch (\Exception $ex){
-              //  session()->flash("error", "<strong>Whoops!</strong> We had trouble sending a mail to this email address"."(".$request->email.")");
-              //  return back();
-            //}
         }
 
     }
