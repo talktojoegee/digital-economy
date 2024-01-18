@@ -98,14 +98,14 @@ class RegisterController extends Controller
             $subscriber = $this->emailverification->addRegistration($request);
             #Send mail
             //try{
-            $url = "https://digitale.ojivenetworksolutions.com.ng/mailer/send";
-            //$url = "https://digitale.ojivenetworksolutions.com.ng/mailer/send/{$subscriber->slug}/{$subscriber->email}";
-            $form['slug'] = $subscriber->slug;
-            $form['email'] = $subscriber->email;
-            $req = $this->sendAPIRequest($url, json_encode($form));
-            //$client = new Client();
-            //$response = $client->get($url);
-            if($req){
+            //$url = "https://digitale.ojivenetworksolutions.com.ng/api/mailer/send";
+            $url = "https://digitale.ojivenetworksolutions.com.ng/mailer/send/{$subscriber->slug}/{$subscriber->email}";
+            //$form['slug'] = $subscriber->slug;
+            //$form['email'] = $subscriber->email;
+            //$req = $this->sendAPIRequest($url, json_encode($form));
+            $client = new Client();
+            $response = $client->get($url);
+            if($response->getStatusCode() == 200){
                 session()->flash("success", "Success! A verification link was sent to your email account. Please click on the link
             provided to continue with the registration process.");
                 return back();
@@ -183,7 +183,7 @@ class RegisterController extends Controller
                 CURLOPT_TIMEOUT => 0,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_CUSTOMREQUEST => 'GET',
                 CURLOPT_POSTFIELDS =>$data,
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json'
