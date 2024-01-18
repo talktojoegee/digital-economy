@@ -81,8 +81,8 @@
                                         <div class="text-center" style="border-top: 2px solid #fff;">
                                             <hr style="background: rgba(0,78,56,0.6);">
                                             <div class="btn-group">
-                                                <a href="#" class="btn text-white">Go Back Home</a>
-                                                <a href="#" class="btn text-white">Have An Account? Login</a>
+                                                <a href="{{ route('register') }}" class="btn text-white">Go Back Home</a>
+                                                <a href="{{ route('login')  }}" class="btn text-white">Have An Account? Login</a>
                                             </div>
                                         </div>
                                     </form>

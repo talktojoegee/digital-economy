@@ -23,6 +23,18 @@ class EmailVerification extends Model
         return $verify;
     }
 
+
+    public static function storeFromRemoteRegistration($email, $slug){
+        $current = new Carbon();
+        $verify = new EmailVerification();
+        $verify->email = $email;
+        $verify->slug = $slug;
+        $verify->valid_from = now();
+        $verify->expires_at = $current->addMinutes(30); // valid for 30 minutes
+        $verify->save();
+        return $verify;
+    }
+
     public function getRegistrationBySlug($slug){
         return EmailVerification::where('slug', $slug)->first();
     }

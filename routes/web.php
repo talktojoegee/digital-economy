@@ -13,12 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/')->group(function(){
+/*Route::prefix('/')->group(function(){
     Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('homepage');
-});
+});*/
+
 Route::get('/', function(){
     return redirect()->route('register');
-});
+})->name('homepage');
+
+Route::get('/mailer/send/{slug}/{email}', [App\Http\Controllers\UtilityController::class, 'attendToRemoteRegistrationRequest'])->name('remote-registration');
+
+
+
+
+
 
 Route::get('/authenticate', [App\Http\Controllers\Auth\LoginController::class, 'showAdminLoginScreen'])->name('authenticate');
 Route::post('/authenticate', [App\Http\Controllers\Auth\LoginController::class, 'loginAdmin']);
