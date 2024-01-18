@@ -19,7 +19,7 @@ class UtilityController extends Controller
         //return response()->json(['from'=>env('MAIL_FROM_ADDRESS')],200);
         try{
             Mail::to($subscriber)->send(new VerificationMail($subscriber));
-            return response()->json(['success'=>'Action successful'], 200);
+            return response()->json(['success'=>'Action successful']);
         }catch (\Exception $exception){
             return response()->json(['error'=>"Something went wrong. {$exception->getMessage()}"],500);
         }
