@@ -21,7 +21,8 @@ Route::get('/', function(){
     return redirect()->route('register');
 })->name('homepage');
 
-Route::get('/mailer/send/{slug}/{email}', [App\Http\Controllers\UtilityController::class, 'attendToRemoteRegistrationRequest'])->name('remote-registration');
+Route::post('/mailer/send', [App\Http\Controllers\UtilityController::class, 'attendToRemoteRegistrationRequest'])->name('remote-registration');
+//Route::get('/mailer/send/{slug}/{email}', [App\Http\Controllers\UtilityController::class, 'attendToRemoteRegistrationRequest'])->name('remote-registration');
 
 
 
